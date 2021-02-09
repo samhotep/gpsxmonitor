@@ -13,6 +13,32 @@ export default function LoginScreen({navigation}) {
     navigation.navigate(screen);
   };
 
+  const validateLogin = () => {
+    if (
+      !/^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/.test(email)
+    ) {
+      ToastAndroid.show(
+        'Please correct your email address',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    } else if (password === '') {
+      ToastAndroid.show(
+        'Please enter a password',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    } else {
+      API.authenticateUser(email, password).then((result) => {
+        if (result === true) {
+          goToScreen('Dashboard');
+        } else {
+          ToastAndroid.show(result, ToastAndroid.SHORT, ToastAndroid.CENTER);
+        }
+      });
+    }
+  };
+
   return (
     <Container>
       <StatusBar backgroundColor="#4788c7" />
@@ -39,7 +65,7 @@ export default function LoginScreen({navigation}) {
             setPassword(text);
           }}
         />
-        <RowContainer width={300}>
+        <RowContainer width="300px">
           <Button onPress={() => goToScreen('Reset')}>
             <Text color="#c5c5c5" margin={5}>
               Forgot Password?
@@ -49,17 +75,7 @@ export default function LoginScreen({navigation}) {
         <GenericButton
           title="Log in"
           onPress={() => {
-            API.authenticateUser(email, password).then((result) => {
-              if (result === true) {
-                goToScreen('Dashboard');
-              } else {
-                ToastAndroid.show(
-                  result,
-                  ToastAndroid.SHORT,
-                  ToastAndroid.CENTER,
-                );
-              }
-            });
+            validateLogin();
           }}
           color="#ffffff"
           bgcolor="#4788c7"

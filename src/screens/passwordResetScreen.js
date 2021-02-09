@@ -1,21 +1,50 @@
 import React, {useEffect, useState} from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, ToastAndroid} from 'react-native';
 import styled from 'styled-components/native';
 import Input from '../components/inputs/input';
 import GenericButton from '../components/buttons/genericButton';
 
 export default function PasswordResetScreen({navigation}) {
-  const [remember, setRemember] = useState(false);
+  const [email, setEmail] = useState();
 
   const goToScreen = (screen) => {
     navigation.navigate(screen);
+  };
+
+  const validateEmail = () => {
+    if (
+      !/^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/.test(email)
+    ) {
+      ToastAndroid.show(
+        'Please correct your email address',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    } else {
+      setTimeout(() => {
+        ToastAndroid.show(
+          'Password reset request submitted',
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+        goToScreen('Dashboard');
+      }, 1000);
+    }
   };
 
   return (
     <Container>
       <StatusBar backgroundColor="#4788c7" />
       <FormContainer>
-        <Input placeholder="Email" width={300} color="#c5c5c5" />
+        <Input
+          placeholder="Email"
+          width={300}
+          color="#c5c5c5"
+          value={email}
+          onChangeText={(text) => {
+            setEmail(text);
+          }}
+        />
         <ImageContainer
           source={require('../assets/captcha.png')}
           resizeMode="contain"
@@ -28,7 +57,7 @@ export default function PasswordResetScreen({navigation}) {
         />
         <GenericButton
           title="Submit"
-          // onPress={() => goToScreen('Dashboard')}
+          onPress={() => validateEmail()}
           color="#ffffff"
           bgcolor="#4788c7"
           width={300}

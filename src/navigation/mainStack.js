@@ -7,6 +7,7 @@ import CheckBox from '@react-native-community/checkbox';
 import AuthStack from './authStack';
 import Dashboard from './dashboard';
 import HeaderIcon from '../components/headers/headerIcon';
+import FloatingLoader from '../components/loaders/floatingLoader';
 import styled from 'styled-components';
 import Storage from '../storage/storage';
 
@@ -165,28 +166,36 @@ function HeaderItem(props) {
 
 export default function MainStack() {
   const [loggedIn, setLoggedIn] = useState();
+  const [loading, setLoading] = useState(true);
+
   // Check if the user is logged in, if they are, redirect to the home page
   useEffect(() => {
     Storage.getUserToken().then((token) => {
+      setLoading(false);
       if (token !== '') {
         setLoggedIn(true);
       } else {
         setLoggedIn(false);
       }
     });
-  });
+  }, []);
+
+  if (loading) {
+    return <FloatingLoader />;
+  }
+
   return (
     <Stack.Navigator initialRouteName="Main">
-      {loggedIn === false ? (
+      {loggedIn === true ? (
         <Stack.Screen
           name="Main"
-          component={SettingsDrawer}
+          component={Dashboard}
           options={{headerShown: false}}
         />
       ) : (
         <Stack.Screen
           name="Main"
-          component={Dashboard}
+          component={SettingsDrawer}
           options={{headerShown: false}}
         />
       )}

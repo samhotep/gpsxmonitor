@@ -50,6 +50,7 @@ export default function LoginScreen({navigation}) {
         <Input
           placeholder="Email"
           width={300}
+          font={18}
           color="#c5c5c5"
           value={email}
           onChangeText={(text) => {
@@ -59,6 +60,7 @@ export default function LoginScreen({navigation}) {
         <Input
           placeholder="Password"
           width={300}
+          font={18}
           hidden={true}
           value={password}
           onChangeText={(text) => {

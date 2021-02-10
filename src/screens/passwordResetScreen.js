@@ -1,22 +1,37 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
-import styled from 'styled-components/native';
+import Captcha from '../components/captcha/captcha';
 import Input from '../components/inputs/input';
 import GenericButton from '../components/buttons/genericButton';
+import styled from 'styled-components/native';
 
 export default function PasswordResetScreen({navigation}) {
   const [email, setEmail] = useState();
+  const [captchaValue, setCaptchaValue] = useState();
+  const [verify, setVerify] = useState();
 
   const goToScreen = (screen) => {
     navigation.navigate(screen);
   };
 
-  const validateEmail = () => {
+  const validate = () => {
     if (
       !/^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/.test(email)
     ) {
       ToastAndroid.show(
         'Please correct your email address',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    } else if (verify === '') {
+      ToastAndroid.show(
+        'Please enter the verification code',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    } else if (captchaValue !== verify) {
+      ToastAndroid.show(
+        'Wrong verification code',
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
       );
@@ -27,7 +42,7 @@ export default function PasswordResetScreen({navigation}) {
           ToastAndroid.SHORT,
           ToastAndroid.CENTER,
         );
-        goToScreen('Dashboard');
+        goToScreen('Login');
       }, 1000);
     }
   };
@@ -36,28 +51,39 @@ export default function PasswordResetScreen({navigation}) {
     <Container>
       <StatusBar backgroundColor="#4788c7" />
       <FormContainer>
+        <Text color="#000000" size={18}>
+          Enter your email to reset your password
+        </Text>
         <Input
           placeholder="Email"
           width={300}
+          font={18}
           color="#c5c5c5"
           value={email}
           onChangeText={(text) => {
             setEmail(text);
           }}
         />
-        <ImageContainer
-          source={require('../assets/captcha.png')}
-          resizeMode="contain"
+        <Captcha
+          length={6}
+          width="180"
+          height="130"
+          getValue={setCaptchaValue}
         />
         <Input
           placeholder="Text from image above"
           width={300}
+          font={18}
           color="#c5c5c5"
-          margin={20}
+          margin={10}
+          value={verify}
+          onChangeText={(text) => {
+            setVerify(text);
+          }}
         />
         <GenericButton
           title="Submit"
-          onPress={() => validateEmail()}
+          onPress={() => validate()}
           color="#ffffff"
           bgcolor="#4788c7"
           width={300}
@@ -76,16 +102,9 @@ const Container = styled.View`
   width: 100%;
 `;
 
-const RowContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-  width: ${(props) => props.width || 'auto'};
-`;
-
 const ImageContainer = styled.Image`
   width: 180px;
-  height: 180px;
+  height: 130px;
   margin: 5px;
 `;
 

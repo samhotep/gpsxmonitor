@@ -186,7 +186,7 @@ export default function MainStack() {
 
   return (
     <Stack.Navigator initialRouteName="Main">
-      {loggedIn === true ? (
+      {loggedIn === false ? (
         <Stack.Screen
           name="Main"
           component={Dashboard}

@@ -24,10 +24,11 @@ export default function Input(props) {
 }
 
 const FormInput = styled.TextInput`
-  font-size: ${(props) => props.font || 22}px;
+  font-size: ${(props) => props.font || 20}px;
   color: #333333;
   width: ${(props) => props.width || 260}px;
   text-align: left;
+  padding: 5px;
 `;
 
 const Container = styled.View`

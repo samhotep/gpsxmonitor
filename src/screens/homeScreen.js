@@ -1,57 +1,36 @@
 import React, {useEffect, useState} from 'react';
-import {StatusBar} from 'react-native';
-import styled from 'styled-components/native';
-import Input from '../components/inputs/input';
-import GenericButton from '../components/buttons/genericButton';
+import {StyleSheet, View} from 'react-native';
+import {useWindowDimensions} from 'react-native';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+
+MapboxGL.setAccessToken(
+  'pk.eyJ1Ijoic2Ftb2x3ZSIsImEiOiJja2t4aGsxNHYyZzl1MnFueW1zMjZ4MWVpIn0.D288xM5ZDihIhNBDiS2d8w',
+);
+
+const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  map: {
+    flex: 1,
+  },
+});
 
 export default function SignInScreen({navigation}) {
-  const [remember, setRemember] = useState(false);
-
-  const goToLogin = () => {
-    navigation.navigate('Login');
-  };
-
+  const window = useWindowDimensions();
   return (
-    <Container>
-      <StatusBar backgroundColor="#4788c7" />
-    </Container>
+    <View style={styles.page}>
+      <View
+        style={{
+          height: window.height,
+          width: window.width,
+          backgroundColor: 'grey',
+        }}>
+        <MapboxGL.MapView style={styles.map} />
+      </View>
+    </View>
   );
 }
-
-const Container = styled.View`
-  flex-direction: column;
-  background-color: #ffffff;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-`;
-
-const RowContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: ${(props) => props.width || 'auto'};
-`;
-
-const ImageContainer = styled.Image`
-  width: 180px;
-  height: 180px;
-  margin: 5px;
-`;
-
-const Header = styled.Text`
-  font-size: 40px;
-  color: #000000;
-  font-family: 'Roboto-Light';
-  margin: 10px;
-`;
-
-const Button = styled.TouchableOpacity``;
-
-const Text = styled.Text`
-  font-size: 14px;
-  color: #000000;
-  font-family: 'Roboto-Regular';
-  margin: 5px;
-`;

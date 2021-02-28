@@ -1,40 +1,33 @@
 import * as React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+  createDrawerNavigator,
+} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from '../screens/homeScreen';
+import HomeStack from '../navigation/homeStack';
 import HeaderIcon from '../components/headers/headerIcon';
 import styled from 'styled-components';
 
+const Drawer = createDrawerNavigator();
+
 const Stack = createStackNavigator();
 
-export default function ProductStack(props) {
-  const navigation = useNavigation();
+export default function ProductStack({route, navigation}) {
   return (
-    <Stack.Navigator initialRouteName="HomeScreen" headerMode="screen">
+    <Drawer.Navigator
+      initialRouteName="HomeScreen"
+      headerMode="screen"
+      drawerPosition="right">
       <Stack.Screen
         name="HomeScreen"
-        component={HomeScreen}
-        options={{
-          headerTitle: (props) => <LogoTitle title="Map" {...props} />,
-          headerStyle: {
-            backgroundColor: '#1e96dc',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-          headerLeft: () => (
-            <HeaderIcon
-              size={25}
-              source={require('../assets/dash.png')}
-              onPress={() => {
-                navigation.toggleDrawer();
-              }}
-            />
-          ),
-        }}
+        component={HomeStack}
+        options={{headerShown: false}}
       />
-    </Stack.Navigator>
+    </Drawer.Navigator>
   );
 }
 

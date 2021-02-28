@@ -8,8 +8,8 @@ import HeaderIcon from '../components/headers/headerIcon';
 
 const Stack = createStackNavigator();
 
-export default function AuthStack() {
-  const navigation = useNavigation();
+export default function AuthStack({route, navigation}) {
+  // const navigation = useNavigation();
   return (
     <Stack.Navigator
       initialRouteName="Login"
@@ -58,6 +58,9 @@ export default function AuthStack() {
       <Stack.Screen
         name="Dashboard"
         component={Dashboard}
+        navigationOptions={{
+          drawerLockMode: 'locked-closed',
+        }}
         options={{
           headerShown: false,
         }}

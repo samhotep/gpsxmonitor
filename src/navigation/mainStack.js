@@ -10,6 +10,7 @@ import HeaderIcon from '../components/headers/headerIcon';
 import FloatingLoader from '../components/loaders/floatingLoader';
 import styled from 'styled-components';
 import Storage from '../storage/storage';
+import API from '../api/api';
 
 const Stack = createStackNavigator();
 
@@ -54,6 +55,8 @@ function CustomDrawerContent(props) {
   // Check to see if there is an API server URL, if not, then set the default
   useEffect(() => {
     Storage.getURL().then((url) => {
+      console.log('url');
+      console.log(url);
       if (url === '') {
         Storage.setURL('https://hosting.fms-ecsinternational.com/api/');
       } else {
@@ -168,15 +171,29 @@ export default function MainStack() {
   const [loggedIn, setLoggedIn] = useState();
   const [loading, setLoading] = useState(true);
 
-  // Check if the user is logged in, if they are, redirect to the home page
+  /**
+   * Check to see if there is an API server URL, if not, then set the default
+   */
   useEffect(() => {
-    Storage.getUserToken().then((token) => {
-      setLoading(false);
-      if (token !== '') {
+    Storage.getURL().then((url) => {
+      console.log(url);
+      if (url === null) {
+        Storage.setURL('https://hosting.fms-ecsinternational.com/api/');
+      }
+    });
+  }, []);
+
+  /**
+   * Check if the user session is still valid, if not then redirect to the home page
+   */
+  useEffect(() => {
+    API.checkIn().then((result) => {
+      if (result === true) {
         setLoggedIn(true);
       } else {
         setLoggedIn(false);
       }
+      setLoading(false);
     });
   }, []);
 
@@ -186,19 +203,20 @@ export default function MainStack() {
 
   return (
     <Stack.Navigator initialRouteName="Main">
-      {loggedIn === false ? (
+      {loggedIn === true ? (
         <Stack.Screen
           name="Main"
           component={Dashboard}
           options={{headerShown: false}}
         />
-      ) : (
+      ) : null}
+      {loggedIn === false ? (
         <Stack.Screen
           name="Main"
           component={SettingsDrawer}
           options={{headerShown: false}}
         />
-      )}
+      ) : null}
     </Stack.Navigator>
   );
 }

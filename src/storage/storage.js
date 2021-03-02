@@ -29,6 +29,19 @@ const Storage = {
       console.log(e);
     }
   },
+  getUserInfo: () => {
+    return AsyncStorage.getItem('userinfo');
+  },
+  setUserInfo: (data) => {
+    AsyncStorage.setItem('userinfo', JSON.stringify(data));
+  },
+  removeUserInfo: async () => {
+    try {
+      await AsyncStorage.removeItem('userinfo');
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };
 
 export default Storage;

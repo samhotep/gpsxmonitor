@@ -23,8 +23,7 @@ const API = {
   },
   apiCall: (endpoint, data) => {
     // Make Generic API Call
-    return Storage.getURL().then((result) => {
-      let url = JSON.parse(result);
+    return Storage.getURL().then((url) => {
       console.log(url + endpoint);
       return API.post(url + endpoint, data)
         .then((response) => {

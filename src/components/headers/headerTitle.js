@@ -15,7 +15,7 @@ export default function HeaderTitle(props) {
 const HeaderContainer = styled.View`
   flex-direction: row;
   align-items: center;
-  height: 50px;
+  height: 56px;
   width: 100%;
   background-color: #1e96dc;
 `;

@@ -9,6 +9,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import styled from 'styled-components/native';
 import ProductStack from './productStack';
 import CategoryItem from '../components/items/categoryItem';
+import HeaderTitle from '../components/headers/headerTitle';
 
 const Drawer = createDrawerNavigator();
 
@@ -68,6 +69,13 @@ function CustomDrawerContent(props) {
         justifyContent: 'space-between',
       }}>
       {/* TODO Put title, search and filter icons up here */}
+      <HeaderTitle
+        source={require('../assets/back.png')}
+        onPress={() => {
+          // navigation.goBack();
+        }}
+        label="Settings"
+      />
       <DrawerHeaderContainer>
         <DrawerIcon source={require('../assets/account.png')} />
         <HeaderContent>

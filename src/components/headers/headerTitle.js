@@ -24,6 +24,7 @@ const ItemLabel = styled.Text`
   font-size: ${(props) => props.size || 20}px;
   color: ${(props) => props.color || '#4788c7'};
   font-family: 'Roboto-Regular';
+  font-weight: bold;
   padding: ${(props) => props.padding || 0}px;
   margin: ${(props) => props.margin || 5}px;
 `;
@@ -32,6 +33,5 @@ const ExtrasContainer = styled.View`
   flex-direction: row;
   align-items: center;
   height: 50px;
-  width: 100%;
   background-color: #1e96dc;
 `;

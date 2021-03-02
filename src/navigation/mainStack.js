@@ -195,8 +195,8 @@ export default function MainStack() {
       if (result === true) {
         setLoggedIn(true);
       } else {
+        setLoggedIn(false);
       }
-      setLoggedIn(false);
       setLoading(false);
     });
   }, []);

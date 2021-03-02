@@ -4,12 +4,12 @@ import styled from 'styled-components';
 
 export default function FloatingLoader() {
   const window = useWindowDimensions();
-  const adHeight = window.height / 2 - 100;
-  const adWidth = window.width / 2 - 45;
+  const size = 50;
+  const depth = 100;
 
   return (
-    <Container>
-      <Loader size="large" color="#b4004e" />
+    <Container left={window.width / 2 - size / 2} size={size} depth={100}>
+      <Loader size="large" color="#4788c7" />
     </Container>
   );
 }
@@ -20,13 +20,12 @@ const Container = styled.View`
   justify-content: center;
   border-radius: 25px;
   background-color: #ffffff;
-  elevation: 10;
+  left: ${(props) => props.left}px;
+  bottom: ${(props) => props.depth}px;
+  elevation: 5;
   position: absolute;
-  left: 45%;
-  top: 75%;
-  padding: 5px;
+  width: ${(props) => props.size}px;
+  height: ${(props) => props.size}px;
 `;
 
-const Loader = styled.ActivityIndicator`
-  align-self: center;
-`;
+const Loader = styled.ActivityIndicator``;

@@ -9,10 +9,6 @@ export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const goToScreen = (screen) => {
-    navigation.navigate(screen);
-  };
-
   const validateLogin = () => {
     if (
       !/^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/.test(email)
@@ -31,7 +27,7 @@ export default function LoginScreen({navigation}) {
     } else {
       API.authenticateUser(email, password).then((result) => {
         if (result === true) {
-          goToScreen('Dashboard');
+          navigation.reset({index: 0, routes: [{name: 'Dashboard'}]});
         } else {
           ToastAndroid.show(result, ToastAndroid.SHORT, ToastAndroid.CENTER);
         }
@@ -68,7 +64,7 @@ export default function LoginScreen({navigation}) {
           }}
         />
         <RowContainer width="300px">
-          <Button onPress={() => goToScreen('Reset')}>
+          <Button onPress={() => navigation.navigate('Reset')}>
             <Text color="#c5c5c5" margin={5}>
               Forgot Password?
             </Text>
@@ -83,7 +79,7 @@ export default function LoginScreen({navigation}) {
           bgcolor="#4788c7"
           width={300}
         />
-        <Button onPress={() => goToScreen('Dashboard')}>
+        <Button onPress={() => validateLogin()}>
           <Text padding={10} margin={10} size={18}>
             Demo
           </Text>

@@ -3,12 +3,13 @@ import {useWindowDimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import styled from 'styled-components';
 import CheckBox from '@react-native-community/checkbox';
 import AuthStack from './authStack';
 import Dashboard from './dashboard';
+import HeaderTitle from '../components/headers/headerTitle';
 import HeaderIcon from '../components/headers/headerIcon';
 import FloatingLoader from '../components/loaders/floatingLoader';
-import styled from 'styled-components';
 import Storage from '../storage/storage';
 import API from '../api/api';
 
@@ -66,16 +67,13 @@ function CustomDrawerContent(props) {
   }, []);
   return (
     <DrawerContainer>
-      <DrawerHeaderContainer>
-        <HeaderIcon
-          size={20}
-          source={require('../assets/back.png')}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
-        <ItemLabel color="#ffffff">Settings</ItemLabel>
-      </DrawerHeaderContainer>
+      <HeaderTitle
+        source={require('../assets/back.png')}
+        onPress={() => {
+          navigation.goBack();
+        }}
+        label="Settings"
+      />
       <HeaderItem
         label="Notification settings"
         item={

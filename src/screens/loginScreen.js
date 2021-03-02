@@ -30,6 +30,7 @@ export default function LoginScreen({navigation}) {
       setLoading(true);
       API.authenticateUser(email, password).then((result) => {
         if (result === true) {
+          API.getUserInfo();
           navigation.reset({index: 0, routes: [{name: 'Dashboard'}]});
         } else {
           ToastAndroid.show(result, ToastAndroid.SHORT, ToastAndroid.CENTER);

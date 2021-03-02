@@ -44,6 +44,85 @@ function CustomDrawerContent(props) {
   const [labelsEnabled, setLabelsEnabled] = useState(false);
   const [inputURL, setInputURL] = useState('');
 
+  const headerItems = [
+    {
+      label: 'Notification settings',
+      item: (
+        <Button>
+          <ItemLabel color="#202020" size={18} margin={5}>
+            Notifications
+          </ItemLabel>
+        </Button>
+      ),
+    },
+    {
+      label: 'Map Settings',
+      item: (
+        <InputRowContainer>
+          <InputContainer>
+            <ItemLabel color="#202020" size={18}>
+              Object Labels
+            </ItemLabel>
+            <ItemLabel color="#acacac" size={16}>
+              Object labels displayed on map
+            </ItemLabel>
+          </InputContainer>
+          <CheckBox
+            disabled={false}
+            value={labelsEnabled}
+            onValueChange={() =>
+              labelsEnabled ? setLabelsEnabled(false) : setLabelsEnabled(true)
+            }
+            tintColors={{true: '#1e96dc', false: '#1e96dc'}}
+          />
+        </InputRowContainer>
+      ),
+    },
+    {
+      label: 'Sorting settings',
+      item: (
+        <Button onPress={toggleSortObjects}>
+          <InputContainer>
+            <ItemLabel color="#202020" size={18}>
+              Sort objects
+            </ItemLabel>
+            <ItemLabel color="#acacac" size={16}>
+              {sortValue}
+            </ItemLabel>
+          </InputContainer>
+        </Button>
+      ),
+    },
+    {
+      label: 'Advanced settings',
+      item: (
+        <InputContainer>
+          <ItemLabel color="#202020" size={18}>
+            API server URL
+          </ItemLabel>
+          <FormInput
+            placeholder="https://hosting.fms-ecsinternational.com/api/"
+            size={16}
+            value={inputURL}
+            onChangeText={(value) => {
+              let tempURL = value;
+              if (value.substr(value.length - 1) !== '/') {
+                tempURL.concat('/');
+              }
+              // If value is not specified, then leave the field blank, and save the default url to storage
+              if (value !== '') {
+                setInputURL(tempURL);
+              } else {
+                tempURL = 'https://hosting.fms-ecsinternational.com/api/';
+              }
+              Storage.setURL(tempURL);
+            }}
+          />
+        </InputContainer>
+      ),
+    },
+  ];
+
   const toggleSortObjects = () => {
     if (sortObjects) {
       setSortValue('disabled');
@@ -74,82 +153,9 @@ function CustomDrawerContent(props) {
         }}
         label="Settings"
       />
-      <HeaderItem
-        label="Notification settings"
-        item={
-          <Button>
-            <ItemLabel color="#202020" size={18} margin={5}>
-              Notifications
-            </ItemLabel>
-          </Button>
-        }
-      />
-      <HeaderItem
-        label="Map Settings"
-        item={
-          <InputRowContainer>
-            <InputContainer>
-              <ItemLabel color="#202020" size={18}>
-                Object Labels
-              </ItemLabel>
-              <ItemLabel color="#acacac" size={16}>
-                Object labels displayed on map
-              </ItemLabel>
-            </InputContainer>
-            <CheckBox
-              disabled={false}
-              value={labelsEnabled}
-              onValueChange={() =>
-                labelsEnabled ? setLabelsEnabled(false) : setLabelsEnabled(true)
-              }
-              tintColors={{true: '#1e96dc', false: '#1e96dc'}}
-            />
-          </InputRowContainer>
-        }
-      />
-      <HeaderItem
-        label="Sorting settings"
-        item={
-          <Button onPress={toggleSortObjects}>
-            <InputContainer>
-              <ItemLabel color="#202020" size={18}>
-                Sort objects
-              </ItemLabel>
-              <ItemLabel color="#acacac" size={16}>
-                {sortValue}
-              </ItemLabel>
-            </InputContainer>
-          </Button>
-        }
-      />
-      <HeaderItem
-        label="Advanced settings"
-        item={
-          <InputContainer>
-            <ItemLabel color="#202020" size={18}>
-              API server URL
-            </ItemLabel>
-            <FormInput
-              placeholder="https://hosting.fms-ecsinternational.com/api/"
-              size={16}
-              value={inputURL}
-              onChangeText={(value) => {
-                let tempURL = value;
-                if (value.substr(value.length - 1) !== '/') {
-                  tempURL.concat('/');
-                }
-                // If value is not specified, then leave the field blank, and save the default url to storage
-                if (value !== '') {
-                  setInputURL(tempURL);
-                } else {
-                  tempURL = 'https://hosting.fms-ecsinternational.com/api/';
-                }
-                Storage.setURL(tempURL);
-              }}
-            />
-          </InputContainer>
-        }
-      />
+      {headerItems.map((_, i) => {
+        return <HeaderItem label={_.label} item={_.item} />;
+      })}
     </DrawerContainer>
   );
 }

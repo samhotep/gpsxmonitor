@@ -3,11 +3,13 @@ import {StatusBar, ToastAndroid} from 'react-native';
 import styled from 'styled-components/native';
 import Input from '../components/inputs/input';
 import GenericButton from '../components/buttons/genericButton';
+import FloatingLoader from '../components/loaders/floatingLoader';
 import API from '../api/api';
 
 export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState();
 
   const validateLogin = () => {
     if (
@@ -25,12 +27,14 @@ export default function LoginScreen({navigation}) {
         ToastAndroid.CENTER,
       );
     } else {
+      setLoading(true);
       API.authenticateUser(email, password).then((result) => {
         if (result === true) {
           navigation.reset({index: 0, routes: [{name: 'Dashboard'}]});
         } else {
           ToastAndroid.show(result, ToastAndroid.SHORT, ToastAndroid.CENTER);
         }
+        setLoading(false);
       });
     }
   };
@@ -85,6 +89,7 @@ export default function LoginScreen({navigation}) {
           </Text>
         </Button>
       </FormContainer>
+      {loading ? <FloatingLoader /> : null}
     </Container>
   );
 }

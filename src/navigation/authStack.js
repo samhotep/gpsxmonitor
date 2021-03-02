@@ -1,6 +1,5 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {useNavigation} from '@react-navigation/native';
 import LoginScreen from '../screens/loginScreen';
 import PasswordResetScreen from '../screens/passwordResetScreen';
 import Dashboard from './dashboard';
@@ -9,7 +8,6 @@ import HeaderIcon from '../components/headers/headerIcon';
 const Stack = createStackNavigator();
 
 export default function AuthStack({route, navigation}) {
-  // const navigation = useNavigation();
   return (
     <Stack.Navigator
       initialRouteName="Login"

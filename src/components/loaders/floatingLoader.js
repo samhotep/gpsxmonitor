@@ -8,7 +8,7 @@ export default function FloatingLoader() {
   const depth = 100;
 
   return (
-    <Container left={window.width / 2 - size / 2} size={size} depth={100}>
+    <Container left={window.width / 2 - size / 2} size={size} depth={depth}>
       <Loader size="large" color="#4788c7" />
     </Container>
   );

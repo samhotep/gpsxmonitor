@@ -23,7 +23,8 @@ const API = {
   },
   apiCall: (endpoint, data) => {
     // Make Generic API Call
-    return Storage.getURL().then((url) => {
+    return Storage.getURL().then((result) => {
+      let url = JSON.parse(result);
       console.log(url + endpoint);
       return API.post(url + endpoint, data)
         .then((response) => {
@@ -46,6 +47,50 @@ const API = {
         }
       },
     );
+  },
+  getUserInfo: () => {
+    return API.apiCall('user/get_info/', {
+      hash: Storage.getUserToken(),
+    }).then((result) => {
+      console.log(result);
+      if (result.success === true) {
+        return result;
+      } else {
+        return result.status.description;
+      }
+    });
+  },
+  checkIn: () => {
+    return Storage.getUserToken().then((result) => {
+      let hash = JSON.parse(result);
+      if (hash === null) {
+        return false;
+      } else {
+        return API.apiCall('user/audit/checkin/', {
+          hash: hash,
+        }).then((result) => {
+          console.log(result);
+          if (result.success === true) {
+            return true;
+          } else {
+            return result.status.description;
+          }
+        });
+      }
+    });
+  },
+  renewSession: () => {
+    return API.apiCall('user/session/renew/', {
+      hash: Storage.getUserToken(),
+    }).then((result) => {
+      console.log(result);
+      if (result.success === true) {
+        Storage.setUserToken(result.hash);
+        return true;
+      } else {
+        return result.status.description;
+      }
+    });
   },
 };
 

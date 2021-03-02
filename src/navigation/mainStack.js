@@ -225,10 +225,8 @@ export default function MainStack() {
   );
 }
 
-const DrawerContainer = styled.View`
+const DrawerContainer = styled.ScrollView`
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
 `;
 
 const ItemContainer = styled.View`

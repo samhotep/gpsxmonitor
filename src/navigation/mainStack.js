@@ -8,7 +8,6 @@ import CheckBox from '@react-native-community/checkbox';
 import AuthStack from './authStack';
 import Dashboard from './dashboard';
 import HeaderTitle from '../components/headers/headerTitle';
-import HeaderIcon from '../components/headers/headerIcon';
 import FloatingLoader from '../components/loaders/floatingLoader';
 import Storage from '../storage/storage';
 import API from '../api/api';
@@ -23,6 +22,7 @@ function SettingsDrawer({route, navigation}) {
     <Drawer.Navigator
       initialRouteName="Home"
       drawerPosition="right"
+      // eslint-disable-next-line react-native/no-inline-styles
       drawerStyle={{
         backgroundColor: '#ffffff',
         width: window.width,
@@ -246,14 +246,6 @@ const ItemLabel = styled.Text`
   padding: ${(props) => props.padding || 0}px;
   margin: ${(props) => props.margin || 0}px;
   width: 100%;
-`;
-
-const DrawerHeaderContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  height: 50px;
-  width: 100%;
-  background-color: #1e96dc;
 `;
 
 const Button = styled.TouchableOpacity`

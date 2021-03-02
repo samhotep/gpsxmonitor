@@ -51,9 +51,9 @@ const API = {
     return API.apiCall('user/get_info/', {
       hash: Storage.getUserToken(),
     }).then((result) => {
-      console.log(result);
       if (result.success === true) {
-        return result;
+        Storage.setUserInfo(result);
+        return true;
       } else {
         return result.status.description;
       }

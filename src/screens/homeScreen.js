@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import React from 'react';
+import {StyleSheet, View, StatusBar} from 'react-native';
 import {useWindowDimensions} from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -7,6 +7,7 @@ export default function HomeScreen({navigation}) {
   const window = useWindowDimensions();
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor="#4788c7" />
       <MapView
         style={styles.map}
         initialRegion={{

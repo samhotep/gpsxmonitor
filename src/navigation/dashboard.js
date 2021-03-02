@@ -62,8 +62,8 @@ function CustomDrawerContent(props) {
   //     );
 
   return (
-    <DrawerContentScrollView
-      {...props}
+    <DrawerContainer
+      // eslint-disable-next-line react-native/no-inline-styles
       contentContainerStyle={{
         flex: 1,
         justifyContent: 'space-between',
@@ -89,9 +89,13 @@ function CustomDrawerContent(props) {
         {/* TODO Create color wheel that appends different colors for each object */}
         <CategoryItem text="URA GENERATORS (4)" color="yellow" />
       </DrawerContentContainer>
-    </DrawerContentScrollView>
+    </DrawerContainer>
   );
 }
+
+const DrawerContainer = styled.ScrollView`
+  flex-direction: column;
+`;
 
 const DrawerIcon = styled.Image`
   height: ${(props) => props.size || 60}px;

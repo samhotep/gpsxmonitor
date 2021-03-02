@@ -191,8 +191,8 @@ export default function MainStack() {
       if (result === true) {
         setLoggedIn(true);
       } else {
-        setLoggedIn(false);
       }
+      setLoggedIn(false);
       setLoading(false);
     });
   }, []);
@@ -247,7 +247,7 @@ const ItemLabel = styled.Text`
 const DrawerHeaderContainer = styled.View`
   flex-direction: row;
   align-items: center;
-  height: 44px;
+  height: 50px;
   width: 100%;
   background-color: #1e96dc;
 `;

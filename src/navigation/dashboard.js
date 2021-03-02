@@ -70,7 +70,9 @@ function CustomDrawerContent(props) {
         <DrawerIcon source={require('../assets/account.png')} />
         <HeaderContent>
           <DrawerLabel bold="bold">Test Test</DrawerLabel>
-          <DrawerLabel>ID #365</DrawerLabel>
+          <DrawerLabel underline="underline" color="#4788c7">
+            ID #365
+          </DrawerLabel>
         </HeaderContent>
       </DrawerHeaderContainer>
     </DrawerContentScrollView>
@@ -87,7 +89,8 @@ const DrawerLabel = styled.Text`
   font-weight: ${(props) => (props.bold ? props.bold : 'normal')};
   font-size: 14px;
   text-align: left;
-  color: #707070;
+  color: ${(props) => props.color || '#707070'};
+  text-decoration: ${(props) => props.underline || 'none'};
 `;
 
 const DrawerHeaderContainer = styled.View`

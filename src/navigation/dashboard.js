@@ -69,7 +69,7 @@ function CustomDrawerContent(props) {
       <DrawerHeaderContainer>
         <DrawerIcon source={require('../assets/account.png')} />
         <HeaderContent>
-          <DrawerLabel>Test Test</DrawerLabel>
+          <DrawerLabel bold="bold">Test Test</DrawerLabel>
           <DrawerLabel>ID #365</DrawerLabel>
         </HeaderContent>
       </DrawerHeaderContainer>
@@ -84,7 +84,7 @@ const DrawerIcon = styled.Image`
 `;
 
 const DrawerLabel = styled.Text`
-  font-weight: ${(props) => (props.bold ? props.bold : 'bold')};
+  font-weight: ${(props) => (props.bold ? props.bold : 'normal')};
   font-size: 14px;
   text-align: left;
   color: #707070;

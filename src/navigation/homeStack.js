@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from '../screens/homeScreen';
 import HeaderIcon from '../components/headers/headerIcon';

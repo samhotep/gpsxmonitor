@@ -3,6 +3,7 @@ import {StyleSheet, View, StatusBar} from 'react-native';
 import {useWindowDimensions} from 'react-native';
 import MapView from 'react-native-maps';
 
+// TODO Pass the location as a state prop, or as an event emitter
 export default function HomeScreen({navigation}) {
   const window = useWindowDimensions();
   return (
@@ -11,8 +12,8 @@ export default function HomeScreen({navigation}) {
       <MapView
         style={styles.map}
         initialRegion={{
-          latitude: 0.347596,
-          longitude: 32.58252,
+          latitude: 2.6031808853,
+          longitude: 31.9491958618,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}

@@ -7,7 +7,7 @@ const Storage = {
     return AsyncStorage.getItem('hash');
   },
   setUserToken: (data) => {
-    AsyncStorage.setItem('hash', data);
+    AsyncStorage.setItem('hash', JSON.stringify(data));
   },
   removeUserToken: async () => {
     try {
@@ -20,7 +20,7 @@ const Storage = {
     return AsyncStorage.getItem('url');
   },
   setURL: (data) => {
-    AsyncStorage.setItem('url', data);
+    AsyncStorage.setItem('url', JSON.stringify(data));
   },
   removeURL: async () => {
     try {

@@ -15,7 +15,9 @@ const StackNavigator = createStackNavigator();
 
 export default function Dashboard({route, navigation}) {
   return (
-    <Drawer.Navigator initialRouteName="Home">
+    <Drawer.Navigator
+      initialRouteName="Home"
+      drawerContent={CustomDrawerContent}>
       <Drawer.Screen name="Home" component={ProductStack} />
     </Drawer.Navigator>
   );
@@ -63,24 +65,39 @@ function CustomDrawerContent(props) {
       contentContainerStyle={{
         flex: 1,
         justifyContent: 'space-between',
-      }}></DrawerContentScrollView>
+      }}>
+      <DrawerHeaderContainer>
+        <DrawerIcon source={require('../assets/account.png')} />
+        <HeaderContent>
+          <DrawerLabel>Test Test</DrawerLabel>
+          <DrawerLabel>ID #365</DrawerLabel>
+        </HeaderContent>
+      </DrawerHeaderContainer>
+    </DrawerContentScrollView>
   );
 }
 
 const DrawerIcon = styled.Image`
-  width: 12.5%;
-  height: 100%;
+  height: ${(props) => props.size || 60}px;
+  width: ${(props) => props.size || 60}px;
+  margin: 10px;
 `;
 
 const DrawerLabel = styled.Text`
-  font-size: 15px;
-  text-align: center;
+  font-weight: ${(props) => (props.bold ? props.bold : 'bold')};
+  font-size: 14px;
+  text-align: left;
   color: #707070;
 `;
 
 const DrawerHeaderContainer = styled.View`
-  flex: 1;
-  padding: 15px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+const HeaderContent = styled.View`
+  flex-direction: column;
 `;
 
 const DrawerContentContainer = styled.ScrollView`

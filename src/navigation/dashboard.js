@@ -8,6 +8,7 @@ import {
 import {createStackNavigator} from '@react-navigation/stack';
 import styled from 'styled-components/native';
 import ProductStack from './productStack';
+import CategoryItem from '../components/items/categoryItem';
 
 const Drawer = createDrawerNavigator();
 
@@ -66,6 +67,7 @@ function CustomDrawerContent(props) {
         flex: 1,
         justifyContent: 'space-between',
       }}>
+      {/* TODO Put title, search and filter icons up here */}
       <DrawerHeaderContainer>
         <DrawerIcon source={require('../assets/account.png')} />
         <HeaderContent>
@@ -75,6 +77,10 @@ function CustomDrawerContent(props) {
           </DrawerLabel>
         </HeaderContent>
       </DrawerHeaderContainer>
+      <DrawerContentContainer>
+        {/* TODO Create color wheel that appends different colors for each object */}
+        <CategoryItem text="URA GENERATORS (4)" color="yellow" />
+      </DrawerContentContainer>
     </DrawerContentScrollView>
   );
 }
@@ -105,7 +111,7 @@ const HeaderContent = styled.View`
 
 const DrawerContentContainer = styled.ScrollView`
   flex-grow: 1;
-  background-color: #ffebee;
+  background-color: #ffffff;
 `;
 
 // TODO Add get_states to API

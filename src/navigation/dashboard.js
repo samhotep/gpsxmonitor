@@ -12,6 +12,7 @@ import CategoryItem from '../components/items/categoryItem';
 import HeaderTitle from '../components/headers/headerTitle';
 import HeaderIcon from '../components/headers/headerIcon';
 import ListItem from '../components/items/listItem';
+import Utils from '../utils/utils';
 
 const Drawer = createDrawerNavigator();
 
@@ -28,6 +29,138 @@ export default function Dashboard({route, navigation}) {
 }
 
 function CustomDrawerContent(navigation) {
+  let cat = {
+    success: true,
+    list: [
+      {
+        id: 250,
+        label: 'M09-UAP 935Z',
+        group_id: 15,
+        source: {
+          id: 244,
+          device_id: '866795035815966',
+          model: 'bce_fms500_one',
+          blocked: false,
+          tariff_id: 2,
+          phone: '256707653534',
+          status_listing_id: null,
+          creation_date: '2020-04-23',
+          tariff_end_date: '2020-04-24',
+        },
+        tag_bindings: [],
+        clone: false,
+      },
+      {
+        id: 251,
+        label: 'M10-UAR 662V',
+        group_id: 15,
+        source: {
+          id: 245,
+          device_id: '866795035826013',
+          model: 'bce_fms500_one',
+          blocked: false,
+          tariff_id: 2,
+          phone: '256707653531',
+          status_listing_id: null,
+          creation_date: '2020-04-23',
+          tariff_end_date: '2020-04-24',
+        },
+        tag_bindings: [],
+        clone: false,
+      },
+      {
+        id: 274,
+        label: 'UBG 066T Toyota Hillux',
+        group_id: 5,
+        source: {
+          id: 268,
+          device_id: '861230049838197',
+          model: 'bce_fms500_lightplus',
+          blocked: false,
+          tariff_id: 2,
+          phone: '256707653609',
+          status_listing_id: null,
+          creation_date: '2020-04-24',
+          tariff_end_date: '2020-04-25',
+        },
+        tag_bindings: [],
+        clone: false,
+      },
+      {
+        id: 557,
+        label: '2010104 - URA MALABA CUSTOMS',
+        group_id: 2,
+        source: {
+          id: 4,
+          device_id: '864626044880224',
+          model: 'bce_fms500_lightplus',
+          blocked: false,
+          tariff_id: 2,
+          phone: '256770420898',
+          status_listing_id: null,
+          creation_date: '2020-03-27',
+          tariff_end_date: '2020-03-28',
+        },
+        tag_bindings: [],
+        clone: true,
+      },
+      {
+        id: 3282,
+        label: '2010094 - URA LIRA GENSET',
+        group_id: 2,
+        source: {
+          id: 991,
+          device_id: '860922040727459',
+          model: 'bce_fms500_lightplus',
+          blocked: false,
+          tariff_id: 2,
+          phone: '256784301180',
+          status_listing_id: null,
+          creation_date: '2020-09-02',
+          tariff_end_date: '2020-09-03',
+        },
+        tag_bindings: [],
+        clone: true,
+      },
+      {
+        id: 3369,
+        label: '2010093 - URA ELEGU GENSET',
+        group_id: 2,
+        source: {
+          id: 992,
+          device_id: '860922041049242',
+          model: 'bce_fms500_lightplus',
+          blocked: false,
+          tariff_id: 2,
+          phone: '256783849396',
+          status_listing_id: null,
+          creation_date: '2020-09-02',
+          tariff_end_date: '2020-09-03',
+        },
+        tag_bindings: [],
+        clone: true,
+      },
+      {
+        id: 5013,
+        label: '2010091 - URA BUSITEMA GENSET',
+        group_id: 2,
+        source: {
+          id: 1341,
+          device_id: '860922041069778',
+          model: 'bce_fms500_lightplus',
+          blocked: false,
+          tariff_id: 2,
+          phone: '882360012105187',
+          status_listing_id: null,
+          creation_date: '2020-12-04',
+          tariff_end_date: '2020-12-05',
+        },
+        tag_bindings: [],
+        clone: true,
+      },
+    ],
+  };
+
   //   const confirmLogout = () =>
   //     Alert.alert(
   //       "Logout",
@@ -63,6 +196,13 @@ function CustomDrawerContent(navigation) {
   //       { cancelable: false }
   //     );
 
+  // useEffect(() => {
+  //   // TODO Get objects from API
+  //   let res = Utils.getCategories(cat.list);
+  //   setData(res);
+  //   console.log(res);
+  // }, []);
+
   return (
     <DrawerContainer
       // eslint-disable-next-line react-native/no-inline-styles
@@ -97,7 +237,9 @@ function CustomDrawerContent(navigation) {
         {/* TODO list_models endpoint for these */}
         {/* TODO Create color wheel that appends different colors for each object */}
         <CategoryItem text="URA GENERATORS (4)" color="yellow" />
-        <ListItem text="URA GENERATORS (4)" color="yellow" />
+        {cat.list.map((_, i) => {
+          return <ListItem text={_.label} color="green" />;
+        })}
       </DrawerContentContainer>
     </DrawerContainer>
   );

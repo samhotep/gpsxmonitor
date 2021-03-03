@@ -5,9 +5,11 @@ import HeaderIcon from '../headers/headerIcon';
 export default function HeaderTitle(props) {
   return (
     <HeaderContainer>
-      <HeaderIcon size={20} source={props.source} onPress={props.onPress} />
-      <ItemLabel color="#ffffff">{props.label}</ItemLabel>
-      <ExtrasContainer>{props.extras}</ExtrasContainer>
+      <ItemsContainer>
+        <HeaderIcon size={20} source={props.source} onPress={props.onPress} />
+        <ItemLabel color="#ffffff">{props.label}</ItemLabel>
+      </ItemsContainer>
+      <ItemsContainer>{props.extras}</ItemsContainer>
     </HeaderContainer>
   );
 }
@@ -15,6 +17,7 @@ export default function HeaderTitle(props) {
 const HeaderContainer = styled.View`
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   height: 56px;
   width: 100%;
   background-color: #1e96dc;
@@ -29,9 +32,7 @@ const ItemLabel = styled.Text`
   margin: ${(props) => props.margin || 5}px;
 `;
 
-const ExtrasContainer = styled.View`
+const ItemsContainer = styled.View`
   flex-direction: row;
   align-items: center;
-  height: 50px;
-  background-color: #1e96dc;
 `;

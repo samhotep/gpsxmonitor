@@ -10,6 +10,7 @@ import styled from 'styled-components/native';
 import ProductStack from './productStack';
 import CategoryItem from '../components/items/categoryItem';
 import HeaderTitle from '../components/headers/headerTitle';
+import HeaderIcon from '../components/headers/headerIcon';
 
 const Drawer = createDrawerNavigator();
 
@@ -19,13 +20,13 @@ export default function Dashboard({route, navigation}) {
   return (
     <Drawer.Navigator
       initialRouteName="Home"
-      drawerContent={CustomDrawerContent}>
+      drawerContent={() => CustomDrawerContent(navigation)}>
       <Drawer.Screen name="Home" component={ProductStack} />
     </Drawer.Navigator>
   );
 }
 
-function CustomDrawerContent(props) {
+function CustomDrawerContent(navigation) {
   //   const confirmLogout = () =>
   //     Alert.alert(
   //       "Logout",
@@ -72,9 +73,15 @@ function CustomDrawerContent(props) {
       <HeaderTitle
         source={require('../assets/back.png')}
         onPress={() => {
-          // navigation.goBack();
+          navigation.goBack();
         }}
-        label="Settings"
+        extras={
+          <ExtrasContainer>
+            <HeaderIcon source={require('../assets/search.png')} size={20} />
+            <HeaderIcon source={require('../assets/filter.png')} size={20} />
+          </ExtrasContainer>
+        }
+        label="Objects"
       />
       <DrawerHeaderContainer>
         <DrawerIcon source={require('../assets/account.png')} />
@@ -124,6 +131,10 @@ const HeaderContent = styled.View`
 const DrawerContentContainer = styled.ScrollView`
   flex-grow: 1;
   background-color: #ffffff;
+`;
+
+const ExtrasContainer = styled.View`
+  flex-direction: row;
 `;
 
 // TODO Add get_states to API

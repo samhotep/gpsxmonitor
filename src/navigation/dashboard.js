@@ -11,6 +11,7 @@ import ProductStack from './productStack';
 import CategoryItem from '../components/items/categoryItem';
 import HeaderTitle from '../components/headers/headerTitle';
 import HeaderIcon from '../components/headers/headerIcon';
+import ListItem from '../components/items/listItem';
 
 const Drawer = createDrawerNavigator();
 
@@ -93,8 +94,10 @@ function CustomDrawerContent(navigation) {
         </HeaderContent>
       </DrawerHeaderContainer>
       <DrawerContentContainer>
+        {/* TODO list_models endpoint for these */}
         {/* TODO Create color wheel that appends different colors for each object */}
         <CategoryItem text="URA GENERATORS (4)" color="yellow" />
+        <ListItem text="URA GENERATORS (4)" color="yellow" />
       </DrawerContentContainer>
     </DrawerContainer>
   );

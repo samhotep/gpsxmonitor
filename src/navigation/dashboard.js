@@ -206,8 +206,6 @@ function CustomDrawerContent({navigation}) {
   //   console.log(res);
   // }, []);
 
-  const focusSearch = () => {};
-
   return (
     <DrawerContainer
       // eslint-disable-next-line react-native/no-inline-styles

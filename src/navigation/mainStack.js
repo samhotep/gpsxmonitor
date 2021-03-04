@@ -106,7 +106,7 @@ function CustomDrawerContent(props) {
             value={inputURL}
             onChangeText={(value) => {
               setInputURL(value);
-              Storage.setURL('https://hosting.fms-ecsinternational.com/api/');
+              Storage.setURL(value);
             }}
           />
         </InputContainer>

@@ -105,17 +105,8 @@ function CustomDrawerContent(props) {
             size={16}
             value={inputURL}
             onChangeText={(value) => {
-              let tempURL = value;
-              if (value.substr(value.length - 1) !== '/') {
-                tempURL.concat('/');
-              }
-              // If value is not specified, then leave the field blank, and save the default url to storage
-              if (value !== '') {
-                setInputURL(tempURL);
-              } else {
-                tempURL = 'https://hosting.fms-ecsinternational.com/api/';
-              }
-              Storage.setURL(tempURL);
+              setInputURL(value);
+              Storage.setURL('https://hosting.fms-ecsinternational.com/api/');
             }}
           />
         </InputContainer>
@@ -132,18 +123,6 @@ function CustomDrawerContent(props) {
     setSortObjects(!sortObjects);
   };
 
-  // Check to see if there is an API server URL, if not, then set the default
-  useEffect(() => {
-    Storage.getURL().then((url) => {
-      console.log('url');
-      console.log(url);
-      if (url === '') {
-        Storage.setURL('https://hosting.fms-ecsinternational.com/api/');
-      } else {
-        setInputURL(url);
-      }
-    });
-  }, []);
   return (
     <DrawerContainer>
       <HeaderTitle
@@ -176,29 +155,21 @@ export default function MainStack() {
   const [loading, setLoading] = useState(true);
 
   /**
-   * Check to see if there is an API server URL, if not, then set the default
-   */
-  useEffect(() => {
-    Storage.getURL().then((url) => {
-      console.log(url);
-      if (url === null) {
-        Storage.setURL('https://hosting.fms-ecsinternational.com/api/');
-      }
-    });
-  }, []);
-
-  /**
    * Check if the user session is still valid, if not then redirect to the home page
    */
   useEffect(() => {
-    API.checkIn().then((result) => {
-      if (result === true) {
-        setLoggedIn(true);
-      } else {
-        setLoggedIn(false);
-      }
-      setLoading(false);
-    });
+    API.checkIn()
+      .then((result) => {
+        if (result === true) {
+          setLoggedIn(true);
+        } else {
+          setLoggedIn(false);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   if (loading) {

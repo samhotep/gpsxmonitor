@@ -2,29 +2,42 @@ import Storage from '../storage/storage';
 
 const API = {
   get: async (url = '', token = '', headers = '') => {
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json',
-      },
+    return Storage.getUserToken().then((result) => {
+      return fetch(url + `?hash=${JSON.parse(result)}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+        },
+      }).then((response) => {
+        return response.json().then((resultData) => {
+          return resultData;
+        });
+      });
     });
-    return await response.json();
   },
   post: async (url = '', data = {}, headers = '') => {
-    console.log(data);
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(data),
+    /**
+     * Check for a hash in user storage in order to validate request
+     */
+    return Storage.getUserToken().then((result) => {
+      let hashedData = {...data, hash: JSON.parse(result)};
+      console.log(hashedData);
+      return fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(hashedData),
+      }).then((response) => {
+        return response.json().then((resultData) => {
+          return resultData;
+        });
+      });
     });
-    return await response.json();
   },
   apiCall: (endpoint, data) => {
     // Make Generic API Call
     return Storage.getURL().then((url) => {
-      console.log(url + endpoint);
       return API.post(url + endpoint, data)
         .then((response) => {
           return response;
@@ -37,7 +50,6 @@ const API = {
   authenticateUser: (email, password) => {
     return API.apiCall('user/auth/', {login: email, password: password}).then(
       (result) => {
-        console.log(result);
         if (result.success === true) {
           Storage.setUserToken(result.hash);
           return true;
@@ -48,9 +60,7 @@ const API = {
     );
   },
   getUserInfo: () => {
-    return API.apiCall('user/get_info/', {
-      hash: Storage.getUserToken(),
-    }).then((result) => {
+    return API.apiCall('user/get_info/').then((result) => {
       if (result.success === true) {
         Storage.setUserInfo(result);
         return true;
@@ -60,29 +70,16 @@ const API = {
     });
   },
   checkIn: () => {
-    return Storage.getUserToken().then((result) => {
-      let hash = JSON.parse(result);
-      if (hash === null) {
-        return false;
+    return API.apiCall('user/audit/checkin/').then((result) => {
+      if (result.success === true) {
+        return true;
       } else {
-        return API.apiCall('user/audit/checkin/', {
-          hash: hash,
-        }).then((result) => {
-          console.log(result);
-          if (result.success === true) {
-            return true;
-          } else {
-            return result.status.description;
-          }
-        });
+        return result.status.description;
       }
     });
   },
   renewSession: () => {
-    return API.apiCall('user/session/renew/', {
-      hash: Storage.getUserToken(),
-    }).then((result) => {
-      console.log(result);
+    return API.apiCall('user/session/renew/').then((result) => {
       if (result.success === true) {
         Storage.setUserToken(result.hash);
         return true;
@@ -95,13 +92,11 @@ const API = {
 
 export default API;
 
-const x = {
-  errors: [
-    {error: 'length must be between 1 and 50', parameter: 'password'},
-    {error: 'length must be between 1 and 90', parameter: 'login'},
-    {error: 'must not be empty', parameter: 'password'},
-    {error: 'must not be empty', parameter: 'login'},
-  ],
-  status: {code: 7, description: 'Invalid parameters'},
+// TODO Incorporate hash error on every API Call
+let x = {
   success: false,
+  status: {
+    code: 3,
+    description: 'Wrong user hash',
+  },
 };

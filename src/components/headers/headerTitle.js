@@ -7,7 +7,11 @@ export default function HeaderTitle(props) {
     <HeaderContainer>
       <ItemsContainer>
         <HeaderIcon size={20} source={props.source} onPress={props.onPress} />
-        <ItemLabel color="#ffffff">{props.label}</ItemLabel>
+        {props.header ? (
+          props.header
+        ) : (
+          <ItemLabel color="#ffffff">{props.label}</ItemLabel>
+        )}
       </ItemsContainer>
       <ItemsContainer>{props.extras}</ItemsContainer>
     </HeaderContainer>

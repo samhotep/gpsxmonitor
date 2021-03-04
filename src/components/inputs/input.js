@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useRef, useEffect} from 'react';
 import styled from 'styled-components/native';
 
 export default function Input(props) {
@@ -8,6 +8,7 @@ export default function Input(props) {
       margin={props.margin}
       noBorder={props.noBorder}>
       <FormInput
+        autoFocus={props.autoFocus}
         defaultValue={props.defaultValue}
         placeholder={props.placeholder}
         secureTextEntry={props.hidden}

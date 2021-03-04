@@ -1,14 +1,19 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
+// TODO Animate the list
 export default function ListItem(props) {
   return (
-    <Container selected={props.selected}>
-      <Text selected={props.selected}>{props.text}</Text>
-      <IdentityColor color={props.color} />
-    </Container>
+    <Highlight onPress={props.onPress}>
+      <Container selected={props.selected}>
+        <Text selected={props.selected}>{props.text}</Text>
+        <IdentityColor color={props.color} />
+      </Container>
+    </Highlight>
   );
 }
+
+const Highlight = styled.TouchableHighlight``;
 
 const Container = styled.View`
   flex-direction: row;

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, createRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -31,7 +31,6 @@ export default function Dashboard({route, navigation}) {
 
 function CustomDrawerContent({navigation}) {
   const [clicked, setClicked] = useState(false);
-  const searchRef = createRef();
 
   let cat = {
     success: true,
@@ -207,6 +206,8 @@ function CustomDrawerContent({navigation}) {
   //   console.log(res);
   // }, []);
 
+  const focusSearch = () => {};
+
   return (
     <DrawerContainer
       // eslint-disable-next-line react-native/no-inline-styles
@@ -218,31 +219,39 @@ function CustomDrawerContent({navigation}) {
       <HeaderTitle
         source={require('../assets/back.png')}
         onPress={() => {
-          navigation.goBack();
+          if (clicked) {
+            setClicked(false);
+          } else {
+            navigation.goBack();
+          }
         }}
         // TODO Create a search object here, that is toggled on and off by pressing search
         // and by pressing 'X'. It should change the keyboard icon to search
-        header={null}
-        extras={
-          <ExtrasContainer>
-            {clicked ? (
+        header={
+          clicked ? (
+            <ExtrasContainer>
               <Input
-                ref={searchRef}
                 width={100}
                 color="#ffffff"
                 selectionColor={'#ffffff'}
                 noBorder={true}
                 placeholder="Search..."
+                placeholderTextColor="#4fc3f7"
+              />
+            </ExtrasContainer>
+          ) : null
+        }
+        extras={
+          <ExtrasContainer>
+            {clicked === false ? (
+              <HeaderIcon
+                source={require('../assets/search.png')}
+                size={20}
+                onPress={() => {
+                  setClicked(true);
+                }}
               />
             ) : null}
-            <HeaderIcon
-              source={require('../assets/search.png')}
-              size={20}
-              onPress={() => {
-                setClicked(true);
-                searchRef.current.getNativeRef().focus();
-              }}
-            />
             <HeaderIcon source={require('../assets/filter.png')} size={20} />
           </ExtrasContainer>
         }

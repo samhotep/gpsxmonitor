@@ -88,6 +88,15 @@ const API = {
       }
     });
   },
+  getTrackers: () => {
+    return API.apiCall('tracker/list/').then((result) => {
+      if (result.success === true) {
+        return true;
+      } else {
+        return result.status.description;
+      }
+    });
+  },
 };
 
 export default API;

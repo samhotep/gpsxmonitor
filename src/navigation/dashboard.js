@@ -231,6 +231,7 @@ function CustomDrawerContent({navigation}) {
           clicked ? (
             <ExtrasContainer>
               <Input
+                autoFocus={true}
                 width={100}
                 color="#ffffff"
                 selectionColor={'#ffffff'}

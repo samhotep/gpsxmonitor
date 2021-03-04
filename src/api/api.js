@@ -91,7 +91,7 @@ const API = {
   getTrackers: () => {
     return API.apiCall('tracker/list/').then((result) => {
       if (result.success === true) {
-        return true;
+        return result.list;
       } else {
         return result.status.description;
       }

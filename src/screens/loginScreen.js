@@ -96,9 +96,30 @@ export default function LoginScreen({navigation}) {
         />
         <Button
           onPress={() => {
-            setEmail('test@fms-ecsafrica.com');
-            setPassword('pass123');
-            validateLogin();
+            setLoading(true);
+            API.authenticateUser('test@fms-ecsafrica.com', 'pass123')
+              .then((result) => {
+                if (result === true) {
+                  API.getUserInfo();
+                  navigation.reset({index: 0, routes: [{name: 'Dashboard'}]});
+                } else {
+                  ToastAndroid.show(
+                    result,
+                    ToastAndroid.SHORT,
+                    ToastAndroid.CENTER,
+                  );
+                }
+                setLoading(false);
+              })
+              .catch((error) => {
+                setLoading(false);
+                console.log(error);
+                ToastAndroid.show(
+                  'Network request failed',
+                  ToastAndroid.SHORT,
+                  ToastAndroid.CENTER,
+                );
+              });
           }}>
           <Text padding={10} margin={10} size={18}>
             Demo

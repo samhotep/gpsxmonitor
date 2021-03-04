@@ -13,9 +13,7 @@ export default function ListItem(props) {
   );
 }
 
-const Highlight = styled.TouchableHighlight`
-  margin: 5px;
-`;
+const Highlight = styled.TouchableHighlight``;
 
 const Container = styled.View`
   flex-direction: row;

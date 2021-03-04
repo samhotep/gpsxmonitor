@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, createRef} from 'react';
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -12,6 +12,7 @@ import CategoryItem from '../components/items/categoryItem';
 import HeaderTitle from '../components/headers/headerTitle';
 import HeaderIcon from '../components/headers/headerIcon';
 import ListItem from '../components/items/listItem';
+import Input from '../components/inputs/input';
 import Utils from '../utils/utils';
 
 const Drawer = createDrawerNavigator();
@@ -22,13 +23,16 @@ export default function Dashboard({route, navigation}) {
   return (
     <Drawer.Navigator
       initialRouteName="Home"
-      drawerContent={() => CustomDrawerContent(navigation)}>
+      drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={ProductStack} />
     </Drawer.Navigator>
   );
 }
 
-function CustomDrawerContent(navigation) {
+function CustomDrawerContent({navigation}) {
+  const [clicked, setClicked] = useState(false);
+  const searchRef = createRef();
+
   let cat = {
     success: true,
     list: [
@@ -216,9 +220,29 @@ function CustomDrawerContent(navigation) {
         onPress={() => {
           navigation.goBack();
         }}
+        // TODO Create a search object here, that is toggled on and off by pressing search
+        // and by pressing 'X'. It should change the keyboard icon to search
+        header={null}
         extras={
           <ExtrasContainer>
-            <HeaderIcon source={require('../assets/search.png')} size={20} />
+            {clicked ? (
+              <Input
+                ref={searchRef}
+                width={100}
+                color="#ffffff"
+                selectionColor={'#ffffff'}
+                noBorder={true}
+                placeholder="Search..."
+              />
+            ) : null}
+            <HeaderIcon
+              source={require('../assets/search.png')}
+              size={20}
+              onPress={() => {
+                setClicked(true);
+                searchRef.current.getNativeRef().focus();
+              }}
+            />
             <HeaderIcon source={require('../assets/filter.png')} size={20} />
           </ExtrasContainer>
         }

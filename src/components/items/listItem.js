@@ -13,7 +13,9 @@ export default function ListItem(props) {
   );
 }
 
-const Highlight = styled.TouchableHighlight``;
+const Highlight = styled.TouchableHighlight`
+  margin: 5px;
+`;
 
 const Container = styled.View`
   flex-direction: row;
@@ -36,7 +38,9 @@ const IdentityColor = styled.View`
 `;
 
 const Text = styled.Text`
-  text-align: center;
+  flex: 1;
+  text-align: left;
+  flex-wrap: wrap;
+  font-size: 14px;
   color: ${(props) => (props.selected ? '#ffffff' : '#202020')};
-  padding: 5px;
 `;

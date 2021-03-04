@@ -39,8 +39,7 @@ const API = {
     // Make Generic API Call
     return Storage.getURL().then((url) => {
       let tempURL = JSON.parse(url);
-      console.log(tempURL.length);
-      if (!tempURL || tempURL.length === 0) {
+      if (!tempURL || tempURL === '') {
         tempURL = `https://hosting.fms-ecsinternational.com/api/${endpoint}`;
       } else {
         tempURL += endpoint;

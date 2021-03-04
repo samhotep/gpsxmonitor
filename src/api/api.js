@@ -38,11 +38,12 @@ const API = {
   apiCall: (endpoint, data) => {
     // Make Generic API Call
     return Storage.getURL().then((url) => {
-      let tempURL = url;
-      if (url === null || url === '') {
-        tempURL = 'https://hosting.fms-ecsinternational.com/api/' + endpoint;
+      let tempURL = JSON.parse(url);
+      console.log(tempURL.length);
+      if (!tempURL || tempURL.length === 0) {
+        tempURL = `https://hosting.fms-ecsinternational.com/api/${endpoint}`;
       } else {
-        tempURL = url + endpoint;
+        tempURL += endpoint;
       }
       console.log(tempURL);
       return API.post(tempURL, data)

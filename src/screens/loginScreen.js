@@ -28,15 +28,25 @@ export default function LoginScreen({navigation}) {
       );
     } else {
       setLoading(true);
-      API.authenticateUser(email, password).then((result) => {
-        if (result === true) {
-          API.getUserInfo();
-          navigation.reset({index: 0, routes: [{name: 'Dashboard'}]});
-        } else {
-          ToastAndroid.show(result, ToastAndroid.SHORT, ToastAndroid.CENTER);
-        }
-        setLoading(false);
-      });
+      API.authenticateUser(email, password)
+        .then((result) => {
+          if (result === true) {
+            API.getUserInfo();
+            navigation.reset({index: 0, routes: [{name: 'Dashboard'}]});
+          } else {
+            ToastAndroid.show(result, ToastAndroid.SHORT, ToastAndroid.CENTER);
+          }
+          setLoading(false);
+        })
+        .catch((error) => {
+          setLoading(false);
+          console.log(error);
+          ToastAndroid.show(
+            'Network request failed',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
+        });
     }
   };
 
@@ -84,7 +94,12 @@ export default function LoginScreen({navigation}) {
           bgcolor="#4788c7"
           width={300}
         />
-        <Button onPress={() => validateLogin()}>
+        <Button
+          onPress={() => {
+            setEmail('test@fms-ecsafrica.com');
+            setPassword('pass123');
+            validateLogin();
+          }}>
           <Text padding={10} margin={10} size={18}>
             Demo
           </Text>

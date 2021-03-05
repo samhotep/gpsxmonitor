@@ -36,14 +36,8 @@ export default function HomeScreen({navigation}) {
         updateLocation({
           latitude: trackerData.gps.location.lat,
           longitude: trackerData.gps.location.lng,
-          latitudeDelta: 0,
-          longitudeDelta: 0,
-        });
-        console.log({
-          latitude: trackerData.gps.location.lat,
-          longitude: trackerData.gps.location.lng,
-          latitudeDelta: 0,
-          longitudeDelta: 0,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.05,
         });
       },
     );

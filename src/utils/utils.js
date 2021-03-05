@@ -32,49 +32,4 @@ const Utils = {
   },
 };
 
-// nof = [
-//   {
-//     id: 13,
-//     label: "cat",
-//     color: "#ffffff",
-//     trackers: [
-//       {...},
-//       {...}
-//     ]
-//   }
-// ]
-
 export default Utils;
-
-let b = {
-  15: [
-    {
-      clone: false,
-      group_id: 15,
-      id: 251,
-      label: 'M10-UAR 662V',
-      source: [Object],
-      tag_bindings: [Array],
-    },
-  ],
-  2: [
-    {
-      clone: true,
-      group_id: 2,
-      id: 5013,
-      label: '2010091 - URA BUSITEMA GENSET',
-      source: [Object],
-      tag_bindings: [Array],
-    },
-  ],
-  5: [
-    {
-      clone: false,
-      group_id: 5,
-      id: 274,
-      label: 'UBG 066T Toyota Hillux',
-      source: [Object],
-      tag_bindings: [Array],
-    },
-  ],
-};

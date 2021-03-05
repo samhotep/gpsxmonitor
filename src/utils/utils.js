@@ -10,8 +10,7 @@ const Utils = {
   getIDList: (list) => {
     let ids = {};
     list.map((_, i) => {
-      let id = _.group_id;
-      ids[id] = Number(id);
+      ids[_.id] = Number(_.id);
     });
     return Object.values(ids);
   },

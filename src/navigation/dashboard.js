@@ -1,10 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-  createDrawerNavigator,
-} from '@react-navigation/drawer';
+import React, {useState, useEffect, useCallback} from 'react';
+import {createDrawerNavigator, useIsDrawerOpen} from '@react-navigation/drawer';
+import {ToastAndroid} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import styled from 'styled-components/native';
 import ProductStack from './productStack';
@@ -14,6 +10,7 @@ import HeaderIcon from '../components/headers/headerIcon';
 import ListItem from '../components/items/listItem';
 import Input from '../components/inputs/input';
 import Utils from '../utils/utils';
+import DrawerLoader from '../components/loaders/drawerLoader';
 import API from '../api/api';
 
 const Drawer = createDrawerNavigator();
@@ -33,6 +30,8 @@ export default function Dashboard({route, navigation}) {
 function CustomDrawerContent({navigation}) {
   const [clicked, setClicked] = useState(false);
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const isDrawerOpen = useIsDrawerOpen();
 
   //   const confirmLogout = () =>
   //     Alert.alert(
@@ -69,14 +68,51 @@ function CustomDrawerContent({navigation}) {
   //       { cancelable: false }
   //     );
 
-  useEffect(() => {
+  const getTrackersLocation = () => {
+    API.getTrackerLocation().then((result) => {});
+  };
+
+  const createObjects = () => {
     // TODO Get objects from API
-    // let res = Utils.getCategories(cat.list);
-    API.getTrackers().then((result) => {
-      setData(result);
-      console.log(result);
-    });
-  }, []);
+    setLoading(true);
+    API.getGroups()
+      .then((groups) => {
+        return API.getTrackers().then((trackers) => {
+          setData(Utils.createCategories(groups, trackers));
+          setLoading(false);
+        });
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log(error);
+        ToastAndroid.show(
+          'Network request failed',
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+      });
+    // API.getTrackers().then((result) => {
+    //   setData(result);
+    //   API.getStates(Utils.getTrackerIDs(result)).then((response) => {
+    //     // console.log(response);
+    //   });
+    //   setLoading(false);
+    //   // console.log(Utils.getTrackerIDs(result));
+    //   // let res = Utils.getCategories(result);
+    //   // console.log(res);
+    // });
+  };
+
+  useEffect(() => {
+    if (isDrawerOpen) {
+      console.log('foucs');
+      createObjects();
+    }
+  }, [isDrawerOpen]);
+
+  if (loading) {
+    return <DrawerLoader />;
+  }
 
   return (
     <DrawerContainer
@@ -85,7 +121,6 @@ function CustomDrawerContent({navigation}) {
         flex: 1,
         justifyContent: 'space-between',
       }}>
-      {/* TODO Put title, search and filter icons up here */}
       <HeaderTitle
         source={require('../assets/back.png')}
         onPress={() => {
@@ -113,6 +148,8 @@ function CustomDrawerContent({navigation}) {
           ) : null
         }
         extras={
+          // TODO Use fuse.js to search objects
+          // import Fuse from 'fuse.js';
           <ExtrasContainer>
             {clicked === false ? (
               <HeaderIcon
@@ -138,11 +175,27 @@ function CustomDrawerContent({navigation}) {
         </HeaderContent>
       </DrawerHeaderContainer>
       <DrawerContentContainer>
-        {/* TODO list_models endpoint for these */}
         {/* TODO Create color wheel that appends different colors for each object */}
-        <CategoryItem text="URA GENERATORS (4)" color="yellow" />
-        {data.map((_, i) => {
-          return <ListItem text={_.label} color="green" />;
+        {data.map((category, i) => {
+          return (
+            <CategoryContainer>
+              <CategoryItem
+                text={`${category.title} (${category.trackers.length})`}
+                color={`#${category.color}`}
+              />
+              {category.trackers.map((tracker, j) => {
+                return (
+                  <ListItem
+                    key={tracker.id}
+                    text={tracker.label}
+                    color="green"
+                    selected={false}
+                    onPress={() => {}}
+                  />
+                );
+              })}
+            </CategoryContainer>
+          );
         })}
       </DrawerContentContainer>
     </DrawerContainer>
@@ -184,6 +237,11 @@ const DrawerContentContainer = styled.ScrollView`
 
 const ExtrasContainer = styled.View`
   flex-direction: row;
+`;
+
+const CategoryContainer = styled.View`
+  flex-direction: column;
+  width: 100%;
 `;
 
 // TODO Add get_states to API to get locations

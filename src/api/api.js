@@ -126,6 +126,15 @@ const API = {
       },
     );
   },
+  getGroups: () => {
+    return API.apiCall('tracker/group/list/').then((result) => {
+      if (result.success === true) {
+        return result.list;
+      } else {
+        return result.status.description;
+      }
+    });
+  },
 };
 
 export default API;

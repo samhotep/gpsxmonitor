@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
-  StyleSheet,
-  View,
-  StatusBar,
   NativeEventEmitter,
   NativeModules,
+  StyleSheet,
+  StatusBar,
+  View,
 } from 'react-native';
 import {useWindowDimensions} from 'react-native';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, {Animated, AnimatedRegion, Marker} from 'react-native-maps';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
@@ -19,12 +19,16 @@ export default function HomeScreen({navigation}) {
     latitude: 2.6031808853,
     longitude: 31.9491958618,
   });
-  const [location, setLocation] = useState({
-    latitude: 2.6031808853,
-    longitude: 31.9491958618,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
+  const mapRef = useRef();
+  const markerRef = useRef();
+  const [location, setLocation] = useState(
+    new AnimatedRegion({
+      latitude: 2.6031808853,
+      longitude: 31.9491958618,
+      latitudeDelta: 3,
+      longitudeDelta: 0.5,
+    }),
+  );
 
   useEffect(() => {
     // Listener for location update events
@@ -32,16 +36,35 @@ export default function HomeScreen({navigation}) {
       'event.trackerEvent',
       (trackerData) => {
         setCurrentTracker(trackerData);
-        setLocation({
-          latitude: trackerData.gps.location.lat,
-          longitude: trackerData.gps.location.lng,
-          latitudeDelta: 0.1,
-          longitudeDelta: 0.05,
-        });
+        setLocation(
+          new AnimatedRegion({
+            latitude: trackerData.gps.location.lat,
+            longitude: trackerData.gps.location.lng,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.05,
+          }),
+        );
         setCurrentMarker({
           latitude: trackerData.gps.location.lat,
           longitude: trackerData.gps.location.lng,
         });
+        mapRef.current.animateToRegion(
+          {
+            latitude: trackerData.gps.location.lat,
+            longitude: trackerData.gps.location.lng,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.05,
+          },
+          1000,
+        );
+        // TODO Might be useful somewhere -> Animate Marker
+        // markerRef.current.animateMarkerToCoordinate(
+        //   {
+        //     latitude: trackerData.gps.location.lat,
+        //     longitude: trackerData.gps.location.lng,
+        //   },
+        //   1000,
+        // );
       },
     );
     return () => {
@@ -52,17 +75,9 @@ export default function HomeScreen({navigation}) {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#4788c7" />
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 2.6031808853,
-          longitude: 31.9491958618,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-        region={location}>
-        <Marker coordinate={currentMarker} />
-      </MapView>
+      <Animated ref={mapRef} style={styles.map} initialRegion={location}>
+        <Marker.Animated ref={markerRef} coordinate={currentMarker} />
+      </Animated>
     </View>
   );
 }

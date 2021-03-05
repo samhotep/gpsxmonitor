@@ -7,21 +7,42 @@ const Utils = {
    * Return modified array with objects sorted into categories, which are
    * mapped with identifier colors
    */
-  getTrackerIDs: (list) => {
-    let ids = [];
+  getIDList: (list) => {
+    let ids = {};
     list.map((_, i) => {
-      ids.push(_.id);
+      let id = _.group_id;
+      ids[id] = Number(id);
     });
-    return ids;
+    return Object.values(ids);
   },
-  getCategories: (list) => {
-    let cc = {};
-    list.map((_, i) => {
-      cc[_.group_id] = [_];
+  createCategories: (groups, trackers) => {
+    let categories = [];
+    groups.map((group, i) => {
+      let tracker_list = [];
+      trackers.map((tracker, index) => {
+        if (group.id === Number(tracker.group_id)) {
+          tracker_list.push(tracker);
+        }
+      });
+      if (tracker_list.length > 0) {
+        categories.push({...group, trackers: tracker_list});
+      }
     });
-    return cc;
+    return categories;
   },
 };
+
+// nof = [
+//   {
+//     id: 13,
+//     label: "cat",
+//     color: "#ffffff",
+//     trackers: [
+//       {...},
+//       {...}
+//     ]
+//   }
+// ]
 
 export default Utils;
 

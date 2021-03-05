@@ -190,6 +190,7 @@ function CustomDrawerContent({navigation}) {
                 text={`${category.title} (${category.trackers.length})`}
                 color={`#${category.color}`}
               />
+              {/* TODO Create refs for selection of item */}
               {category.trackers.map((tracker, j) => {
                 return (
                   <ListItem

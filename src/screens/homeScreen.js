@@ -13,12 +13,12 @@ const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
 // TODO Pass the location as a state prop, or as an event emitter
 export default function HomeScreen({navigation}) {
-  const window = useWindowDimensions();
   const [currentTracker, setCurrentTracker] = useState();
   const [currentMarker, setCurrentMarker] = useState({
     latitude: 2.6031808853,
     longitude: 31.9491958618,
   });
+  const [type, setType] = useState('hybrid');
   const mapRef = useRef();
   const markerRef = useRef();
   const [location, setLocation] = useState(
@@ -40,8 +40,8 @@ export default function HomeScreen({navigation}) {
           new AnimatedRegion({
             latitude: trackerData.gps.location.lat,
             longitude: trackerData.gps.location.lng,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.05,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
           }),
         );
         setCurrentMarker({
@@ -52,8 +52,8 @@ export default function HomeScreen({navigation}) {
           {
             latitude: trackerData.gps.location.lat,
             longitude: trackerData.gps.location.lng,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.05,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
           },
           1000,
         );
@@ -75,7 +75,11 @@ export default function HomeScreen({navigation}) {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#4788c7" />
-      <Animated ref={mapRef} style={styles.map} initialRegion={location}>
+      <Animated
+        ref={mapRef}
+        style={styles.map}
+        initialRegion={location}
+        mapType={type}>
         <Marker.Animated ref={markerRef} coordinate={currentMarker} />
       </Animated>
     </View>

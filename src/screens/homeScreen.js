@@ -7,7 +7,7 @@ import {
   NativeModules,
 } from 'react-native';
 import {useWindowDimensions} from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
@@ -15,6 +15,10 @@ const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 export default function HomeScreen({navigation}) {
   const window = useWindowDimensions();
   const [currentTracker, setCurrentTracker] = useState();
+  const [currentMarker, setCurrentMarker] = useState({
+    latitude: 2.6031808853,
+    longitude: 31.9491958618,
+  });
   const [location, setLocation] = useState({
     latitude: 2.6031808853,
     longitude: 31.9491958618,
@@ -22,22 +26,21 @@ export default function HomeScreen({navigation}) {
     longitudeDelta: 0.0421,
   });
 
-  const updateLocation = (newCoordinates) => {
-    console.log('New Location Received');
-    setLocation(newCoordinates);
-  };
-
   useEffect(() => {
     // Listener for location update events
     const eventListener = eventEmitter.addListener(
       'event.trackerEvent',
       (trackerData) => {
         setCurrentTracker(trackerData);
-        updateLocation({
+        setLocation({
           latitude: trackerData.gps.location.lat,
           longitude: trackerData.gps.location.lng,
           latitudeDelta: 0.1,
           longitudeDelta: 0.05,
+        });
+        setCurrentMarker({
+          latitude: trackerData.gps.location.lat,
+          longitude: trackerData.gps.location.lng,
         });
       },
     );
@@ -57,8 +60,9 @@ export default function HomeScreen({navigation}) {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        region={location}
-      />
+        region={location}>
+        <Marker coordinate={currentMarker} />
+      </MapView>
     </View>
   );
 }

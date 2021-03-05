@@ -32,7 +32,7 @@ export default function Dashboard({route, navigation}) {
 // Emitter for navigating to login on hash expiry
 function CustomDrawerContent({navigation}) {
   const [clicked, setClicked] = useState(false);
-  const [trackerData, setTrackerData] = useState([]);
+  const [trackerStates, setTrackerStates] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const isDrawerOpen = useIsDrawerOpen();
@@ -72,10 +72,13 @@ function CustomDrawerContent({navigation}) {
   //       { cancelable: false }
   //     );
 
-  const updateScreenLocation = (tracker_id) => {
+  const updateScreenLocation = (tracker) => {
     // API.getTrackerLocation().then((result) => {});
     // On item press, get location, close drawer and update home screen marker
-    eventEmitter.emit('event.trackerEvent', trackerData[tracker_id]);
+    eventEmitter.emit('event.trackerEvent', {
+      label: tracker.label,
+      ...trackerStates[tracker.id],
+    });
     navigation.toggleDrawer();
   };
 
@@ -85,10 +88,9 @@ function CustomDrawerContent({navigation}) {
       .then((groups) => {
         return API.getTrackers().then((trackers) => {
           setData(Utils.createCategories(groups, trackers));
-
           // Get detailed state info for each tracker
-          API.getStates(Utils.getIDList(trackers)).then((data) => {
-            setTrackerData(data.states);
+          API.getStates(Utils.getIDList(trackers)).then((result) => {
+            setTrackerStates(result.states);
           });
           setLoading(false);
         });
@@ -199,7 +201,7 @@ function CustomDrawerContent({navigation}) {
                     color="green"
                     selected={false}
                     onPress={() => {
-                      updateScreenLocation(tracker.id);
+                      updateScreenLocation(tracker);
                     }}
                   />
                 );

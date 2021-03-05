@@ -26,7 +26,8 @@ export default function Dashboard({route, navigation}) {
     </Drawer.Navigator>
   );
 }
-
+// TODO Timer to prevent too many rerenders
+// Emitter for navigating to login on hash expiry
 function CustomDrawerContent({navigation}) {
   const [clicked, setClicked] = useState(false);
   const [data, setData] = useState([]);
@@ -73,7 +74,6 @@ function CustomDrawerContent({navigation}) {
   };
 
   const createObjects = () => {
-    // TODO Get objects from API
     setLoading(true);
     API.getGroups()
       .then((groups) => {
@@ -105,7 +105,6 @@ function CustomDrawerContent({navigation}) {
 
   useEffect(() => {
     if (isDrawerOpen) {
-      console.log('foucs');
       createObjects();
     }
   }, [isDrawerOpen]);
@@ -130,8 +129,6 @@ function CustomDrawerContent({navigation}) {
             navigation.goBack();
           }
         }}
-        // TODO Create a search object here, that is toggled on and off by pressing search
-        // and by pressing 'X'. It should change the keyboard icon to search
         header={
           clicked ? (
             <ExtrasContainer>
@@ -175,7 +172,6 @@ function CustomDrawerContent({navigation}) {
         </HeaderContent>
       </DrawerHeaderContainer>
       <DrawerContentContainer>
-        {/* TODO Create color wheel that appends different colors for each object */}
         {data.map((category, i) => {
           return (
             <CategoryContainer>

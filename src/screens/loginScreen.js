@@ -52,7 +52,7 @@ export default function LoginScreen({navigation}) {
 
   return (
     <Container>
-      <StatusBar backgroundColor="#4788c7" />
+      <StatusBar backgroundColor="#007aa6" />
       <ImageContainer
         source={require('../assets/icon.png')}
         resizeMode="contain"

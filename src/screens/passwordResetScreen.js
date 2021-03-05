@@ -49,7 +49,7 @@ export default function PasswordResetScreen({navigation}) {
 
   return (
     <Container>
-      <StatusBar backgroundColor="#4788c7" />
+      <StatusBar backgroundColor="#007aa6" />
       <FormContainer>
         <Text color="#000000" size={18}>
           Enter your email to reset your password

@@ -18,7 +18,7 @@ export default function HomeScreen({navigation}) {
     latitude: 2.6031808853,
     longitude: 31.9491958618,
   });
-  const [type, setType] = useState('hybrid');
+  const [type, setType] = useState('standard');
   const mapRef = useRef();
   const markerRef = useRef();
   const [location, setLocation] = useState(
@@ -74,13 +74,18 @@ export default function HomeScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#4788c7" />
+      <StatusBar backgroundColor="#007aa6" />
       <Animated
         ref={mapRef}
         style={styles.map}
         initialRegion={location}
         mapType={type}>
-        <Marker.Animated ref={markerRef} coordinate={currentMarker} />
+        <Marker.Animated
+          title="URA Something"
+          description="URA Something"
+          ref={markerRef}
+          coordinate={currentMarker}
+        />
       </Animated>
     </View>
   );

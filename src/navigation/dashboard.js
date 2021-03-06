@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import {createDrawerNavigator, useIsDrawerOpen} from '@react-navigation/drawer';
 import {ToastAndroid, NativeEventEmitter, NativeModules} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -147,12 +147,21 @@ function CustomDrawerContent({navigation}) {
             <ExtrasContainer>
               <Input
                 autoFocus={true}
-                width={100}
+                width={120}
+                margin={5}
                 color="#ffffff"
                 selectionColor={'#ffffff'}
                 noBorder={true}
                 placeholder="Search..."
                 placeholderTextColor="#4fc3f7"
+              />
+              <HeaderIcon
+                source={require('../assets/close.png')}
+                size={18}
+                margin={5}
+                onPress={() => {
+                  setClicked(false);
+                }}
               />
             </ExtrasContainer>
           ) : null
@@ -249,6 +258,7 @@ const DrawerContentContainer = styled.ScrollView`
 
 const ExtrasContainer = styled.View`
   flex-direction: row;
+  align-items: center;
 `;
 
 const CategoryContainer = styled.View`

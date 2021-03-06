@@ -20,6 +20,9 @@ export default function HomeScreen({navigation}) {
     latitude: 2.6031808853,
     longitude: 31.9491958618,
   });
+  const [latDelta, setLatDelta] = useState(0.05);
+  const [longDelta, setLongDelta] = useState(0.05);
+  const renderDelay = 2000;
   /**
    * Supported Map Types
    * - standard: standard road map (default)
@@ -51,8 +54,8 @@ export default function HomeScreen({navigation}) {
           new AnimatedRegion({
             latitude: trackerData.gps.location.lat,
             longitude: trackerData.gps.location.lng,
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
+            latitudeDelta: 0.5,
+            longitudeDelta: 0.5,
           }),
         );
         setCurrentMarker({
@@ -63,10 +66,10 @@ export default function HomeScreen({navigation}) {
           {
             latitude: trackerData.gps.location.lat,
             longitude: trackerData.gps.location.lng,
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
+            latitudeDelta: latDelta,
+            longitudeDelta: longDelta,
           },
-          1000,
+          renderDelay,
         );
         // TODO Might be useful somewhere -> Animate Marker
         // markerRef.current.animateMarkerToCoordinate(
@@ -103,16 +106,18 @@ export default function HomeScreen({navigation}) {
       {currentTracker ? (
         <HomeItem
           label={currentTracker.label}
-          signal={currentTracker.gsm['signal_level']}
+          signal={currentTracker.gps.signal_level}
+          time={currentTracker.gps.updated}
+          movement={currentTracker.movement_status}
           onPress={() =>
             mapRef.current.animateToRegion(
               {
                 latitude: currentTracker.gps.location.lat,
                 longitude: currentTracker.gps.location.lng,
-                latitudeDelta: 0.005,
-                longitudeDelta: 0.005,
+                latitudeDelta: latDelta,
+                longitudeDelta: longDelta,
               },
-              1000,
+              renderDelay,
             )
           }
         />

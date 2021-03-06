@@ -4,6 +4,7 @@ import styled from 'styled-components';
 // TODO Animate the list
 export default function HomeItem(props) {
   const [signalIcon, setSignalIcon] = useState();
+  const [timeStatus, setTimeStatus] = useState('since today');
 
   const getSignalIcon = () => {
     if (props.signal >= 75) {
@@ -17,9 +18,17 @@ export default function HomeItem(props) {
     }
   };
 
+  const getTimeDifference = () => {
+    let diff = new Date(
+      Date.now() - Date.parse(props.time.replace(/-+/g, '/')),
+    );
+    setTimeStatus(diff.getMinutes());
+  };
+
   useEffect(() => {
     getSignalIcon();
-  }, []);
+    getTimeDifference();
+  }, [props]);
 
   return (
     <Container onPress={props.onPress} selected={props.selected}>
@@ -29,10 +38,24 @@ export default function HomeItem(props) {
       </ColumnContainer>
       <ColumnContainer>
         <RowContainer>
-          <Text selected={props.selected}>{props.label}</Text>
+          <Text selected={props.selected} color="#202020">
+            {props.label}
+          </Text>
         </RowContainer>
         <RowContainer>
-          <Text size={14}>Signal: {props.signal}%</Text>
+          <Text size={14} color="#b9b9b9">
+            Signal: {props.signal}%
+          </Text>
+        </RowContainer>
+      </ColumnContainer>
+      <ColumnContainer>
+        <RowContainer>
+          <Text size={14} color="#b9b9b9">
+            {timeStatus} min. ago
+          </Text>
+        </RowContainer>
+        <RowContainer>
+          <Text size={14}>{props.movement}</Text>
         </RowContainer>
       </ColumnContainer>
     </Container>
@@ -42,7 +65,7 @@ export default function HomeItem(props) {
 const Container = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   background-color: #ffffff;
   width: 100%;
   padding: 10px;
@@ -70,11 +93,13 @@ const ImageContainer = styled.Image`
   margin: 5px;
 `;
 
-const Text = styled.Text`
+const Text = styled.Text.attrs({
+  numberOfLines: 1,
+})`
   text-align: left;
-  flex-wrap: wrap;
   font-size: ${(props) => props.size || 18}px;
   color: ${(props) => props.color || '#636261'};
+  width: ${(props) => props.width || 220}px;
 `;
 
 let v = {

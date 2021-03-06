@@ -104,6 +104,17 @@ export default function HomeScreen({navigation}) {
         <HomeItem
           label={currentTracker.label}
           signal={currentTracker.gsm['signal_level']}
+          onPress={() =>
+            mapRef.current.animateToRegion(
+              {
+                latitude: currentTracker.gps.location.lat,
+                longitude: currentTracker.gps.location.lng,
+                latitudeDelta: 0.005,
+                longitudeDelta: 0.005,
+              },
+              1000,
+            )
+          }
         />
       ) : null}
     </View>

@@ -9,6 +9,7 @@ import {
   Image,
 } from 'react-native';
 import MapView, {Animated, AnimatedRegion, Marker} from 'react-native-maps';
+import HomeItem from '../components/items/homeItem';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
@@ -99,6 +100,12 @@ export default function HomeScreen({navigation}) {
           </View>
         </Marker.Animated>
       </Animated>
+      {currentTracker ? (
+        <HomeItem
+          label={currentTracker.label}
+          signal={currentTracker.gsm['signal_level']}
+        />
+      ) : null}
     </View>
   );
 }

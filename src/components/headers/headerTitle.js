@@ -1,10 +1,12 @@
 import React from 'react';
+import {useHeaderHeight} from '@react-navigation/stack';
 import styled from 'styled-components';
 import HeaderIcon from '../headers/headerIcon';
 
 export default function HeaderTitle(props) {
+  let headerHeight = useHeaderHeight();
   return (
-    <HeaderContainer>
+    <HeaderContainer height={headerHeight}>
       <ItemsContainer>
         <HeaderIcon size={20} source={props.source} onPress={props.onPress} />
         {props.header ? (
@@ -22,7 +24,7 @@ const HeaderContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
+  height: ${(props) => props.height || 56}px;
   width: 100%;
   background-color: #1e96dc;
 `;

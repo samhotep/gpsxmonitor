@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import MapView, {Animated, AnimatedRegion, Marker} from 'react-native-maps';
 import HomeItem from '../components/items/homeItem';
+import HomeButton from '../components/buttons/homeButton';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
@@ -48,7 +49,6 @@ export default function HomeScreen({navigation}) {
     const eventListener = eventEmitter.addListener(
       'event.trackerEvent',
       (trackerData) => {
-        console.log(trackerData);
         setCurrentTracker(trackerData);
         setLocation(
           new AnimatedRegion({
@@ -122,6 +122,8 @@ export default function HomeScreen({navigation}) {
           }
         />
       ) : null}
+      <HomeButton source={require('../assets/globe.png')} bottom={90} />
+      <HomeButton source={require('../assets/arrow.png')} />
     </View>
   );
 }

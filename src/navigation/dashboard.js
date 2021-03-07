@@ -35,6 +35,7 @@ function CustomDrawerContent({navigation}) {
   const [trackerStates, setTrackerStates] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [updatedDate, setUpdatedDate] = useState(Date.now());
   const isDrawerOpen = useIsDrawerOpen();
 
   //   const confirmLogout = () =>
@@ -82,6 +83,13 @@ function CustomDrawerContent({navigation}) {
     navigation.toggleDrawer();
   };
 
+  const getTimeDifference = () => {
+    console.log(updatedDate);
+    if (Date.now() - updatedDate > 300000) {
+      setUpdatedDate(Date.now());
+    }
+  };
+
   const createObjects = () => {
     setLoading(true);
     API.getGroups()
@@ -117,8 +125,10 @@ function CustomDrawerContent({navigation}) {
   };
 
   useEffect(() => {
-    if (isDrawerOpen) {
+    // Update only after 5 min delay
+    if (Date.now() - updatedDate > 300000 && isDrawerOpen) {
       createObjects();
+      setUpdatedDate(Date.now());
     }
   }, [isDrawerOpen]);
 

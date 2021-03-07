@@ -11,6 +11,8 @@ import {
 import MapView, {Animated, AnimatedRegion, Marker} from 'react-native-maps';
 import HomeItem from '../components/items/homeItem';
 import HomeButton from '../components/buttons/homeButton';
+import HomeModal from '../components/modals/homeModal';
+import HeaderIcon from '../components/headers/headerIcon';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
@@ -43,6 +45,8 @@ export default function HomeScreen({navigation}) {
       longitudeDelta: 0.5,
     }),
   );
+  const [globeClicked, setGlobeClicked] = useState(false);
+  const [arrowClicked, setArrowClicked] = useState(false);
 
   useEffect(() => {
     // Listener for location update events
@@ -122,8 +126,31 @@ export default function HomeScreen({navigation}) {
           }
         />
       ) : null}
-      <HomeButton source={require('../assets/globe.png')} bottom={90} />
-      <HomeButton source={require('../assets/arrow.png')} />
+      <HomeModal
+        clicked={globeClicked}
+        height={250}
+        width={150}
+        bottom={150}
+        left={68}
+        inject={<HeaderIcon source={require('../assets/arrow.png')} />}
+      />
+      <HomeModal
+        clicked={arrowClicked}
+        height={250}
+        width={150}
+        bottom={90}
+        left={68}
+        inject={<HeaderIcon source={require('../assets/arrow.png')} />}
+      />
+      <HomeButton
+        source={require('../assets/globe.png')}
+        bottom={90}
+        onPress={() => setGlobeClicked(!globeClicked)}
+      />
+      <HomeButton
+        source={require('../assets/arrow.png')}
+        onPress={() => setArrowClicked(!arrowClicked)}
+      />
     </View>
   );
 }

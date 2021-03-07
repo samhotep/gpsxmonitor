@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
+import Utils from '../../utils/utils';
 
 // TODO Animate the list
 export default function HomeItem(props) {
@@ -18,16 +19,9 @@ export default function HomeItem(props) {
     }
   };
 
-  const getTimeDifference = () => {
-    let diff = new Date(
-      Date.now() - Date.parse(props.time.replace(/-+/g, '/')),
-    );
-    setTimeStatus(diff.getMinutes());
-  };
-
   useEffect(() => {
     getSignalIcon();
-    getTimeDifference();
+    setTimeStatus(Utils.getTimeDifference(props.time));
   }, [props]);
 
   return (

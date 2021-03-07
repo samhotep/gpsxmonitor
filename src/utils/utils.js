@@ -29,6 +29,12 @@ const Utils = {
     });
     return categories;
   },
+  getTimeDifference: (dateString) => {
+    let diff = new Date(
+      Date.now() - Date.parse(dateString.replace(/-+/g, '/')),
+    );
+    return diff.getMinutes();
+  },
 };
 
 export default Utils;

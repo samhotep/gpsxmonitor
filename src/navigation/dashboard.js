@@ -83,13 +83,6 @@ function CustomDrawerContent({navigation}) {
     navigation.toggleDrawer();
   };
 
-  const getTimeDifference = () => {
-    console.log(updatedDate);
-    if (Date.now() - updatedDate > 300000) {
-      setUpdatedDate(Date.now());
-    }
-  };
-
   const createObjects = () => {
     setLoading(true);
     API.getGroups()
@@ -125,8 +118,13 @@ function CustomDrawerContent({navigation}) {
   };
 
   useEffect(() => {
-    // Update only after 5 min delay
-    if (Date.now() - updatedDate > 300000 && isDrawerOpen) {
+    // Load objects on first render
+    createObjects();
+  }, []);
+
+  useEffect(() => {
+    // Update only after 3 min delay
+    if (Date.now() - updatedDate > 180000 && isDrawerOpen) {
       createObjects();
       setUpdatedDate(Date.now());
     }

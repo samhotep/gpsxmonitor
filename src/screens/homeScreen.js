@@ -49,12 +49,6 @@ export default function HomeScreen({navigation}) {
   const [radioValue, setRadioValue] = useState(Array(4).fill(false));
   const mapRef = useRef();
   const markerRef = useRef();
-  let radioRef = [];
-
-  const setRef = (ref) => {
-    radioRef.push(ref);
-  };
-
   const mapTypes = ['standard', 'satellite', 'hybrid', 'terrain'];
 
   const renderDelay = 2000;
@@ -165,7 +159,6 @@ export default function HomeScreen({navigation}) {
                     {_.charAt(0).toUpperCase() + _.slice(1)}
                   </RadioLabel>
                   <RadioInput
-                    ref={setRef}
                     color="#1e96dc"
                     selected={radioValue[i]}
                     onPress={() => updateMapType(i)}
@@ -213,7 +206,11 @@ const styles = StyleSheet.create({
   text: {
     backgroundColor: '#007aa6',
     color: '#ffffff',
-    padding: 1,
+    padding: 2,
+    borderWidth: 1,
+    borderColor: '#ffffff',
+    borderRadius: 2,
+    fontSize: 10,
   },
   icon: {
     height: 28,

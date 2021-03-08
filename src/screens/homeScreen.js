@@ -9,10 +9,12 @@ import {
   Image,
 } from 'react-native';
 import MapView, {Animated, AnimatedRegion, Marker} from 'react-native-maps';
+import styled from 'styled-components';
 import HomeItem from '../components/items/homeItem';
 import HomeButton from '../components/buttons/homeButton';
 import HomeModal from '../components/modals/homeModal';
 import HeaderIcon from '../components/headers/headerIcon';
+import RadioInput from '../components/inputs/radioInput';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
@@ -25,7 +27,6 @@ export default function HomeScreen({navigation}) {
   });
   const [latDelta, setLatDelta] = useState(0.05);
   const [longDelta, setLongDelta] = useState(0.05);
-  const renderDelay = 2000;
   /**
    * Supported Map Types
    * - standard: standard road map (default)
@@ -35,8 +36,6 @@ export default function HomeScreen({navigation}) {
    * - terrain: topographic view
    */
   const [type, setType] = useState('standard');
-  const mapRef = useRef();
-  const markerRef = useRef();
   const [location, setLocation] = useState(
     new AnimatedRegion({
       latitude: 2.6031808853,
@@ -47,6 +46,30 @@ export default function HomeScreen({navigation}) {
   );
   const [globeClicked, setGlobeClicked] = useState(false);
   const [arrowClicked, setArrowClicked] = useState(false);
+  const [radioValue, setRadioValue] = useState(Array(4).fill(false));
+  const mapRef = useRef();
+  const markerRef = useRef();
+  let radioRef = [];
+
+  const setRef = (ref) => {
+    radioRef.push(ref);
+  };
+
+  const mapTypes = ['standard', 'satellite', 'hybrid', 'terrain'];
+
+  const renderDelay = 2000;
+  const updateMapType = (index) => {
+    setType(mapTypes[index]);
+    let newRadio = Array(4).fill(false);
+    newRadio[index] = true;
+    setRadioValue(newRadio);
+  };
+
+  const [selected, setSelected] = useState(false);
+
+  const pressed = () => {
+    setSelected(!selected);
+  };
 
   useEffect(() => {
     // Listener for location update events
@@ -128,11 +151,30 @@ export default function HomeScreen({navigation}) {
       ) : null}
       <HomeModal
         clicked={globeClicked}
-        height={250}
-        width={150}
+        height={180}
+        width={170}
         bottom={150}
         left={68}
-        inject={<HeaderIcon source={require('../assets/arrow.png')} />}
+        inject={
+          <ModalContainer>
+            <RadioLabel color="#bebebe">Map Type:</RadioLabel>
+            {mapTypes.map((_, i) => {
+              return (
+                <RadioContainer>
+                  <RadioLabel>
+                    {_.charAt(0).toUpperCase() + _.slice(1)}
+                  </RadioLabel>
+                  <RadioInput
+                    ref={setRef}
+                    color="#1e96dc"
+                    selected={radioValue[i]}
+                    onPress={() => updateMapType(i)}
+                  />
+                </RadioContainer>
+              );
+            })}
+          </ModalContainer>
+        }
       />
       <HomeModal
         clicked={arrowClicked}
@@ -178,3 +220,22 @@ const styles = StyleSheet.create({
     width: 28,
   },
 });
+
+const ModalContainer = styled.View`
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+`;
+
+const RadioContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 140px;
+`;
+
+const RadioLabel = styled.Text`
+  font-size: 18px;
+  color: ${(props) => props.color || '#202020'};
+`;

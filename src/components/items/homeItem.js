@@ -1,15 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
+import API from '../../api/api';
 import Utils from '../../utils/utils';
 
 // TODO Animate the list
 // TODO Show time in days, mins, hours
 export default function HomeItem(props) {
   const [signalIcon, setSignalIcon] = useState();
-  const [timeStatus, setTimeStatus] = useState('since today');
+  const [timeStatus, setTimeStatus] = useState('0');
   const [movementIcon, setMovementIcon] = useState(
     require('../../assets/moving.png'),
   );
+  const [movementStatus, setMovementStatus] = useState('0');
 
   const getSignalIcon = () => {
     if (props.signal >= 75) {
@@ -36,7 +38,10 @@ export default function HomeItem(props) {
   useEffect(() => {
     getMovementIcon();
     getSignalIcon();
-    setTimeStatus(Utils.getTimeDifference(props.time));
+    setMovementStatus(
+      Utils.getTimeDifference(props.tracker.actual_track_update),
+    );
+    setTimeStatus(Utils.getTimeDifference(props.tracker.gps.updated));
   }, [props]);
 
   return (
@@ -48,24 +53,25 @@ export default function HomeItem(props) {
       <ColumnContainer>
         <RowContainer>
           <Text selected={props.selected} color="#202020">
-            {props.label}
+            {props.tracker.label}
           </Text>
         </RowContainer>
         <RowContainer>
           <Text size={14} color="#b9b9b9" width={100}>
-            Signal: {props.signal}%
+            Signal: {props.tracker.gps.signal_level}%
           </Text>
           <ImageContainer source={movementIcon} size={24} margin={1} />
           <TimeLabel size={12}>
-            {props.movement.charAt(0).toUpperCase() + props.movement.slice(1)}{' '}
-            for 21 min
+            {props.tracker.movement_status.charAt(0).toUpperCase() +
+              props.tracker.movement_status.slice(1)}{' '}
+            for {movementStatus}
           </TimeLabel>
         </RowContainer>
       </ColumnContainer>
       <ColumnContainer>
         <RowContainer>
           <Text size={14} width={100} color="#b9b9b9">
-            {timeStatus} min. ago
+            {timeStatus} ago
           </Text>
         </RowContainer>
       </ColumnContainer>

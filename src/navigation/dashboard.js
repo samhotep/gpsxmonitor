@@ -78,6 +78,7 @@ function CustomDrawerContent({navigation}) {
     // On item press, get location, close drawer and update home screen marker
     eventEmitter.emit('event.trackerEvent', {
       label: tracker.label,
+      id: tracker.id,
       ...trackerStates[tracker.id],
     });
     navigation.toggleDrawer();

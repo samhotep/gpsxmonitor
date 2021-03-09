@@ -59,12 +59,6 @@ export default function HomeScreen({navigation}) {
     setRadioValue(newRadio);
   };
 
-  const [selected, setSelected] = useState(false);
-
-  const pressed = () => {
-    setSelected(!selected);
-  };
-
   useEffect(() => {
     // Listener for location update events
     const eventListener = eventEmitter.addListener(
@@ -126,10 +120,7 @@ export default function HomeScreen({navigation}) {
       </Animated>
       {currentTracker ? (
         <HomeItem
-          label={currentTracker.label}
-          signal={currentTracker.gps.signal_level}
-          time={currentTracker.gps.updated}
-          movement={currentTracker.movement_status}
+          tracker={currentTracker}
           onPress={() =>
             mapRef.current.animateToRegion(
               {

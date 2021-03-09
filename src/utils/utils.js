@@ -36,14 +36,16 @@ const Utils = {
     );
     let millis = diff.getTime();
     let ranges = [
-      {name: 'days', length: 86400000},
-      {name: 'hours', length: 3600000},
-      {name: 'min.', length: 60000},
+      {name: 'day', length: 86400000},
+      {name: 'hour', length: 3600000},
+      {name: 'min', length: 60000},
     ];
     ranges.map((_, i) => {
       let total = Math.floor(millis / _.length);
-      if (total > 0) {
+      if (total > 0 && total < 2) {
         destructuredTime += `${total} ${_.name} `;
+      } else if (total > 1) {
+        destructuredTime += `${total} ${_.name}s `;
       }
       millis = millis % _.length;
     });

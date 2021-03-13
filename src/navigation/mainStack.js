@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {useWindowDimensions} from 'react-native';
+import {ToastAndroid, useWindowDimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -171,6 +171,11 @@ export default function MainStack() {
         console.log(error);
         setLoggedIn(false);
         setLoading(false);
+        ToastAndroid.show(
+          'Network request failed',
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
       });
   }, []);
 

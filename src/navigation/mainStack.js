@@ -133,7 +133,7 @@ function CustomDrawerContent(props) {
         label="Settings"
       />
       {headerItems.map((_, i) => {
-        return <HeaderItem label={_.label} item={_.item} />;
+        return <HeaderItem key={_.label} label={_.label} item={_.item} />;
       })}
     </DrawerContainer>
   );

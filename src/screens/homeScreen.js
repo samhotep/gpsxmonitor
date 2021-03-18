@@ -15,6 +15,7 @@ import HomeButton from '../components/buttons/homeButton';
 import HomeModal from '../components/modals/homeModal';
 import HeaderIcon from '../components/headers/headerIcon';
 import RadioInput from '../components/inputs/radioInput';
+import useWindowDimensions from 'react-native/Libraries/Utilities/useWindowDimensions';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
@@ -50,6 +51,7 @@ export default function HomeScreen({navigation}) {
   const mapRef = useRef();
   const markerRef = useRef();
   const mapTypes = ['standard', 'satellite', 'hybrid', 'terrain'];
+  const window = useWindowDimensions();
 
   const renderDelay = 2000;
   const updateMapType = (index) => {
@@ -176,6 +178,41 @@ export default function HomeScreen({navigation}) {
       <HomeButton
         source={require('../assets/arrow.png')}
         onPress={() => setArrowClicked(!arrowClicked)}
+      />
+      <HomeButton
+        source={require('../assets/zoomin.png')}
+        bottom={90}
+        left={window.width - 58}
+        onPress={() => {
+          let delta = longDelta * 0.05;
+          mapRef.current.animateToRegion(
+            {
+              latitude: currentMarker.latitude,
+              longitude: currentMarker.longitude,
+              latitudeDelta: latDelta,
+              longitudeDelta: delta,
+            },
+            renderDelay,
+          );
+          setLongDelta(delta);
+        }}
+      />
+      <HomeButton
+        source={require('../assets/zoomout.png')}
+        left={window.width - 58}
+        onPress={() => {
+          let delta = longDelta / 0.05;
+          mapRef.current.animateToRegion(
+            {
+              latitude: currentMarker.latitude,
+              longitude: currentMarker.longitude,
+              latitudeDelta: latDelta,
+              longitudeDelta: 0.0005,
+            },
+            renderDelay,
+          );
+          setLongDelta(delta);
+        }}
       />
     </View>
   );

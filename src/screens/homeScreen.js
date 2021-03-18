@@ -21,6 +21,7 @@ const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
 // TODO Pass the location as a state prop, or as an event emitter
 export default function HomeScreen({navigation}) {
+  const window = useWindowDimensions();
   const [currentTracker, setCurrentTracker] = useState();
   const [currentMarker, setCurrentMarker] = useState({
     latitude: 2.6031808853,
@@ -51,7 +52,6 @@ export default function HomeScreen({navigation}) {
   const mapRef = useRef();
   const markerRef = useRef();
   const mapTypes = ['standard', 'satellite', 'hybrid', 'terrain'];
-  const window = useWindowDimensions();
 
   const renderDelay = 2000;
   const updateMapType = (index) => {
@@ -71,8 +71,8 @@ export default function HomeScreen({navigation}) {
           new AnimatedRegion({
             latitude: trackerData.gps.location.lat,
             longitude: trackerData.gps.location.lng,
-            latitudeDelta: 0.5,
-            longitudeDelta: 0.5,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
           }),
         );
         setCurrentMarker({
@@ -184,34 +184,38 @@ export default function HomeScreen({navigation}) {
         bottom={90}
         left={window.width - 58}
         onPress={() => {
-          let delta = longDelta * 0.05;
+          let newLat = latDelta / 10;
+          let newLong = longDelta / 10;
           mapRef.current.animateToRegion(
             {
               latitude: currentMarker.latitude,
               longitude: currentMarker.longitude,
-              latitudeDelta: latDelta,
-              longitudeDelta: delta,
+              latitudeDelta: newLat,
+              longitudeDelta: newLong,
             },
             renderDelay,
           );
-          setLongDelta(delta);
+          setLatDelta(newLat);
+          setLongDelta(newLong);
         }}
       />
       <HomeButton
         source={require('../assets/zoomout.png')}
         left={window.width - 58}
         onPress={() => {
-          let delta = longDelta / 0.05;
+          let newLat = latDelta * 10;
+          let newLong = longDelta * 10;
           mapRef.current.animateToRegion(
             {
               latitude: currentMarker.latitude,
               longitude: currentMarker.longitude,
-              latitudeDelta: latDelta,
-              longitudeDelta: 0.0005,
+              latitudeDelta: newLat,
+              longitudeDelta: newLong,
             },
             renderDelay,
           );
-          setLongDelta(delta);
+          setLatDelta(newLat);
+          setLongDelta(newLong);
         }}
       />
     </View>

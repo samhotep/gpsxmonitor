@@ -24,8 +24,8 @@ export default function HomeScreen({navigation}) {
   const window = useWindowDimensions();
   const [currentTracker, setCurrentTracker] = useState();
   const [currentMarker, setCurrentMarker] = useState({
-    latitude: 2.6031808853,
-    longitude: 31.9491958618,
+    latitude: 0.347596,
+    longitude: 32.58252,
   });
   const [latDelta, setLatDelta] = useState(0.05);
   const [longDelta, setLongDelta] = useState(0.05);
@@ -40,10 +40,10 @@ export default function HomeScreen({navigation}) {
   const [type, setType] = useState('standard');
   const [location, setLocation] = useState(
     new AnimatedRegion({
-      latitude: 2.6031808853,
-      longitude: 31.9491958618,
-      latitudeDelta: 3,
-      longitudeDelta: 0.5,
+      latitude: 0.347596,
+      longitude: 32.58252,
+      latitudeDelta: 0.05,
+      longitudeDelta: 0.05,
     }),
   );
   const [globeClicked, setGlobeClicked] = useState(false);

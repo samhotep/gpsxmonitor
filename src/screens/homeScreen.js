@@ -184,8 +184,8 @@ export default function HomeScreen({navigation}) {
         bottom={90}
         left={window.width - 58}
         onPress={() => {
-          let newLat = latDelta / 10;
-          let newLong = longDelta / 10;
+          let newLat = latDelta / Math.sqrt(10);
+          let newLong = longDelta / Math.sqrt(10);
           mapRef.current.animateToRegion(
             {
               latitude: currentMarker.latitude,
@@ -193,7 +193,7 @@ export default function HomeScreen({navigation}) {
               latitudeDelta: newLat,
               longitudeDelta: newLong,
             },
-            renderDelay,
+            500,
           );
           setLatDelta(newLat);
           setLongDelta(newLong);
@@ -203,8 +203,8 @@ export default function HomeScreen({navigation}) {
         source={require('../assets/zoomout.png')}
         left={window.width - 58}
         onPress={() => {
-          let newLat = latDelta * 10;
-          let newLong = longDelta * 10;
+          let newLat = latDelta * Math.sqrt(10);
+          let newLong = longDelta * Math.sqrt(10);
           mapRef.current.animateToRegion(
             {
               latitude: currentMarker.latitude,
@@ -212,7 +212,7 @@ export default function HomeScreen({navigation}) {
               latitudeDelta: newLat,
               longitudeDelta: newLong,
             },
-            renderDelay,
+            500,
           );
           setLatDelta(newLat);
           setLongDelta(newLong);

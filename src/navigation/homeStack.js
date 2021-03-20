@@ -53,7 +53,7 @@ function LogoTitle(props) {
       <HeaderIcon
         size={25}
         margin={5}
-        source={require('../assets/mail.png')}
+        source={require('../assets/mail_warn.png')}
         onPress={props.onPress}
       />
     </Container>

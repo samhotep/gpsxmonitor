@@ -5,6 +5,7 @@ import Input from '../components/inputs/input';
 import GenericButton from '../components/buttons/genericButton';
 import FloatingLoader from '../components/loaders/floatingLoader';
 import API from '../api/api';
+import Storage from '../storage/storage';
 
 export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
@@ -28,26 +29,32 @@ export default function LoginScreen({navigation}) {
       );
     } else {
       setLoading(true);
-      API.authenticateUser(email, password)
-        .then((result) => {
-          if (result === true) {
-            API.getUserInfo();
-            navigation.reset({index: 0, routes: [{name: 'Dashboard'}]});
-          } else {
-            ToastAndroid.show(result, ToastAndroid.SHORT, ToastAndroid.CENTER);
-          }
-          setLoading(false);
-        })
-        .catch((error) => {
-          setLoading(false);
-          console.log(error);
-          ToastAndroid.show(
-            'Network request failed',
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER,
-          );
-        });
+      doAuth(email, password);
     }
+  };
+
+  const doAuth = (id, key) => {
+    API.authenticateUser(id, key)
+      .then((result) => {
+        if (result === true) {
+          API.getUserInfo();
+          Storage.setUserEmail(id);
+          navigation.navigate('Billing');
+          // navigation.reset({index: 0, routes: [{name: 'Dashboard'}]});
+        } else {
+          ToastAndroid.show(result, ToastAndroid.SHORT, ToastAndroid.CENTER);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log(error);
+        ToastAndroid.show(
+          'Network request failed',
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+      });
   };
 
   return (
@@ -97,30 +104,7 @@ export default function LoginScreen({navigation}) {
         <Button
           onPress={() => {
             setLoading(true);
-            API.authenticateUser('test@fms-ecsafrica.com', 'pass123')
-              .then((result) => {
-                if (result === true) {
-                  API.getUserInfo();
-                  navigation.navigate('Billing');
-                  // navigation.reset({index: 0, routes: [{name: 'Dashboard'}]});
-                } else {
-                  ToastAndroid.show(
-                    result,
-                    ToastAndroid.SHORT,
-                    ToastAndroid.CENTER,
-                  );
-                }
-                setLoading(false);
-              })
-              .catch((error) => {
-                setLoading(false);
-                console.log(error);
-                ToastAndroid.show(
-                  'Network request failed',
-                  ToastAndroid.SHORT,
-                  ToastAndroid.CENTER,
-                );
-              });
+            doAuth('test@fms-ecsafrica.com', 'pass123');
           }}>
           <Text padding={10} margin={10} size={18}>
             Demo

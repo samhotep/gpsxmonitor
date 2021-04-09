@@ -101,7 +101,8 @@ export default function LoginScreen({navigation}) {
               .then((result) => {
                 if (result === true) {
                   API.getUserInfo();
-                  navigation.reset({index: 0, routes: [{name: 'Dashboard'}]});
+                  navigation.navigate('Billing');
+                  // navigation.reset({index: 0, routes: [{name: 'Dashboard'}]});
                 } else {
                   ToastAndroid.show(
                     result,

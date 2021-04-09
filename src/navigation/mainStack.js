@@ -6,6 +6,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import styled from 'styled-components';
 import CheckBox from '@react-native-community/checkbox';
 import AuthStack from './authStack';
+import BillingStack from './billingStack.js';
 import Dashboard from './dashboard';
 import HeaderTitle from '../components/headers/headerTitle';
 import FloatingLoader from '../components/loaders/floatingLoader';
@@ -31,6 +32,11 @@ function SettingsDrawer({route, navigation}) {
       <Drawer.Screen
         name="Auth"
         component={AuthStack}
+        options={{headerShown: false}}
+      />
+      <Drawer.Screen
+        name="Billing"
+        component={BillingStack}
         options={{headerShown: false}}
       />
     </Drawer.Navigator>

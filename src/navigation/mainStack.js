@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import CheckBox from '@react-native-community/checkbox';
 import AuthStack from './authStack';
 import BillingStack from './billingStack.js';
-import Dashboard from './dashboard';
 import HeaderTitle from '../components/headers/headerTitle';
 import FloatingLoader from '../components/loaders/floatingLoader';
 import Storage from '../storage/storage';
@@ -21,7 +20,7 @@ function SettingsDrawer({route, navigation}) {
   const window = useWindowDimensions();
   return (
     <Drawer.Navigator
-      initialRouteName="Home"
+      initialRouteName="Auth"
       drawerPosition="right"
       // eslint-disable-next-line react-native/no-inline-styles
       drawerStyle={{
@@ -194,7 +193,7 @@ export default function MainStack() {
       {loggedIn === true ? (
         <Stack.Screen
           name="Main"
-          component={Dashboard}
+          component={BillingStack}
           options={{headerShown: false}}
         />
       ) : null}

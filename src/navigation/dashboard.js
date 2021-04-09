@@ -197,6 +197,7 @@ function CustomDrawerContent({navigation}) {
         <DrawerIcon source={require('../assets/account.png')} />
         <HeaderContent>
           <DrawerLabel bold="bold">Test Test</DrawerLabel>
+          {/* TODO Use real user id  */}
           <DrawerLabel underline="underline" color="#4788c7">
             ID #365
           </DrawerLabel>

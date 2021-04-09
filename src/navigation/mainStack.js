@@ -204,6 +204,11 @@ export default function MainStack() {
           options={{headerShown: false}}
         />
       ) : null}
+      <Stack.Screen
+        name="Auth"
+        component={AuthStack}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 }

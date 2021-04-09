@@ -9,9 +9,7 @@ const API = {
           'Content-type': 'application/json',
         },
       }).then((response) => {
-        return response.json().then((resultData) => {
-          return resultData;
-        });
+        return response.json();
       });
     });
   },
@@ -30,9 +28,7 @@ const API = {
         },
         body: JSON.stringify(hashedData),
       }).then((response) => {
-        return response.json().then((resultData) => {
-          return resultData;
-        });
+        return response.json();
       });
     });
   },

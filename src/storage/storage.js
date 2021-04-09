@@ -42,6 +42,33 @@ const Storage = {
       console.log(e);
     }
   },
+  // Billing
+  getBillingToken: () => {
+    return AsyncStorage.getItem('billingtoken');
+  },
+  setBillingToken: (data) => {
+    AsyncStorage.setItem('billingtoken', JSON.stringify(data));
+  },
+  removeBillingToken: async () => {
+    try {
+      await AsyncStorage.removeItem('billingtoken');
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  getUserEmail: () => {
+    return AsyncStorage.getItem('useremail');
+  },
+  setUserEmail: (data) => {
+    AsyncStorage.setItem('useremail', JSON.stringify(data));
+  },
+  removeUserEmail: async () => {
+    try {
+      await AsyncStorage.removeItem('useremail');
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };
 
 export default Storage;

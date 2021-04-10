@@ -47,7 +47,7 @@ export default function BillingStack({route, navigation}) {
             <HeaderTitle
               source={require('../assets/back.png')}
               onPress={() => {
-                navigation.goBack();
+                navigation.navigate('Subscribe');
               }}
             />
           ),

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {StatusBar} from 'react-native';
 import styled from 'styled-components';
 import BillingButton from '../components/buttons/billingButton';
+import Input from '../components/inputs/input';
 
 // TODO Pass the location as a state prop, or as an event emitter
 export default function ConfirmationScreen({route, navigation}) {
@@ -52,15 +53,14 @@ export default function ConfirmationScreen({route, navigation}) {
           follow the prompts to complete the transaction.
         </Text>
       </TextRow>
+      <Input width={300} placeholder="Phone Number" keyboardType="numeric" />
       <BillingButton title="Confirm" />
     </Container>
   );
 }
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
   height: 100%;
   width: 100%;
   padding: 20px;
@@ -85,7 +85,7 @@ const TextRow = styled.View`
 `;
 
 const Text = styled.Text`
-  font-size: ${(props) => props.size || 20}px;
+  font-size: ${(props) => props.size || 18}px;
   color: ${(props) => props.color || '#000000'};
   font-family: 'Roboto-Regular';
   font-weight: ${(props) => props.weight || 'normal'};

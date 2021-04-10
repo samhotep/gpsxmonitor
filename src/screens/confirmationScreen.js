@@ -1,19 +1,32 @@
 import React, {useEffect, useState} from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, ToastAndroid} from 'react-native';
 import styled from 'styled-components';
 import BillingButton from '../components/buttons/billingButton';
 import Input from '../components/inputs/input';
 
 // TODO Pass the location as a state prop, or as an event emitter
 export default function ConfirmationScreen({route, navigation}) {
+  const [phoneNumber, setPhoneNumber] = useState('');
   const service = route.params;
   const periods = {
     1: {name: 'Day', time: '1 day'},
     2: {name: 'Month', time: '30 days'},
   };
+
+  const submitRequest = () => {
+    if (!/^07(7|8|0|5)\d{7}$/.test(phoneNumber)) {
+      ToastAndroid.show(
+        'Please correct your phone number',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    }
+  };
+
   useEffect(() => {
     console.log(route.params);
   });
+
   return (
     <Container>
       <StatusBar backgroundColor="#007aa6" />
@@ -53,8 +66,15 @@ export default function ConfirmationScreen({route, navigation}) {
           follow the prompts to complete the transaction.
         </Text>
       </TextRow>
-      <Input width={300} placeholder="Phone Number" keyboardType="numeric" />
-      <BillingButton title="Confirm" />
+      <Input
+        width={300}
+        placeholder="Phone Number"
+        keyboardType="numeric"
+        onChangeText={(text) => {
+          setPhoneNumber(text);
+        }}
+      />
+      <BillingButton title="Confirm" onPress={submitRequest} />
     </Container>
   );
 }

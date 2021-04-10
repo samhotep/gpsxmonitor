@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from '../screens/loginScreen';
 import PasswordResetScreen from '../screens/passwordResetScreen';
 import Dashboard from './dashboard';
+import BillingStack from './billingStack';
 import HeaderIcon from '../components/headers/headerIcon';
 
 const Stack = createStackNavigator();
@@ -49,6 +50,13 @@ export default function AuthStack({route, navigation}) {
       <Stack.Screen
         name="Reset"
         component={PasswordResetScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Billing"
+        component={BillingStack}
         options={{
           headerShown: false,
         }}

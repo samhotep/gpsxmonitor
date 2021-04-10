@@ -39,7 +39,7 @@ export default function LoginScreen({navigation}) {
         if (result === true) {
           API.getUserInfo();
           Storage.setUserEmail(id);
-          navigation.navigate('Billing');
+          navigation.navigate('Subscribe');
           // navigation.reset({index: 0, routes: [{name: 'Dashboard'}]});
         } else {
           ToastAndroid.show(result, ToastAndroid.SHORT, ToastAndroid.CENTER);

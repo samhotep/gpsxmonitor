@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
 import SubscriptionInput from '../components/inputs/subscriptionInput';
+import BillingButton from '../components/buttons/billingButton';
 import styled from 'styled-components';
 import API from '../api/api';
 
@@ -22,7 +23,7 @@ export default function SubscribeScreen({navigation}) {
     }
     vals[id] = true;
     setSelectables(vals);
-    // setSelectedService()
+    setSelectedService(services[id]);
   };
 
   useEffect(() => {
@@ -91,6 +92,7 @@ export default function SubscribeScreen({navigation}) {
           );
         })}
       </SubscriptionList>
+      <BillingButton title="Continue" />
     </Container>
   );
 }
@@ -101,7 +103,7 @@ const Container = styled.View`
   align-items: center;
   height: 100%;
   width: 100%;
-  padding: 10px;
+  padding: 20px;
   background-color: #ffffff;
 `;
 
@@ -114,9 +116,9 @@ const Title = styled.Text`
 `;
 
 const ImageContainer = styled.Image`
-  height: 200px;
-  width: 200px;
-  margin: 20px;
+  height: 150px;
+  width: 150px;
+  margin: 10px;
 `;
 
 const SubscriptionList = styled.ScrollView``;

@@ -104,8 +104,7 @@ export default function SubscribeScreen({navigation}) {
           <BillingButton
             title="Continue"
             onPress={() => {
-              console.log(selectedService);
-              if (selectedService === {}) {
+              if (Object.keys(selectedService).length === 0) {
                 ToastAndroid.show(
                   'Please select a service',
                   ToastAndroid.SHORT,

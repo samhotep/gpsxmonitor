@@ -41,7 +41,6 @@ export default function SubscribeScreen({navigation}) {
               );
             } else {
               API.getServices().then((result) => {
-                console.log(result);
                 if (result.message !== 'Unauthorized') {
                   let vals = [];
                   for (var i = 1; i <= result.services.length; i++) {

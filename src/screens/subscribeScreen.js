@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, ToastAndroid} from 'react-native';
 import SubscriptionInput from '../components/inputs/subscriptionInput';
+import {useFocusEffect} from '@react-navigation/native';
 import styled from 'styled-components';
+import API from '../api/api';
 
 // TODO Pass the location as a state prop, or as an event emitter
 export default function SubscribeScreen({navigation}) {
@@ -71,6 +73,38 @@ export default function SubscribeScreen({navigation}) {
     }
     setSelectables(vals);
   }, []);
+
+  useFocusEffect(() => {
+    API.createUser()
+      .then((result) => {
+        API.authenticateBilling()
+          .then((response) => {
+            if (response !== 200) {
+              ToastAndroid.show(
+                'Network request failed',
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER,
+              );
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            ToastAndroid.show(
+              'Network request failed',
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER,
+            );
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        ToastAndroid.show(
+          'Network request failed',
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+      });
+  });
 
   return (
     <Container>

@@ -1,18 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {StatusBar} from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
 import styled from 'styled-components';
-import API from '../api/api';
 
 // TODO Pass the location as a state prop, or as an event emitter
-export default function BillingScreen({navigation}) {
-  useFocusEffect(() => {
-    API.authenticateBilling()
-      .then((result) => {})
-      .catch((error) => {
-        console.log(error);
-      });
-  });
+export default function ConfirmationScreen({navigation}) {
   return (
     <Container>
       <StatusBar backgroundColor="#007aa6" />
@@ -33,6 +24,6 @@ const Container = styled.View`
 const Title = styled.Text`
   font-size: 32px;
   font-family: 'Roboto-Regular';
-  color: '#ffffff';
+  color: #ffffff;
   text-align: left;
 `;

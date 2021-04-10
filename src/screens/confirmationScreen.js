@@ -27,38 +27,6 @@ export default function ConfirmationScreen({route, navigation}) {
       setLoading(true);
       API.subscribe(phoneNumber, service.serviceId)
         .then((result) => {
-          let x = {
-            code: 0,
-            data: {
-              amount: 10000,
-              ceatedOn: '2021-04-10T02:57:37.2847008Z',
-              errorMessage: null,
-              errorMessageCode: null,
-              productId: 'e26303f32d0e4b16890bbf44de8f257c',
-              recipientNumber: '256785016759',
-              service: null,
-              serviceId: null,
-              status: 'OK',
-              statusCode: '1',
-              statusMessage: null,
-              transactionId: '6bcece127b52471692ec6e49a3768625',
-              transactionReference:
-                'NqBVuOMrW1PYrgdLDqIA5LbsHKf7bE8apOUfOCz96t0pzq2CxZfmco621fkRl499c3c8950bbbba686c3fe385ddff2abb66',
-              transactionStatus: 'PENDING',
-              updatedBy: null,
-              updatedOn: '0001-01-01T00:00:00',
-              user: {
-                apiKey: null,
-                createdOn: '2021-04-09T23:56:30',
-                email: 'test@fms-ecsafrica.com',
-                userId: 'b33802f8d1fc4ff4921bca9833a69dd8',
-              },
-              userId: 'b33802f8d1fc4ff4921bca9833a69dd8',
-              validateTillDate: '0001-01-01T00:00:00',
-            },
-            message: 'Transaction recorded',
-          };
-          console.log(result);
           if (result.code === -1) {
             ToastAndroid.show(
               result.message,

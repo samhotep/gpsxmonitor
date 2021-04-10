@@ -36,6 +36,21 @@ export default function ConfirmationScreen({route, navigation}) {
         <Text>Duration:</Text>
         <Text>{periods[service.pricing.periodic].time}</Text>
       </TextRow>
+      <TextRow>
+        <ImageContainer
+          source={require('../assets/mtn.png')}
+          resizeMode="contain"
+          width={150}
+        />
+        <ImageContainer source={require('../assets/airtel.png')} />
+      </TextRow>
+      <TextRow>
+        <Text size={14} color="#808080">
+          Pay for your subscription using the supported mobile platforms. You
+          will receive a message on your mobile device, please read it and
+          follow the prompts to complete the transaction.
+        </Text>
+      </TextRow>
     </Container>
   );
 }
@@ -58,13 +73,6 @@ const Title = styled.Text`
   margin: 10px;
 `;
 
-const TextContainer = styled.View`
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  background-color: red;
-`;
-
 const TextRow = styled.View`
   flex-direction: row;
   justify-content: space-between;
@@ -75,9 +83,14 @@ const TextRow = styled.View`
 `;
 
 const Text = styled.Text`
-  font-size: ${(props) => props.size || 24}px;
+  font-size: ${(props) => props.size || 20}px;
   color: ${(props) => props.color || '#000000'};
   font-family: 'Roboto-Regular';
   font-weight: ${(props) => props.weight || 'normal'};
   text-align: ${(props) => props.align || 'left'};
+`;
+
+const ImageContainer = styled.Image`
+  height: ${(props) => props.height || 100}px;
+  width: ${(props) => props.width || 100}px;
 `;

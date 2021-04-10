@@ -6,11 +6,11 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import styled from 'styled-components';
 import CheckBox from '@react-native-community/checkbox';
 import AuthStack from './authStack';
-import BillingStack from './billingStack.js';
 import HeaderTitle from '../components/headers/headerTitle';
 import FloatingLoader from '../components/loaders/floatingLoader';
 import Storage from '../storage/storage';
 import API from '../api/api';
+import Dashboard from './dashboard';
 
 const Stack = createStackNavigator();
 
@@ -31,11 +31,6 @@ function SettingsDrawer({route, navigation}) {
       <Drawer.Screen
         name="Auth"
         component={AuthStack}
-        options={{headerShown: false}}
-      />
-      <Drawer.Screen
-        name="Billing"
-        component={BillingStack}
         options={{headerShown: false}}
       />
     </Drawer.Navigator>
@@ -158,6 +153,7 @@ function HeaderItem(props) {
 export default function MainStack() {
   const [loggedIn, setLoggedIn] = useState();
   const [loading, setLoading] = useState(true);
+  const [subscribed, setSubscribed] = useState();
 
   /**
    * Check if the user session is still valid, if not then redirect to the home page
@@ -184,31 +180,28 @@ export default function MainStack() {
       });
   }, []);
 
+  useEffect(() => {}, []);
+
   if (loading) {
     return <FloatingLoader />;
   }
 
   return (
     <Stack.Navigator initialRouteName="Main">
-      {loggedIn === true ? (
+      {loggedIn && subscribed ? (
         <Stack.Screen
           name="Main"
-          component={BillingStack}
+          component={Dashboard}
           options={{headerShown: false}}
         />
       ) : null}
-      {loggedIn === false ? (
+      {!loggedIn || !subscribed ? (
         <Stack.Screen
           name="Main"
           component={SettingsDrawer}
           options={{headerShown: false}}
         />
       ) : null}
-      <Stack.Screen
-        name="Auth"
-        component={AuthStack}
-        options={{headerShown: false}}
-      />
     </Stack.Navigator>
   );
 }

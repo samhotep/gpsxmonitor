@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {StatusBar} from 'react-native';
 import styled from 'styled-components';
+import BillingButton from '../components/buttons/billingButton';
 
 // TODO Pass the location as a state prop, or as an event emitter
 export default function ConfirmationScreen({route, navigation}) {
@@ -51,6 +52,7 @@ export default function ConfirmationScreen({route, navigation}) {
           follow the prompts to complete the transaction.
         </Text>
       </TextRow>
+      <BillingButton title="Confirm" />
     </Container>
   );
 }

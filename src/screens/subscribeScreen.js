@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
 import SubscriptionInput from '../components/inputs/subscriptionInput';
-import {useFocusEffect} from '@react-navigation/native';
 import styled from 'styled-components';
 import API from '../api/api';
 
 // TODO Pass the location as a state prop, or as an event emitter
 export default function SubscribeScreen({navigation}) {
+  const [services, setServices] = useState([]);
   const [selectedService, setSelectedService] = useState({});
   const [selectables, setSelectables] = useState([false, false, false]);
 
@@ -15,66 +15,17 @@ export default function SubscribeScreen({navigation}) {
     2: {name: 'Month', time: '30 days'},
   };
 
-  const subs = [
-    {
-      serviceId: 'e26303f32d0e4b16890bbf44de8f257c',
-      name: 'tracking',
-      shortName: 'tracking_monthly',
-      createdOn: '2021-03-19T11:15:53',
-      pricingId: '52f26819996a4f85ae894e3768e4b43a',
-      pricing: {
-        pricingId: '52f26819996a4f85ae894e3768e4b43a',
-        periodic: 2,
-        amount: 10000.0,
-        createOn: '2021-03-19T11:15:20',
-      },
-    },
-    {
-      serviceId: 'e26303f32d0e4b16890bbf44de8f257c',
-      name: 'tracking',
-      shortName: 'tracking_monthly',
-      createdOn: '2021-03-19T11:15:53',
-      pricingId: '52f26819996a4f85ae894e3768e4b43a',
-      pricing: {
-        pricingId: '52f26819996a4f85ae894e3768e4b43a',
-        periodic: 2,
-        amount: 10000.0,
-        createOn: '2021-03-19T11:15:20',
-      },
-    },
-    {
-      serviceId: 'e26303f32d0e4b16890bbf44de8f257c',
-      name: 'tracking',
-      shortName: 'tracking_monthly',
-      createdOn: '2021-03-19T11:15:53',
-      pricingId: '52f26819996a4f85ae894e3768e4b43a',
-      pricing: {
-        pricingId: '52f26819996a4f85ae894e3768e4b43a',
-        periodic: 2,
-        amount: 10000.0,
-        createOn: '2021-03-19T11:15:20',
-      },
-    },
-  ];
-
   const chooseService = (id) => {
     let vals = [];
-    for (var i = 1; i <= subs.length; i++) {
+    for (var i = 1; i <= services.length; i++) {
       vals.push(false);
     }
     vals[id] = true;
     setSelectables(vals);
+    // setSelectedService()
   };
 
   useEffect(() => {
-    let vals = [];
-    for (var i = 1; i <= subs.length; i++) {
-      vals.push(false);
-    }
-    setSelectables(vals);
-  }, []);
-
-  useFocusEffect(() => {
     API.createUser()
       .then((result) => {
         API.authenticateBilling()
@@ -85,6 +36,18 @@ export default function SubscribeScreen({navigation}) {
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER,
               );
+            } else {
+              API.getServices().then((result) => {
+                console.log(result);
+                if (result.message !== 'Unauthorized') {
+                  let vals = [];
+                  for (var i = 1; i <= result.services.length; i++) {
+                    vals.push(false);
+                  }
+                  setSelectables(vals);
+                  setServices(result.services);
+                }
+              });
             }
           })
           .catch((error) => {
@@ -104,7 +67,7 @@ export default function SubscribeScreen({navigation}) {
           ToastAndroid.CENTER,
         );
       });
-  });
+  }, []);
 
   return (
     <Container>
@@ -115,9 +78,10 @@ export default function SubscribeScreen({navigation}) {
         resizeMode="cover"
       />
       <SubscriptionList>
-        {subs.map((_, i) => {
+        {services.map((_, i) => {
           return (
             <SubscriptionInput
+              key={_.serviceId}
               name={_.name}
               price={_.pricing.amount}
               period={periods[_.pricing.periodic]}

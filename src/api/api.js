@@ -140,7 +140,7 @@ const API = {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',
-          Bearer: `Token ${result}`,
+          Authorization: `Bearer ${JSON.parse(result)}`,
         },
       }).then((response) => {
         return response.json();
@@ -153,7 +153,7 @@ const API = {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
-          Bearer: `Token ${result}`,
+          Authorization: `Bearer ${JSON.parse(result)}`,
         },
         body: JSON.stringify(data),
       }).then((response) => {
@@ -172,9 +172,9 @@ const API = {
     return Storage.getUserEmail().then((result) => {
       return API.billpost('api/Users/authenticate/', {
         email: JSON.parse(result),
-      }).then((result) => {
-        if (typeof result.token !== 'undefined') {
-          Storage.setBillingToken(result.token);
+      }).then((tokenBody) => {
+        if (typeof tokenBody.token !== 'undefined') {
+          Storage.setBillingToken(tokenBody.token);
           return 200;
         } else {
           return 400;
@@ -183,7 +183,7 @@ const API = {
     });
   },
   getServices: () => {
-    // API.get(API.billingURL);
+    return API.billget('api/Service/');
   },
 };
 

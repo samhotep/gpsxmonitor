@@ -35,7 +35,7 @@ export default function SubscribeScreen({navigation}) {
           .then((response) => {
             if (response !== 200) {
               ToastAndroid.show(
-                'Network request failed',
+                'Unable to authenticate',
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER,
               );

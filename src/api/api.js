@@ -185,6 +185,13 @@ const API = {
   getServices: () => {
     return API.billget('api/Service/');
   },
+  subscribe: (number, id) => {
+    return API.billpost('api/Transactions/', {
+      number: number,
+      narative: 'Subscription for monthly tracking',
+      serviceId: id,
+    });
+  },
 };
 
 export default API;

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import BillingScreen from '../screens/billingScreen';
-import LoginScreen from '../screens/loginScreen';
+import ConfirmationScreen from '../screens/confirmationScreen';
 import SubscribeScreen from '../screens/subscribeScreen';
 import SuccessScreen from '../screens/successScreen';
 import HeaderTitle from '../components/headers/headerTitle';
@@ -27,15 +26,15 @@ export default function BillingStack({route, navigation}) {
             <HeaderTitle
               source={require('../assets/back.png')}
               onPress={() => {
-                navigation.navigate('Auth');
+                navigation.goBack();
               }}
             />
           ),
         }}
       />
       <Stack.Screen
-        name="Billing"
-        component={BillingScreen}
+        name="Confirmation"
+        component={ConfirmationScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen

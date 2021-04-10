@@ -56,7 +56,23 @@ export default function BillingStack({route, navigation}) {
       <Stack.Screen
         name="Success"
         component={SuccessScreen}
-        options={{headerShown: false}}
+        options={{
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#1e96dc',
+          },
+          headerTitleStyle: {
+            color: '#ffffff',
+          },
+          headerLeft: () => (
+            <HeaderTitle
+              source={require('../assets/back.png')}
+              onPress={() => {
+                navigation.navigate('Confirmation');
+              }}
+            />
+          ),
+        }}
       />
     </Stack.Navigator>
   );

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
 import SubscriptionInput from '../components/inputs/subscriptionInput';
 import BillingButton from '../components/buttons/billingButton';
+import FloatingLoader from '../components/loaders/floatingLoader';
 import styled from 'styled-components';
 import API from '../api/api';
 
@@ -10,6 +11,7 @@ export default function SubscribeScreen({navigation}) {
   const [services, setServices] = useState([]);
   const [selectedService, setSelectedService] = useState({});
   const [selectables, setSelectables] = useState([false, false, false]);
+  const [loading, setLoading] = useState(true);
 
   const periods = {
     1: {name: 'Day', time: '1 day'},
@@ -48,6 +50,7 @@ export default function SubscribeScreen({navigation}) {
                   setSelectables(vals);
                   setServices(result.services);
                 }
+                setLoading(false);
               });
             }
           })
@@ -58,6 +61,7 @@ export default function SubscribeScreen({navigation}) {
               ToastAndroid.SHORT,
               ToastAndroid.CENTER,
             );
+            setLoading(false);
           });
       })
       .catch((error) => {
@@ -67,6 +71,7 @@ export default function SubscribeScreen({navigation}) {
           ToastAndroid.SHORT,
           ToastAndroid.CENTER,
         );
+        setLoading(false);
       });
   }, []);
 
@@ -78,21 +83,41 @@ export default function SubscribeScreen({navigation}) {
         source={require('../assets/explore.png')}
         resizeMode="cover"
       />
-      <SubscriptionList>
-        {services.map((_, i) => {
-          return (
-            <SubscriptionInput
-              key={_.serviceId}
-              name={_.name}
-              price={_.pricing.amount}
-              period={periods[_.pricing.periodic]}
-              value={selectables[i]}
-              onPress={() => chooseService(i)}
-            />
-          );
-        })}
-      </SubscriptionList>
-      <BillingButton title="Continue" />
+      {loading ? (
+        <FloatingLoader />
+      ) : (
+        <>
+          <SubscriptionList>
+            {services.map((_, i) => {
+              return (
+                <SubscriptionInput
+                  key={_.serviceId}
+                  name={_.name}
+                  price={_.pricing.amount}
+                  period={periods[_.pricing.periodic]}
+                  value={selectables[i]}
+                  onPress={() => chooseService(i)}
+                />
+              );
+            })}
+          </SubscriptionList>
+          <BillingButton
+            title="Continue"
+            onPress={() => {
+              console.log(selectedService);
+              if (selectedService === {}) {
+                ToastAndroid.show(
+                  'Please select a service',
+                  ToastAndroid.SHORT,
+                  ToastAndroid.CENTER,
+                );
+              } else {
+                navigation.navigate('Confirmation', selectedService);
+              }
+            }}
+          />
+        </>
+      )}
     </Container>
   );
 }

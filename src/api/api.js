@@ -1,6 +1,7 @@
 import Storage from '../storage/storage';
 
 const API = {
+  billingURL: 'http://centatech-001-site3.itempurl.com',
   get: async (url = '', token = '', headers = '') => {
     return Storage.getUserToken().then((result) => {
       return fetch(url + `?hash=${JSON.parse(result)}`, {
@@ -131,6 +132,58 @@ const API = {
         return result.status.description;
       }
     });
+  },
+  // Billing API
+  billget: (endpoint) => {
+    return Storage.getBillingToken().then((result) => {
+      return fetch(`${API.billingURL}/${endpoint}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+          Bearer: `Token ${result}`,
+        },
+      }).then((response) => {
+        return response.json();
+      });
+    });
+  },
+  billpost: (endpoint, data) => {
+    return Storage.getBillingToken().then((result) => {
+      return fetch(`${API.billingURL}/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+          Bearer: `Token ${result}`,
+        },
+        body: JSON.stringify(data),
+      }).then((response) => {
+        return response.json();
+      });
+    });
+  },
+  createUser: () => {
+    return Storage.getUserEmail().then((result) => {
+      return API.billpost('api/Users/', {
+        email: JSON.parse(result),
+      });
+    });
+  },
+  authenticateBilling: () => {
+    return Storage.getUserEmail().then((result) => {
+      return API.billpost('api/Users/authenticate/', {
+        email: JSON.parse(result),
+      }).then((result) => {
+        if (typeof result.token !== 'undefined') {
+          Storage.setBillingToken(result.token);
+          return 200;
+        } else {
+          return 400;
+        }
+      });
+    });
+  },
+  getServices: () => {
+    // API.get(API.billingURL);
   },
 };
 

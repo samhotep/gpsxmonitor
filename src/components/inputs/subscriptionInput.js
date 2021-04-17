@@ -1,9 +1,8 @@
-import React, {useRef, useEffect, useState} from 'react';
+import React from 'react';
 import RadioInput from './radioInput';
 import styled from 'styled-components/native';
 
 export default function SubscriptionInput(props) {
-  const [selected, setSelected] = useState(false);
   return (
     <Container onPress={props.onPress}>
       <RadioInput

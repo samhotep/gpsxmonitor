@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
 import styled from 'styled-components';
 import BillingButton from '../components/buttons/billingButton';
@@ -12,7 +12,7 @@ export default function ConfirmationScreen({route, navigation}) {
   const [loading, setLoading] = useState(false);
   const service = route.params;
   const periods = {
-    1: {name: 'Day', time: '1 day'},
+    0: {name: 'Day', time: '1 day'},
     2: {name: 'Month', time: '30 days'},
   };
 
@@ -25,7 +25,11 @@ export default function ConfirmationScreen({route, navigation}) {
       );
     } else {
       setLoading(true);
-      API.subscribe(phoneNumber, service.serviceId)
+      API.subscribe(
+        phoneNumber,
+        periods[service.pricing.periodic].time,
+        service.serviceId,
+      )
         .then((result) => {
           if (result.code === -1) {
             ToastAndroid.show(
@@ -55,10 +59,6 @@ export default function ConfirmationScreen({route, navigation}) {
         });
     }
   };
-
-  useEffect(() => {
-    console.log(route.params);
-  });
 
   return (
     <Container>
@@ -107,8 +107,8 @@ export default function ConfirmationScreen({route, navigation}) {
           setPhoneNumber(text);
         }}
       />
-      <BillingButton title="Confirm" onPress={submitRequest} />
       {loading ? <FloatingLoader /> : null}
+      <BillingButton title="Confirm" onPress={submitRequest} />
     </Container>
   );
 }

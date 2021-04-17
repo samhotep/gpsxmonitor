@@ -5,6 +5,7 @@ import BillingButton from '../components/buttons/billingButton';
 import FloatingLoader from '../components/loaders/floatingLoader';
 import styled from 'styled-components';
 import API from '../api/api';
+import ErrorBox from '../components/alerts/errorBox';
 
 // TODO Pass the location as a state prop, or as an event emitter
 export default function SubscribeScreen({navigation}) {
@@ -12,6 +13,7 @@ export default function SubscribeScreen({navigation}) {
   const [selectedService, setSelectedService] = useState({});
   const [selectables, setSelectables] = useState([false, false, false]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const periods = {
     1: {name: 'Day', time: '1 day'},
@@ -28,50 +30,46 @@ export default function SubscribeScreen({navigation}) {
     setSelectedService(services[id]);
   };
 
-  useEffect(() => {
+  const loadServices = () => {
+    let errorMessage = 'Network request failed';
+    setError(false);
+    setLoading(true);
     API.createUser()
       .then((result) => {
-        API.authenticateBilling()
-          .then((response) => {
-            if (response !== 200) {
-              ToastAndroid.show(
-                'Unable to authenticate',
-                ToastAndroid.SHORT,
-                ToastAndroid.CENTER,
-              );
-            } else {
-              API.getServices().then((result) => {
-                if (result.message !== 'Unauthorized') {
-                  let vals = [];
-                  for (var i = 1; i <= result.services.length; i++) {
-                    vals.push(false);
-                  }
-                  setSelectables(vals);
-                  setServices(result.services);
-                }
-                setLoading(false);
-              });
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            ToastAndroid.show(
-              'Network request failed',
-              ToastAndroid.SHORT,
-              ToastAndroid.CENTER,
-            );
-            setLoading(false);
-          });
+        return API.authenticateBilling();
+      })
+      .then((response) => {
+        if (response === 200) {
+          return API.getServices();
+        } else {
+          throw 'Unable to authenticate';
+        }
+      })
+      .then((result) => {
+        if (result.message !== 'Unauthorized') {
+          let vals = [];
+          for (var i = 1; i <= result.services.length; i++) {
+            vals.push(false);
+          }
+          setSelectables(vals);
+          setServices(result.services);
+        }
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
+        setError(true);
         ToastAndroid.show(
-          'Network request failed',
+          errorMessage,
           ToastAndroid.SHORT,
           ToastAndroid.CENTER,
         );
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    loadServices();
   }, []);
 
   return (
@@ -84,6 +82,8 @@ export default function SubscribeScreen({navigation}) {
       />
       {loading ? (
         <FloatingLoader />
+      ) : error ? (
+        <ErrorBox text="Unable to load services" onPress={loadServices} />
       ) : (
         <>
           <SubscriptionList>

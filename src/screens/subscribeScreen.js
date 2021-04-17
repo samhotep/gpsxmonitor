@@ -16,7 +16,7 @@ export default function SubscribeScreen({navigation}) {
   const [error, setError] = useState(false);
 
   const periods = {
-    1: {name: 'Day', time: '1 day'},
+    0: {name: 'Day', time: '1 day'},
     2: {name: 'Month', time: '30 days'},
   };
 
@@ -35,7 +35,7 @@ export default function SubscribeScreen({navigation}) {
     setError(false);
     setLoading(true);
     API.createUser()
-      .then((result) => {
+      .then(() => {
         return API.authenticateBilling();
       })
       .then((response) => {

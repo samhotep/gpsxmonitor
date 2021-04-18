@@ -50,58 +50,65 @@ export default function ConfirmationScreen({route, navigation}) {
   };
 
   return (
-    <Container>
-      <StatusBar backgroundColor="#007aa6" />
-      <Title>Confirm your purchase</Title>
-      <TextRow>
-        <Text>Name:</Text>
-        <Text weight="bold" align="right">
-          {service.name.charAt(0).toUpperCase()}
-          {service.name.slice(1)}
-        </Text>
-      </TextRow>
-      <TextRow>
-        <Text>Amount:</Text>
-        <Text weight="bold" align="right">
-          Ugx{' '}
-          {service.pricing.amount
-            .toFixed(1)
-            .replace(/\d(?=(\d{3})+\.)/g, '$&,')}
-        </Text>
-      </TextRow>
-      <TextRow>
-        <Text>Duration:</Text>
-        <Text>{periods[service.pricing.periodic].time}</Text>
-      </TextRow>
-      <TextRow>
-        <ImageContainer
-          source={require('../assets/mtn.png')}
-          resizeMode="contain"
-          width={150}
+    <>
+      <Container
+        // eslint-disable-next-line react-native/no-inline-styles
+        contentContainerStyle={{
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+        }}>
+        <StatusBar backgroundColor="#007aa6" />
+        <Title>Confirm your purchase</Title>
+        <TextRow>
+          <Text>Name:</Text>
+          <Text weight="bold" align="right">
+            {service.name.charAt(0).toUpperCase()}
+            {service.name.slice(1)}
+          </Text>
+        </TextRow>
+        <TextRow>
+          <Text>Amount:</Text>
+          <Text weight="bold" align="right">
+            Ugx{' '}
+            {service.pricing.amount
+              .toFixed(1)
+              .replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+          </Text>
+        </TextRow>
+        <TextRow>
+          <Text>Duration:</Text>
+          <Text>{periods[service.pricing.periodic].time}</Text>
+        </TextRow>
+        <TextRow>
+          <ImageContainer
+            source={require('../assets/mtn.png')}
+            resizeMode="contain"
+            width={150}
+          />
+          <ImageContainer source={require('../assets/airtel.png')} />
+        </TextRow>
+        <TextRow>
+          <Text size={14} color="#808080">
+            Pay for your subscription using the supported mobile platforms. You
+            will receive a message on your mobile device, please read it and
+            follow the prompts to complete the transaction.
+          </Text>
+        </TextRow>
+        <Input
+          width={300}
+          placeholder="Phone Number"
+          keyboardType="numeric"
+          onChangeText={(text) => {
+            setPhoneNumber(text);
+          }}
         />
-        <ImageContainer source={require('../assets/airtel.png')} />
-      </TextRow>
-      <TextRow>
-        <Text size={14} color="#808080">
-          Pay for your subscription using the supported mobile platforms. You
-          will receive a message on your mobile device, please read it and
-          follow the prompts to complete the transaction.
-        </Text>
-      </TextRow>
-      <Input
-        width={300}
-        placeholder="Phone Number"
-        keyboardType="numeric"
-        onChangeText={(text) => {
-          setPhoneNumber(text);
-        }}
-      />
+        {error ? (
+          <ErrorBox text="Unable to subscribe" onPress={submitRequest} />
+        ) : null}
+        <BillingButton title="Confirm" onPress={submitRequest} />
+      </Container>
       {loading ? <FloatingLoader /> : null}
-      {error ? (
-        <ErrorBox text="Unable to subscribe" onPress={submitRequest} />
-      ) : null}
-      <BillingButton title="Confirm" onPress={submitRequest} />
-    </Container>
+    </>
   );
 }
 

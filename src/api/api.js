@@ -152,7 +152,7 @@ const API = {
       return fetch(`${API.billingURL}/${endpoint}`, {
         method: 'POST',
         headers: {
-          'Content-type': 'application/json',
+          'Content-type': 'application/json; charset=UTF-8',
           Authorization: `Bearer ${JSON.parse(result)}`,
         },
         body: JSON.stringify(data),
@@ -185,10 +185,10 @@ const API = {
   getServices: () => {
     return API.billget('api/Service/');
   },
-  subscribe: (number, id) => {
+  subscribe: (number, narrative, id) => {
     return API.billpost('api/Transactions/', {
       number: number,
-      narative: 'Subscription for monthly tracking',
+      narative: narrative,
       serviceId: id,
     });
   },

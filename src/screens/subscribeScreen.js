@@ -17,7 +17,9 @@ export default function SubscribeScreen({navigation}) {
 
   const periods = {
     0: {name: 'Day', time: '1 day'},
+    1: {name: 'Week', time: '7 days'},
     2: {name: 'Month', time: '30 days'},
+    3: {name: 'Year', time: '1 year'},
   };
 
   const chooseService = (id) => {

@@ -10,10 +10,10 @@ export default function SuccessScreen({route, navigation}) {
   return (
     <Container>
       <StatusBar backgroundColor="#007aa6" />
-      <Title>Purchase successfully placed</Title>
-      <Text>Transaction ID:</Text>
+      <Title>Order successfully placed</Title>
+      <Text size={22}>Transaction ID:</Text>
       <Text size={17} weight="bold">
-        {transaction.data.transactionId}
+        {transaction.transactionId}
       </Text>
       <ImageContainer
         source={require('../assets/tick.png')}

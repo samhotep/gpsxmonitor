@@ -133,7 +133,7 @@ const Container = styled.View`
 `;
 
 const Title = styled.Text`
-  font-size: 42px;
+  font-size: 38px;
   font-family: 'Roboto-Regular';
   color: #000000;
   text-align: left;

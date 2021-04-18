@@ -69,6 +69,19 @@ const Storage = {
       console.log(e);
     }
   },
+  getRemainingDays: () => {
+    return AsyncStorage.getItem('days');
+  },
+  setRemainingDays: (data) => {
+    AsyncStorage.setItem('days', JSON.stringify(data));
+  },
+  removeRemainingDays: async () => {
+    try {
+      await AsyncStorage.removeItem('days');
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };
 
 export default Storage;

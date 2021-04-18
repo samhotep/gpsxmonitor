@@ -4,12 +4,14 @@ import styled from 'styled-components';
 import BillingButton from '../components/buttons/billingButton';
 import Input from '../components/inputs/input';
 import FloatingLoader from '../components/loaders/floatingLoader';
+import ErrorBox from '../components/alerts/errorBox';
 import API from '../api/api';
 
 // TODO Pass the location as a state prop, or as an event emitter
 export default function ConfirmationScreen({route, navigation}) {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const service = route.params;
   const periods = {
     0: {name: 'Day', time: '1 day'},
@@ -17,6 +19,7 @@ export default function ConfirmationScreen({route, navigation}) {
   };
 
   const submitRequest = () => {
+    setError(false);
     if (!/^07(7|8|0|5)\d{7}$/.test(phoneNumber)) {
       ToastAndroid.show(
         'Please correct your phone number',
@@ -31,31 +34,17 @@ export default function ConfirmationScreen({route, navigation}) {
         service.serviceId,
       )
         .then((result) => {
-          if (result.code === -1) {
-            ToastAndroid.show(
-              result.message,
-              ToastAndroid.SHORT,
-              ToastAndroid.CENTER,
-            );
-          } else if (result.code === 0) {
+          if (result.code === 0) {
             navigation.navigate('Success', result.data);
           } else {
-            ToastAndroid.show(
-              result.message,
-              ToastAndroid.SHORT,
-              ToastAndroid.CENTER,
-            );
+            throw result.message;
           }
           setLoading(false);
         })
-        .catch((error) => {
-          console.log(error);
-          ToastAndroid.show(
-            'Network request failed',
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER,
-          );
+        .catch((err) => {
+          ToastAndroid.show(err, ToastAndroid.SHORT, ToastAndroid.CENTER);
           setLoading(false);
+          setError(true);
         });
     }
   };
@@ -108,6 +97,9 @@ export default function ConfirmationScreen({route, navigation}) {
         }}
       />
       {loading ? <FloatingLoader /> : null}
+      {error ? (
+        <ErrorBox text="Unable to subscribe" onPress={submitRequest} />
+      ) : null}
       <BillingButton title="Confirm" onPress={submitRequest} />
     </Container>
   );

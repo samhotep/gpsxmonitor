@@ -40,21 +40,26 @@ export default function LoginScreen({navigation}) {
           API.getUserInfo();
           return Storage.setUserEmail(id);
         } else {
-          ToastAndroid.show(result, ToastAndroid.SHORT, ToastAndroid.CENTER);
           throw result;
         }
+      })
+      .then(() => {
+        return API.createUser();
       })
       .then(() => {
         return API.authenticateBilling();
       })
       .then((result) => {
-        if (result === 200) {
+        console.log(result);
+        if (result !== 400) {
           if (result.isSubscriptionValid === true) {
             navigation.reset({index: 0, routes: [{name: 'Dashboard'}]});
           } else {
             navigation.navigate('Billing');
           }
           setLoading(false);
+        } else {
+          throw 'Unable to authenticate';
         }
       })
       .catch((error) => {

@@ -50,7 +50,6 @@ export default function LoginScreen({navigation}) {
         return API.authenticateBilling();
       })
       .then((result) => {
-        console.log(result);
         if (result !== 400) {
           if (result.isSubscriptionValid === true) {
             navigation.reset({index: 0, routes: [{name: 'Dashboard'}]});

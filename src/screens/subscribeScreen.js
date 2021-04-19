@@ -22,50 +22,33 @@ export default function SubscribeScreen({navigation}) {
     3: {name: 'Year', time: '1 year'},
   };
 
-  const chooseService = (id) => {
+  const _updateSelectables = (serviceList) => {
     let vals = [];
-    for (var i = 1; i <= services.length; i++) {
+    for (var i = 1; i <= serviceList.length; i++) {
       vals.push(false);
     }
-    vals[id] = true;
     setSelectables(vals);
-    setSelectedService(services[id]);
+    return vals;
   };
 
   const loadServices = () => {
-    let errorMessage = 'Network request failed';
     setError(false);
     setLoading(true);
-    API.createUser()
-      .then(() => {
-        return API.authenticateBilling();
-      })
-      .then((response) => {
-        if (response === 200) {
-          return API.getServices();
-        } else {
-          throw 'Unable to authenticate';
-        }
-      })
+    API.getServices()
       .then((result) => {
-        if (result.message !== 'Unauthorized') {
-          let vals = [];
-          for (var i = 1; i <= result.services.length; i++) {
-            vals.push(false);
-          }
-          setSelectables(vals);
+        if (result.message === 'Unauthorized') {
+          API.authenticateBilling();
+          throw 'Unable to authenticate';
+        } else {
+          _updateSelectables(result.services);
           setServices(result.services);
         }
         setLoading(false);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
         setError(true);
-        ToastAndroid.show(
-          errorMessage,
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
-        );
+        ToastAndroid.show(err, ToastAndroid.SHORT, ToastAndroid.CENTER);
         setLoading(false);
       });
   };
@@ -97,7 +80,10 @@ export default function SubscribeScreen({navigation}) {
                   price={_.pricing.amount}
                   period={periods[_.pricing.periodic]}
                   value={selectables[i]}
-                  onPress={() => chooseService(i)}
+                  onPress={() => {
+                    _updateSelectables(services);
+                    setSelectedService(services[i]);
+                  }}
                 />
               );
             })}

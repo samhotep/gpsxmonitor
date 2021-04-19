@@ -176,7 +176,7 @@ const API = {
         if (typeof tokenBody.token !== 'undefined') {
           Storage.setBillingToken(tokenBody.token);
           Storage.setRemainingDays(tokenBody.daysLeft);
-          return 200;
+          return tokenBody;
         } else {
           return 400;
         }

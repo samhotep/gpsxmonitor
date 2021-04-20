@@ -1,9 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import {createDrawerNavigator, useIsDrawerOpen} from '@react-navigation/drawer';
-import {ToastAndroid, NativeEventEmitter, NativeModules} from 'react-native';
+import {
+  Alert,
+  NativeEventEmitter,
+  NativeModules,
+  ToastAndroid,
+} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import styled from 'styled-components/native';
 import ProductStack from './productStack';
+import BillingStack from './billingStack';
 import CategoryItem from '../components/items/categoryItem';
 import HeaderTitle from '../components/headers/headerTitle';
 import HeaderIcon from '../components/headers/headerIcon';
@@ -12,6 +18,7 @@ import Input from '../components/inputs/input';
 import Utils from '../utils/utils';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import API from '../api/api';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Drawer = createDrawerNavigator();
 
@@ -38,40 +45,41 @@ function CustomDrawerContent({navigation}) {
   const [updatedDate, setUpdatedDate] = useState(Date.now());
   const isDrawerOpen = useIsDrawerOpen();
 
-  //   const confirmLogout = () =>
-  //     Alert.alert(
-  //       "Logout",
-  //       "Are you sure?",
-  //       [
-  //         {
-  //           text: "Cancel",
-  //           onPress: () => console.log("Cancel Pressed"),
-  //           style: "cancel",
-  //         },
-  //         {
-  //           text: "OK",
-  //           onPress: () => {
-  //             console.log("OK Pressed");
-  //             props.navigation.reset({
-  //               index: 0,
-  //               routes: [
-  //                 {
-  //                   name: "Auth",
-  //                   state: {
-  //                     routes: [
-  //                       {
-  //                         name: "Login",
-  //                       },
-  //                     ],
-  //                   },
-  //                 },
-  //               ],
-  //             });
-  //           },
-  //         },
-  //       ],
-  //       { cancelable: false }
-  //     );
+  const confirmLogout = () =>
+    Alert.alert(
+      'Logout',
+      'Are you sure?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Logout Cancelled'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            console.log('Logged Out');
+            AsyncStorage.clear();
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'Auth',
+                  state: {
+                    routes: [
+                      {
+                        name: 'Login',
+                      },
+                    ],
+                  },
+                },
+              ],
+            });
+          },
+        },
+      ],
+      {cancelable: false},
+    );
 
   const updateScreenLocation = (tracker) => {
     // API.getTrackerLocation().then((result) => {});
@@ -228,6 +236,19 @@ function CustomDrawerContent({navigation}) {
             </CategoryContainer>
           );
         })}
+        <DrawerItemContainer
+          activeOpacity={0.6}
+          underlayColor="#b5dbf1"
+          onPress={() => confirmLogout()}>
+          <>
+            <DrawerIcon
+              source={require('../assets/logout.png')}
+              size={24}
+              margin={10}
+            />
+            <DrawerLabel bold="bold">Logout</DrawerLabel>
+          </>
+        </DrawerItemContainer>
       </DrawerContentContainer>
     </DrawerContainer>
   );
@@ -240,7 +261,7 @@ const DrawerContainer = styled.ScrollView`
 const DrawerIcon = styled.Image`
   height: ${(props) => props.size || 60}px;
   width: ${(props) => props.size || 60}px;
-  margin: 10px;
+  margin: ${(props) => props.margin || 10}px;
 `;
 
 const DrawerLabel = styled.Text`
@@ -249,6 +270,7 @@ const DrawerLabel = styled.Text`
   text-align: left;
   color: ${(props) => props.color || '#707070'};
   text-decoration: ${(props) => props.underline || 'none'};
+  margin: 5px;
 `;
 
 const DrawerHeaderContainer = styled.View`
@@ -274,6 +296,13 @@ const ExtrasContainer = styled.View`
 const CategoryContainer = styled.View`
   flex-direction: column;
   width: 100%;
+`;
+
+const DrawerItemContainer = styled.TouchableHighlight`
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 5px;
 `;
 
 // TODO Add get_states to API to get locations

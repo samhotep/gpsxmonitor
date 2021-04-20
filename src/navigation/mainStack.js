@@ -166,7 +166,20 @@ export default function MainStack() {
         } else {
           setLoggedIn(false);
         }
-        setLoading(false);
+        return API.authenticateBilling();
+      })
+      .then((result) => {
+        if (result !== 400) {
+          if (result.isSubscriptionValid === true) {
+            setSubscribed(true);
+          } else {
+            setSubscribed(false);
+          }
+          setLoading(false);
+        } else {
+          setSubscribed(false);
+          throw 'Unable to authenticate';
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -195,7 +208,7 @@ export default function MainStack() {
           options={{headerShown: false}}
         />
       ) : null}
-      {!loggedIn || !subscribed ? (
+      {!loggedIn || subscribed === false ? (
         <Stack.Screen
           name="Main"
           component={SettingsDrawer}

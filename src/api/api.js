@@ -201,12 +201,6 @@ const API = {
   },
 };
 
-let t = {
-  code: 0,
-  data: 'ONGOING',
-  message: 'Left with -1 days to next billing',
-};
-
 export default API;
 
 // TODO Incorporate hash error on every API Call

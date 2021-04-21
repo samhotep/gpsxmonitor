@@ -27,7 +27,6 @@ export default function SubscribeScreen({navigation}) {
     for (var i = 1; i <= serviceList.length; i++) {
       vals.push(false);
     }
-    setSelectables(vals);
     return vals;
   };
 
@@ -40,7 +39,7 @@ export default function SubscribeScreen({navigation}) {
           API.authenticateBilling();
           throw 'Unable to authenticate';
         } else {
-          _updateSelectables(result.services);
+          setSelectables(_updateSelectables(result.services));
           setServices(result.services);
         }
         setLoading(false);
@@ -81,7 +80,9 @@ export default function SubscribeScreen({navigation}) {
                   period={periods[_.pricing.periodic]}
                   value={selectables[i]}
                   onPress={() => {
-                    _updateSelectables(services);
+                    let vals = _updateSelectables(services);
+                    vals[i] = true;
+                    setSelectables(vals);
                     setSelectedService(services[i]);
                   }}
                 />

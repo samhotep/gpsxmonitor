@@ -18,7 +18,7 @@ import Input from '../components/inputs/input';
 import Utils from '../utils/utils';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import API from '../api/api';
-import AsyncStorage from '@react-native-community/async-storage';
+import Storage from '../storage/storage';
 
 const Drawer = createDrawerNavigator();
 
@@ -32,6 +32,7 @@ export default function Dashboard({route, navigation}) {
       initialRouteName="Home"
       drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={ProductStack} />
+      <Drawer.Screen name="Billing" component={BillingStack} />
     </Drawer.Navigator>
   );
 }
@@ -44,6 +45,21 @@ function CustomDrawerContent({navigation}) {
   const [loading, setLoading] = useState(false);
   const [updatedDate, setUpdatedDate] = useState(Date.now());
   const isDrawerOpen = useIsDrawerOpen();
+
+  const drawerItems = [
+    {
+      name: 'Subscriptions',
+      source: require('../assets/explore.png'),
+      onPress: () => {
+        navigation.navigate('Billing', {screen: 'Success'});
+      },
+    },
+    {
+      name: 'Logout',
+      source: require('../assets/logout.png'),
+      onPress: () => confirmLogout(),
+    },
+  ];
 
   const confirmLogout = () =>
     Alert.alert(
@@ -59,12 +75,13 @@ function CustomDrawerContent({navigation}) {
           text: 'OK',
           onPress: () => {
             console.log('Logged Out');
-            AsyncStorage.clear();
+            Storage.removeUserToken();
+            Storage.removeBillingToken();
             navigation.reset({
               index: 0,
               routes: [
                 {
-                  name: 'Auth',
+                  name: 'Settings',
                   state: {
                     routes: [
                       {
@@ -236,19 +253,19 @@ function CustomDrawerContent({navigation}) {
             </CategoryContainer>
           );
         })}
-        <DrawerItemContainer
-          activeOpacity={0.6}
-          underlayColor="#b5dbf1"
-          onPress={() => confirmLogout()}>
-          <>
-            <DrawerIcon
-              source={require('../assets/logout.png')}
-              size={24}
-              margin={10}
-            />
-            <DrawerLabel bold="bold">Logout</DrawerLabel>
-          </>
-        </DrawerItemContainer>
+        {drawerItems.map((_, i) => {
+          return (
+            <DrawerItemContainer
+              activeOpacity={0.6}
+              underlayColor="#b5dbf1"
+              onPress={_.onPress}>
+              <>
+                <DrawerIcon source={_.source} size={24} margin={10} />
+                <DrawerLabel bold="bold">{_.name}</DrawerLabel>
+              </>
+            </DrawerItemContainer>
+          );
+        })}
       </DrawerContentContainer>
     </DrawerContainer>
   );

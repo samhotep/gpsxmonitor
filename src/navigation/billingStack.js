@@ -79,6 +79,7 @@ export default function BillingStack({route, navigation}) {
         name="Transactions"
         component={TransactionsScreen}
         options={{
+          title: 'Subscriptions',
           headerShown: true,
           headerStyle: {
             backgroundColor: '#1e96dc',

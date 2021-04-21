@@ -150,10 +150,10 @@ function HeaderItem(props) {
   );
 }
 
-export default function MainStack() {
+export default function MainStack({route, navigation}) {
   const [loggedIn, setLoggedIn] = useState();
-  const [loading, setLoading] = useState(true);
   const [subscribed, setSubscribed] = useState();
+  const [loading, setLoading] = useState(true);
 
   /**
    * Check if the user session is still valid, if not then redirect to the home page
@@ -175,15 +175,13 @@ export default function MainStack() {
           } else {
             setSubscribed(false);
           }
-          setLoading(false);
         } else {
           setSubscribed(false);
-          throw 'Unable to authenticate';
         }
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        setLoggedIn(false);
         setLoading(false);
         ToastAndroid.show(
           'Network request failed',
@@ -192,8 +190,6 @@ export default function MainStack() {
         );
       });
   }, []);
-
-  useEffect(() => {}, []);
 
   if (loading) {
     return <FloatingLoader />;
@@ -208,9 +204,9 @@ export default function MainStack() {
           options={{headerShown: false}}
         />
       ) : null}
-      {!loggedIn || subscribed === false ? (
+      {!loggedIn || !subscribed ? (
         <Stack.Screen
-          name="Main"
+          name="Settings"
           component={SettingsDrawer}
           options={{headerShown: false}}
         />

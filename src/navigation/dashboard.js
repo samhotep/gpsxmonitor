@@ -19,6 +19,7 @@ import Utils from '../utils/utils';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import API from '../api/api';
 import Storage from '../storage/storage';
+import Separator from '../components/separators/separator';
 
 const Drawer = createDrawerNavigator();
 
@@ -253,6 +254,7 @@ function CustomDrawerContent({navigation}) {
             </CategoryContainer>
           );
         })}
+        <Separator />
         {drawerItems.map((_, i) => {
           return (
             <DrawerItemContainer

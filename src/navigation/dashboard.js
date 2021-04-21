@@ -51,7 +51,7 @@ function CustomDrawerContent({navigation}) {
       name: 'Subscriptions',
       source: require('../assets/subs.png'),
       onPress: () => {
-        navigation.navigate('Billing', {screen: 'Success'});
+        navigation.navigate('Billing', {screen: 'Transactions'});
       },
     },
     {

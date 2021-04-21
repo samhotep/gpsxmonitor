@@ -49,7 +49,7 @@ function CustomDrawerContent({navigation}) {
   const drawerItems = [
     {
       name: 'Subscriptions',
-      source: require('../assets/explore.png'),
+      source: require('../assets/subs.png'),
       onPress: () => {
         navigation.navigate('Billing', {screen: 'Success'});
       },

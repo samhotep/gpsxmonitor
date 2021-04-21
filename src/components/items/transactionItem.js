@@ -25,6 +25,7 @@ export default function TransactionItem(props) {
   };
 
   useEffect(() => {
+    console.log(props.validDate);
     let expiry = new Date(Date.parse('2021-04-19T23:08:51'));
     loadDetails();
     setExpire(expiry.toLocaleDateString());
@@ -97,15 +98,6 @@ const Container = styled.View`
   elevation: 2;
 `;
 
-const TextContainer = styled.View`
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  /* height: 100%; */
-  margin: 10px;
-  padding: 5px;
-`;
-
 const ItemRow = styled.View`
   flex-direction: row;
   align-items: center;
@@ -127,35 +119,3 @@ const Text = styled.Text`
   font-family: 'Roboto-Regular';
   font-weight: ${(props) => props.weight || 'normal'};
 `;
-
-let p = {
-  transactionId: '931a92bfa7d9438d98df9f51bb161906',
-  userId: '00bf11e088bd4e8a85d34164fee4d003',
-  serviceId: 'd24c2abe124d4db69cfa3d407e427358',
-  recipientNumber: '256785958670',
-  statusMessage: null,
-  errorMessage: null,
-  transactionStatus: 'SUCCEEDED',
-  isActive: true,
-  amount: 500.0,
-  createdOn: '2021-04-18T22:54:21',
-  validateTillDate: '2021-04-19T23:08:51',
-  updatedOn: '2021-04-18T23:08:57',
-  updatedBy: 'BackgroundWorker',
-  service: {
-    serviceId: 'd24c2abe124d4db69cfa3d407e427358',
-    name: 'tracker daily api test',
-    shortName: 'tracker_daily_api_test_daily',
-    createdOn: '2021-04-18T22:26:08',
-    pricingId: '33c16bd72df142289a6a7ef597a7febd',
-    pricing: null,
-  },
-  user: {
-    userId: '00bf11e088bd4e8a85d34164fee4d003',
-    email: 'test@fms-ecsafrica.com',
-    apiKey:
-      'gSFM9+Ef/K4hyW4jubi4viyMIAiwKMpEAjRJ2eruweL3BoN5JTKFewsivXohqI506nm164MN035sLpufuHDCOg==',
-    isActive: true,
-    createdOn: '2021-04-18T15:20:51',
-  },
-};

@@ -26,9 +26,13 @@ export default function TransactionItem(props) {
 
   useEffect(() => {
     console.log(props.validDate);
-    let expiry = new Date(Date.parse('2021-04-19T23:08:51'));
     loadDetails();
-    setExpire(expiry.toLocaleDateString());
+    let expiry = new Date(Date.parse(props.validDate));
+    if (expiry.valueOf() < 0) {
+      setExpire('');
+    } else {
+      setExpire(expiry.toLocaleDateString());
+    }
   }, []);
 
   return (

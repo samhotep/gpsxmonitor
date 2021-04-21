@@ -12,11 +12,11 @@ export default function TransactionItem(props) {
     API.getTransactionStatus(props.id).then((result) => {
       if (result.message === 'Unauthorized') {
         API.authenticateBilling()
-          .then((response) => {
+          .then(() => {
             return API.getTransactionStatus(props.id);
           })
-          .then((result) => {
-            setDetails(result);
+          .then((response) => {
+            setDetails(response);
           });
       } else {
         setDetails(result);

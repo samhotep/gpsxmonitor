@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import ConfirmationScreen from '../screens/confirmationScreen';
 import SubscribeScreen from '../screens/subscribeScreen';
 import SuccessScreen from '../screens/successScreen';
+import TransactionsScreen from '../screens/transactionsScreen';
 import HeaderTitle from '../components/headers/headerTitle';
 
 const Stack = createStackNavigator();
@@ -69,6 +70,27 @@ export default function BillingStack({route, navigation}) {
               source={require('../assets/back.png')}
               onPress={() => {
                 navigation.navigate('Confirmation');
+              }}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="Transactions"
+        component={TransactionsScreen}
+        options={{
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#1e96dc',
+          },
+          headerTitleStyle: {
+            color: '#ffffff',
+          },
+          headerLeft: () => (
+            <HeaderTitle
+              source={require('../assets/back.png')}
+              onPress={() => {
+                navigation.goBack();
               }}
             />
           ),

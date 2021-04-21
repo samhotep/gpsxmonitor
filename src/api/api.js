@@ -193,6 +193,18 @@ const API = {
       serviceId: id,
     });
   },
+  getTransactions: () => {
+    return API.billget('api/Transactions/');
+  },
+  getTransactionStatus: (transactionId) => {
+    return API.billget(`api/Transactions/${transactionId}/billingstatus/`);
+  },
+};
+
+let t = {
+  code: 0,
+  data: 'ONGOING',
+  message: 'Left with -1 days to next billing',
 };
 
 export default API;

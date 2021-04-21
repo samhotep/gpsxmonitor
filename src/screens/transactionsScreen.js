@@ -88,7 +88,6 @@ const StatusContainer = styled.View`
   align-items: center;
   justify-content: flex-start;
   background-color: #ffffff;
-  elevation: 1;
 `;
 
 const TransactionsContainer = styled.ScrollView``;

@@ -204,13 +204,11 @@ export default function MainStack({route, navigation}) {
           options={{headerShown: false}}
         />
       ) : null}
-      {!loggedIn || !subscribed ? (
-        <Stack.Screen
-          name="Settings"
-          component={SettingsDrawer}
-          options={{headerShown: false}}
-        />
-      ) : null}
+      <Stack.Screen
+        name="Settings"
+        component={SettingsDrawer}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 }

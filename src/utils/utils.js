@@ -16,7 +16,11 @@ const Utils = {
   },
   createCategories: (groups, trackers) => {
     let categories = [];
-    groups.map((group, i) => {
+    let modified_groups = [
+      ...groups,
+      {color: '1e96dc', id: 0, title: 'No Group'},
+    ];
+    modified_groups.map((group, i) => {
       let tracker_list = [];
       trackers.map((tracker, index) => {
         if (group.id === Number(tracker.group_id)) {

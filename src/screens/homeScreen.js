@@ -147,11 +147,12 @@ export default function HomeScreen({navigation}) {
             <RadioLabel color="#bebebe">Map Type:</RadioLabel>
             {mapTypes.map((_, i) => {
               return (
-                <RadioContainer>
+                <RadioContainer key={i}>
                   <RadioLabel>
                     {_.charAt(0).toUpperCase() + _.slice(1)}
                   </RadioLabel>
                   <RadioInput
+                    key={i}
                     color="#1e96dc"
                     selected={radioValue[i]}
                     onPress={() => updateMapType(i)}

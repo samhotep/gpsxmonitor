@@ -8,7 +8,7 @@ import {
   Text,
   Image,
 } from 'react-native';
-import MapView, {Animated, AnimatedRegion, Marker} from 'react-native-maps';
+import {Animated, AnimatedRegion, Marker} from 'react-native-maps';
 import styled from 'styled-components';
 import HomeItem from '../components/items/homeItem';
 import HomeButton from '../components/buttons/homeButton';

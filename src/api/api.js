@@ -68,7 +68,7 @@ const API = {
     return API.apiCall('user/get_info/').then((result) => {
       if (result.success === true) {
         Storage.setUserInfo(result);
-        return true;
+        return result;
       } else {
         return result.status.description;
       }

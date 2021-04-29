@@ -41,6 +41,8 @@ export default function Dashboard({route, navigation}) {
 // Emitter for navigating to login on hash expiry
 function CustomDrawerContent({navigation}) {
   const [clicked, setClicked] = useState(false);
+  const [username, setUsername] = useState('');
+  const [userID, setUserID] = useState(0);
   const [trackerStates, setTrackerStates] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -146,6 +148,10 @@ function CustomDrawerContent({navigation}) {
 
   useEffect(() => {
     // Load objects on first render
+    API.getUserInfo().then((result) => {
+      setUsername(result.user_info.title);
+      setUserID(result.user_info.id);
+    });
     createObjects();
   }, []);
 
@@ -222,10 +228,10 @@ function CustomDrawerContent({navigation}) {
       <DrawerHeaderContainer>
         <DrawerIcon source={require('../assets/account.png')} />
         <HeaderContent>
-          <DrawerLabel bold="bold">Test Test</DrawerLabel>
+          <DrawerLabel bold="bold">{username}</DrawerLabel>
           {/* TODO Use real user id  */}
           <DrawerLabel underline="underline" color="#4788c7">
-            ID #365
+            ID #{userID}
           </DrawerLabel>
         </HeaderContent>
       </DrawerHeaderContainer>

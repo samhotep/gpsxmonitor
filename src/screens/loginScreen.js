@@ -72,7 +72,10 @@ export default function LoginScreen({navigation}) {
     <Container>
       <StatusBar backgroundColor="#007aa6" />
       <ImageContainer
-        source={require('../assets/icon.png')}
+        source={{
+          uri:
+            'https://hosting.fms-ecsinternational.com/api/static/paas/1/app_logo.png',
+        }}
         resizeMode="contain"
       />
       <FormContainer>

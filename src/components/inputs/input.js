@@ -11,6 +11,7 @@ export default function Input(props) {
         autoFocus={props.autoFocus}
         defaultValue={props.defaultValue}
         placeholder={props.placeholder}
+        placeholderTextColor={props.placeholderTextColor}
         secureTextEntry={props.hidden}
         autoCompleteType={props.autoCompleteType}
         keyboardType={props.keyboardType}

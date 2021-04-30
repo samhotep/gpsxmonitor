@@ -194,7 +194,7 @@ function CustomDrawerContent({navigation}) {
                 selectionColor={'#ffffff'}
                 noBorder={true}
                 placeholder="Search..."
-                placeholderTextColor="#4fc3f7"
+                placeholderTextColor="#8bc9ed"
               />
               <HeaderIcon
                 source={require('../assets/close.png')}

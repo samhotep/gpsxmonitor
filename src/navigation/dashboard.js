@@ -245,11 +245,19 @@ function CustomDrawerContent({navigation}) {
               />
               {/* TODO Create refs for selection of item */}
               {category.trackers.map((tracker, j) => {
+                let state = trackerStates[tracker.id].connection_status;
+                console.log(state);
+                let color = '#e11616';
+                if (state === 'active') {
+                  color = '#69ce02';
+                } else if (state === 'just_registered') {
+                  color = '#999999';
+                }
                 return (
                   <ListItem
                     key={tracker.id}
                     text={tracker.label}
-                    color="green"
+                    color={color}
                     selected={false}
                     onPress={() => {
                       updateScreenLocation(tracker);

@@ -184,7 +184,7 @@ export default function MainStack({route, navigation}) {
         console.log(error);
         setLoading(false);
         ToastAndroid.show(
-          'Network request failed',
+          error.message,
           ToastAndroid.SHORT,
           ToastAndroid.CENTER,
         );

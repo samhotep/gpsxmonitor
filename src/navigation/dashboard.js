@@ -129,7 +129,7 @@ function CustomDrawerContent({navigation}) {
         setLoading(false);
         console.log(error);
         ToastAndroid.show(
-          'Network request failed',
+          error.message,
           ToastAndroid.SHORT,
           ToastAndroid.CENTER,
         );

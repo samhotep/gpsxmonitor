@@ -64,7 +64,11 @@ export default function LoginScreen({navigation}) {
       .catch((error) => {
         setLoading(false);
         console.log(error);
-        ToastAndroid.show(error, ToastAndroid.SHORT, ToastAndroid.CENTER);
+        ToastAndroid.show(
+          error.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
       });
   };
 

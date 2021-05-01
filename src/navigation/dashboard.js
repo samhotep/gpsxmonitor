@@ -37,13 +37,13 @@ export default function Dashboard({route, navigation}) {
     </Drawer.Navigator>
   );
 }
-// TODO Timer to prevent too many rerenders
 // Emitter for navigating to login on hash expiry
 function CustomDrawerContent({navigation}) {
   const [clicked, setClicked] = useState(false);
   const [username, setUsername] = useState('');
   const [userID, setUserID] = useState(0);
   const [trackerStates, setTrackerStates] = useState([]);
+  const [trackersList, setTrackersList] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [updatedDate, setUpdatedDate] = useState(Date.now());
@@ -114,16 +114,23 @@ function CustomDrawerContent({navigation}) {
 
   const createObjects = () => {
     setLoading(true);
+    let groups = [];
+    let _trackers = [];
     API.getGroups()
-      .then((groups) => {
-        return API.getTrackers().then((trackers) => {
-          setData(Utils.createCategories(groups, trackers));
-          // Get detailed state info for each tracker
-          API.getStates(Utils.getIDList(trackers)).then((result) => {
-            setTrackerStates(result.states);
-          });
-          setLoading(false);
-        });
+      .then((result) => {
+        groups = result;
+        return API.getTrackers();
+      })
+      .then((trackers) => {
+        setTrackersList(trackers);
+        _trackers = trackers;
+        // Get detailed state info for each tracker
+        return API.getStates(Utils.getIDList(trackers));
+      })
+      .then((result) => {
+        setTrackerStates(result.states);
+        setData(Utils.createCategories(groups, _trackers));
+        setLoading(false);
       })
       .catch((error) => {
         setLoading(false);
@@ -134,16 +141,15 @@ function CustomDrawerContent({navigation}) {
           ToastAndroid.CENTER,
         );
       });
-    // API.getTrackers().then((result) => {
-    //   setData(result);
-    //   API.getStates(Utils.getTrackerIDs(result)).then((response) => {
-    //     // console.log(response);
-    //   });
-    //   setLoading(false);
-    //   // console.log(Utils.getTrackerIDs(result));
-    //   // let res = Utils.getCategories(result);
-    //   // console.log(res);
-    // });
+  };
+
+  // TODO Create search function
+  const searchTrackers = (term) => {
+    for (const tracker in trackersList) {
+      if (term === tracker) {
+      }
+      console.log(tracker);
+    }
   };
 
   useEffect(() => {
@@ -245,19 +251,24 @@ function CustomDrawerContent({navigation}) {
               />
               {/* TODO Create refs for selection of item */}
               {category.trackers.map((tracker, j) => {
-                let state = trackerStates[tracker.id].connection_status;
-                console.log(state);
-                let color = '#e11616';
-                if (state === 'active') {
-                  color = '#69ce02';
-                } else if (state === 'just_registered') {
-                  color = '#999999';
-                }
                 return (
                   <ListItem
                     key={tracker.id}
                     text={tracker.label}
-                    color={color}
+                    color={() => {
+                      if (
+                        trackerStates[tracker.id].connection_status === 'active'
+                      ) {
+                        return '#69ce02';
+                      } else if (
+                        trackerStates[tracker.id].connection_status ===
+                        'just_registered'
+                      ) {
+                        return '#999999';
+                      } else {
+                        return '#e11616';
+                      }
+                    }}
                     selected={false}
                     onPress={() => {
                       updateScreenLocation(tracker);

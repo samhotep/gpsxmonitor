@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import API from '../../api/api';
@@ -12,7 +13,16 @@ export default function HomeItem(props) {
     require('../../assets/moving.png'),
   );
   const [movementStatus, setMovementStatus] = useState('0');
-  const [wasUpdated, setWasUpdated] = useState(true);
+  const [updateSwitch, setUpdateSwitch] = useState(true);
+
+  const loadCurrentTrackerData = () => {
+    API.getTrackerState(props.tracker.id).then((result) => {
+      getMovementIcon(result.movement_status);
+      getSignalIcon(result.gps.signal_level);
+      setMovementStatus(Utils.getTimeDifference(result.actual_track_update));
+      setTimeStatus(Utils.getTimeDifference(result.last_update));
+    });
+  };
 
   const getSignalIcon = (signal_level) => {
     if (signal_level > 75) {
@@ -37,25 +47,11 @@ export default function HomeItem(props) {
   };
 
   useEffect(() => {
-    getMovementIcon(props.tracker.movement_status);
-    getSignalIcon(props.tracker.gps.signal_level);
-    setMovementStatus(
-      Utils.getTimeDifference(props.tracker.actual_track_update),
-    );
-    setTimeStatus(Utils.getTimeDifference(props.tracker.gps.updated));
-  }, [props]);
-
-  useEffect(() => {
     setTimeout(() => {
-      API.getTrackerState(props.tracker.id).then((result) => {
-        getMovementIcon(result.movement_status);
-        getSignalIcon(result.gps.signal_level);
-        setMovementStatus(Utils.getTimeDifference(result.actual_track_update));
-        setTimeStatus(Utils.getTimeDifference(result.gps.updated));
-      });
-      setWasUpdated(!wasUpdated);
+      loadCurrentTrackerData();
+      setUpdateSwitch(!updateSwitch);
     }, 5000);
-  }, [wasUpdated]);
+  }, [updateSwitch]);
 
   return (
     <Container onPress={props.onPress} selected={props.selected}>
@@ -69,7 +65,7 @@ export default function HomeItem(props) {
             {props.tracker.label}
           </Text>
         </InnerContainer>
-        <TimeLabel size={14} width={80} color="#b9b9b9">
+        <TimeLabel size={14} width={100} color="#b9b9b9">
           {timeStatus ? `${timeStatus} ago` : null}
         </TimeLabel>
       </RowContainer>

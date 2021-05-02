@@ -52,17 +52,18 @@ export default function HomeScreen({navigation}) {
   const [trackerSelection, setTrackerSelection] = useState(
     Array(3).fill(false),
   );
+  const [showTrackers, setShowTrackers] = useState('All');
   const mapRef = useRef();
   const markerRef = useRef();
   const mapTypes = ['standard', 'satellite', 'hybrid', 'terrain'];
   const trackerSelections = ['All', 'Selected', 'Group'];
 
   const renderDelay = 2000;
-  const updateRadioButtons = (index, list, callback) => {
-    setType(list[index]);
+  const updateRadioButtons = (index, list, radioCallback, itemCallback) => {
+    itemCallback(list[index]);
     let newRadio = Array(list.length).fill(false);
     newRadio[index] = true;
-    callback(newRadio);
+    radioCallback(newRadio);
   };
 
   const updateTracker = (trackerData) => {
@@ -148,14 +149,14 @@ export default function HomeScreen({navigation}) {
       ) : null}
       <HomeModal
         clicked={arrowClicked}
-        height={250}
+        height={180}
         width={170}
         bottom={150}
         left={68}
         inject={
           <ModalContainer>
             <RadioLabel color="#bebebe">Show Trackers:</RadioLabel>
-            {mapTypes.map((_, i) => {
+            {trackerSelections.map((_, i) => {
               return (
                 <RadioContainer key={i}>
                   <RadioLabel>
@@ -164,8 +165,15 @@ export default function HomeScreen({navigation}) {
                   <RadioInput
                     key={i}
                     color="#1e96dc"
-                    selected={mapType[i]}
-                    // onPress={() => updateRadioButtons(i, mapTypes, setMapType)}
+                    selected={trackerSelection[i]}
+                    onPress={() =>
+                      updateRadioButtons(
+                        i,
+                        trackerSelections,
+                        setTrackerSelection,
+                        setShowTrackers,
+                      )
+                    }
                   />
                 </RadioContainer>
               );
@@ -192,7 +200,9 @@ export default function HomeScreen({navigation}) {
                     key={i}
                     color="#1e96dc"
                     selected={mapType[i]}
-                    onPress={() => updateRadioButtons(i, mapTypes, setMapType)}
+                    onPress={() =>
+                      updateRadioButtons(i, mapTypes, setMapType, setType)
+                    }
                   />
                 </RadioContainer>
               );

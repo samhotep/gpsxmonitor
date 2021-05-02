@@ -350,49 +350,6 @@ const DrawerItemContainer = styled.TouchableHighlight`
   padding: 5px;
 `;
 
-// TODO Add get_states to API to get locations
-let x = {
-  success: true,
-  user_time: '2014-07-09 07:50:58',
-  state: {
-    source_id: 65894,
-    gps: {
-      updated: '2013-02-19 10:48:08',
-      signal_level: 25,
-      location: {
-        lat: 56.826068,
-        lng: 60.594338,
-      },
-      heading: 45,
-      speed: 20,
-      alt: 10,
-      precision: 50,
-      gsm_lbs: false,
-    },
-    connection_status: 'active',
-    movement_status: 'moving',
-    gsm: {
-      updated: '2013-02-19 10:48:08',
-      signal_level: 70,
-      network_name: 'T-MOBILE',
-      roaming: false,
-    },
-    last_update: '2013-02-19 10:48:08',
-    battery_level: 100,
-    battery_update: '2013-02-19 10:48:08',
-    inputs: [true, true, false],
-    inputs_update: '2013-02-19 10:48:08',
-    outputs: [true, true, false],
-    outputs_update: '2013-02-19 10:48:08',
-    additional: {
-      hardware_key: {
-        value: 564648745158875,
-        updated: '2013-02-19 10:48:08',
-      },
-    },
-  },
-};
-
 // TODO Add get last GPS point to API
 
 let y = {

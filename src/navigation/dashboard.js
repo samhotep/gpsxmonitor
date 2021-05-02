@@ -46,7 +46,6 @@ function CustomDrawerContent({navigation}) {
   const [trackersList, setTrackersList] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [updatedDate, setUpdatedDate] = useState(Date.now());
   const isDrawerOpen = useIsDrawerOpen();
 
   const drawerItems = [
@@ -163,10 +162,12 @@ function CustomDrawerContent({navigation}) {
 
   useEffect(() => {
     // Update only after 3 min delay
-    if (Date.now() - updatedDate > 120000 && isDrawerOpen) {
-      createObjects();
-      setUpdatedDate(Date.now());
-    }
+    Storage.getLastDate().then((date) => {
+      if ((Date.now() - date > 120000 && isDrawerOpen) || date === null) {
+        createObjects();
+        Storage.setLastDate(Date.now());
+      }
+    });
   }, [isDrawerOpen]);
 
   if (loading) {

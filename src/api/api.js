@@ -93,6 +93,17 @@ const API = {
       }
     });
   },
+  getTrackerState: (tracker_id) => {
+    return API.apiCall('tracker/get_state/', {tracker_id: tracker_id}).then(
+      (result) => {
+        if (result.success === true) {
+          return result.state;
+        } else {
+          return result.status.description;
+        }
+      },
+    );
+  },
   getTrackers: () => {
     return API.apiCall('tracker/list/').then((result) => {
       if (result.success === true) {

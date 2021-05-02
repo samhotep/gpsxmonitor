@@ -55,6 +55,19 @@ const Storage = {
       console.log(e);
     }
   },
+  getCurrentTracker: () => {
+    return AsyncStorage.getItem('tracker');
+  },
+  setCurrentTracker: (data) => {
+    AsyncStorage.setItem('tracker', JSON.stringify(data));
+  },
+  removeCurrentTracker: async () => {
+    try {
+      await AsyncStorage.removeItem('tracker');
+    } catch (e) {
+      console.log(e);
+    }
+  },
   // Billing
   getBillingToken: () => {
     return AsyncStorage.getItem('billingtoken');

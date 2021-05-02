@@ -42,6 +42,19 @@ const Storage = {
       console.log(e);
     }
   },
+  getLastDate: () => {
+    return AsyncStorage.getItem('lastdate');
+  },
+  setLastDate: (data) => {
+    AsyncStorage.setItem('lastdate', JSON.stringify(data));
+  },
+  removeLastDate: async () => {
+    try {
+      await AsyncStorage.removeItem('lastdate');
+    } catch (e) {
+      console.log(e);
+    }
+  },
   // Billing
   getBillingToken: () => {
     return AsyncStorage.getItem('billingtoken');

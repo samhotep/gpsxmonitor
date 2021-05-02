@@ -13,6 +13,7 @@ export default function HomeItem(props) {
     require('../../assets/moving.png'),
   );
   const [movementStatus, setMovementStatus] = useState('0');
+  const [notLoaded, setNotLoaded] = useState(true);
   const [updateSwitch, setUpdateSwitch] = useState(true);
 
   const loadCurrentTrackerData = () => {
@@ -47,6 +48,10 @@ export default function HomeItem(props) {
   };
 
   useEffect(() => {
+    if (notLoaded) {
+      loadCurrentTrackerData();
+      setNotLoaded(false);
+    }
     setTimeout(() => {
       loadCurrentTrackerData();
       setUpdateSwitch(!updateSwitch);

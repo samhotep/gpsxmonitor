@@ -45,7 +45,7 @@ export default function SuccessScreen({route, navigation}) {
       <StatusContainer>
         <ImageContainer source={require('../assets/timer.png')} size={36} />
         <Text size={14}>{email}</Text>
-        <Text size={20}>{days} days</Text>
+        <Text size={20}>{days}</Text>
       </StatusContainer>
       <Separator />
       <Text size={16}>Transaction History</Text>

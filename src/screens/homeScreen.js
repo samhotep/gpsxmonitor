@@ -172,19 +172,44 @@ export default function HomeScreen({navigation}) {
       <HomeModal
         clicked={arrowClicked}
         height={250}
-        width={150}
+        width={170}
         bottom={90}
         left={68}
-        inject={<HeaderIcon source={require('../assets/arrow.png')} />}
+        inject={
+          <ModalContainer>
+            <RadioLabel color="#bebebe">Map Type:</RadioLabel>
+            {mapTypes.map((_, i) => {
+              return (
+                <RadioContainer key={i}>
+                  <RadioLabel>
+                    {_.charAt(0).toUpperCase() + _.slice(1)}
+                  </RadioLabel>
+                  <RadioInput
+                    key={i}
+                    color="#1e96dc"
+                    selected={radioValue[i]}
+                    onPress={() => updateMapType(i)}
+                  />
+                </RadioContainer>
+              );
+            })}
+          </ModalContainer>
+        }
       />
       <HomeButton
         source={require('../assets/globe.png')}
         bottom={90}
-        onPress={() => setGlobeClicked(!globeClicked)}
+        onPress={() => {
+          setGlobeClicked(!globeClicked);
+          setArrowClicked(false);
+        }}
       />
       <HomeButton
         source={require('../assets/arrow.png')}
-        onPress={() => setArrowClicked(!arrowClicked)}
+        onPress={() => {
+          setArrowClicked(!arrowClicked);
+          setGlobeClicked(false);
+        }}
       />
       <HomeButton
         source={require('../assets/zoomin.png')}

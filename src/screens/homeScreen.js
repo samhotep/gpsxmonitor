@@ -9,11 +9,11 @@ import {
   Image,
 } from 'react-native';
 import {Animated, AnimatedRegion, Marker} from 'react-native-maps';
+import CheckBox from '@react-native-community/checkbox';
 import styled from 'styled-components';
 import HomeItem from '../components/items/homeItem';
 import HomeButton from '../components/buttons/homeButton';
 import HomeModal from '../components/modals/homeModal';
-import HeaderIcon from '../components/headers/headerIcon';
 import RadioInput from '../components/inputs/radioInput';
 import useWindowDimensions from 'react-native/Libraries/Utilities/useWindowDimensions';
 
@@ -53,6 +53,7 @@ export default function HomeScreen({navigation}) {
     Array(3).fill(false),
   );
   const [showTrackers, setShowTrackers] = useState('All');
+  const [followObject, setFollowObject] = useState(false);
   const mapRef = useRef();
   const markerRef = useRef();
   const mapTypes = ['standard', 'satellite', 'hybrid', 'terrain'];
@@ -150,7 +151,7 @@ export default function HomeScreen({navigation}) {
       <HomeModal
         clicked={arrowClicked}
         height={180}
-        width={170}
+        width={190}
         bottom={150}
         left={68}
         inject={
@@ -178,6 +179,15 @@ export default function HomeScreen({navigation}) {
                 </RadioContainer>
               );
             })}
+            <RadioContainer>
+              <RadioLabel>Follow the Object:</RadioLabel>
+              <CheckBox
+                disabled={false}
+                value={followObject}
+                onValueChange={(newValue) => setFollowObject(newValue)}
+                tintColors={{true: '#1e96dc', false: '#1e96dc'}}
+              />
+            </RadioContainer>
           </ModalContainer>
         }
       />
@@ -307,7 +317,7 @@ const RadioContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 150px;
+  width: 100%;
 `;
 
 const RadioLabel = styled.Text`

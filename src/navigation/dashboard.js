@@ -163,7 +163,7 @@ function CustomDrawerContent({navigation}) {
 
   useEffect(() => {
     // Update only after 3 min delay
-    if (Date.now() - updatedDate > 180000 && isDrawerOpen) {
+    if (Date.now() - updatedDate > 120000 && isDrawerOpen) {
       createObjects();
       setUpdatedDate(Date.now());
     }

@@ -15,19 +15,19 @@ export default function HomeItem(props) {
 
   const getSignalIcon = () => {
     console.log(props.tracker.gps.signal_level);
-    if (props.tracker.gps.signal_level >= 75) {
+    if (props.tracker.gps.signal_level > 75) {
       setSignalIcon(require('../../assets/signal/strong.png'));
     } else if (
-      props.tracker.gps.signal_level >= 50 &&
-      props.tracker.gps.signal_level < 75
+      props.tracker.gps.signal_level <= 75 &&
+      props.tracker.gps.signal_level > 50
     ) {
       setSignalIcon(require('../../assets/signal/good.png'));
     } else if (
-      props.tracker.gps.signal_level >= 25 &&
-      props.tracker.gps.signal_level < 50
+      props.tracker.gps.signal_level <= 50 &&
+      props.tracker.gps.signal_level > 25
     ) {
       setSignalIcon(require('../../assets/signal/low.png'));
-    } else if (props.tracker.gps.signal_level < 25) {
+    } else if (props.tracker.gps.signal_level <= 25) {
       setSignalIcon(require('../../assets/signal/poor.png'));
     }
   };
@@ -64,7 +64,7 @@ export default function HomeItem(props) {
           </Text>
         </InnerContainer>
         <TimeLabel size={14} width={80} color="#b9b9b9">
-          {timeStatus} ago
+          {timeStatus ? `${timeStatus} ago` : null}
         </TimeLabel>
       </RowContainer>
       <RowContainer>

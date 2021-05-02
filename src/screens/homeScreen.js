@@ -61,41 +61,47 @@ export default function HomeScreen({navigation}) {
     setRadioValue(newRadio);
   };
 
+  const updateTracker = (trackerData) => {
+    if (trackerData) {
+      setLocation(
+        new AnimatedRegion({
+          latitude: trackerData.gps.location.lat,
+          longitude: trackerData.gps.location.lng,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
+        }),
+      );
+      setCurrentMarker({
+        latitude: trackerData.gps.location.lat,
+        longitude: trackerData.gps.location.lng,
+      });
+      mapRef.current.animateToRegion(
+        {
+          latitude: trackerData.gps.location.lat,
+          longitude: trackerData.gps.location.lng,
+          latitudeDelta: latDelta,
+          longitudeDelta: longDelta,
+        },
+        renderDelay,
+      );
+    }
+    // TODO Might be useful somewhere -> Animate Marker
+    // markerRef.current.animateMarkerToCoordinate(
+    //   {
+    //     latitude: trackerData.gps.location.lat,
+    //     longitude: trackerData.gps.location.lng,
+    //   },
+    //   1000,
+    // );
+  };
+
   useEffect(() => {
-    // Listener for location update events
+    // Listener for location update events in dashboard
     const eventListener = eventEmitter.addListener(
       'event.trackerEvent',
       (trackerData) => {
         setCurrentTracker(trackerData);
-        setLocation(
-          new AnimatedRegion({
-            latitude: trackerData.gps.location.lat,
-            longitude: trackerData.gps.location.lng,
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.05,
-          }),
-        );
-        setCurrentMarker({
-          latitude: trackerData.gps.location.lat,
-          longitude: trackerData.gps.location.lng,
-        });
-        mapRef.current.animateToRegion(
-          {
-            latitude: trackerData.gps.location.lat,
-            longitude: trackerData.gps.location.lng,
-            latitudeDelta: latDelta,
-            longitudeDelta: longDelta,
-          },
-          renderDelay,
-        );
-        // TODO Might be useful somewhere -> Animate Marker
-        // markerRef.current.animateMarkerToCoordinate(
-        //   {
-        //     latitude: trackerData.gps.location.lat,
-        //     longitude: trackerData.gps.location.lng,
-        //   },
-        //   1000,
-        // );
+        updateTracker(trackerData);
       },
     );
     return () => {

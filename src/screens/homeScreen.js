@@ -48,17 +48,21 @@ export default function HomeScreen({navigation}) {
   );
   const [globeClicked, setGlobeClicked] = useState(false);
   const [arrowClicked, setArrowClicked] = useState(false);
-  const [radioValue, setRadioValue] = useState(Array(4).fill(false));
+  const [mapType, setMapType] = useState(Array(4).fill(false));
+  const [trackerSelection, setTrackerSelection] = useState(
+    Array(3).fill(false),
+  );
   const mapRef = useRef();
   const markerRef = useRef();
   const mapTypes = ['standard', 'satellite', 'hybrid', 'terrain'];
+  const trackerSelections = ['All', 'Selected', 'Group'];
 
   const renderDelay = 2000;
-  const updateMapType = (index) => {
-    setType(mapTypes[index]);
-    let newRadio = Array(4).fill(false);
+  const updateRadioButtons = (index, list, callback) => {
+    setType(list[index]);
+    let newRadio = Array(list.length).fill(false);
     newRadio[index] = true;
-    setRadioValue(newRadio);
+    callback(newRadio);
   };
 
   const updateTracker = (trackerData) => {
@@ -143,14 +147,14 @@ export default function HomeScreen({navigation}) {
         />
       ) : null}
       <HomeModal
-        clicked={globeClicked}
-        height={180}
+        clicked={arrowClicked}
+        height={250}
         width={170}
         bottom={150}
         left={68}
         inject={
           <ModalContainer>
-            <RadioLabel color="#bebebe">Map Type:</RadioLabel>
+            <RadioLabel color="#bebebe">Show Trackers:</RadioLabel>
             {mapTypes.map((_, i) => {
               return (
                 <RadioContainer key={i}>
@@ -160,8 +164,8 @@ export default function HomeScreen({navigation}) {
                   <RadioInput
                     key={i}
                     color="#1e96dc"
-                    selected={radioValue[i]}
-                    onPress={() => updateMapType(i)}
+                    selected={mapType[i]}
+                    // onPress={() => updateRadioButtons(i, mapTypes, setMapType)}
                   />
                 </RadioContainer>
               );
@@ -170,8 +174,8 @@ export default function HomeScreen({navigation}) {
         }
       />
       <HomeModal
-        clicked={arrowClicked}
-        height={250}
+        clicked={globeClicked}
+        height={180}
         width={170}
         bottom={90}
         left={68}
@@ -187,8 +191,8 @@ export default function HomeScreen({navigation}) {
                   <RadioInput
                     key={i}
                     color="#1e96dc"
-                    selected={radioValue[i]}
-                    onPress={() => updateMapType(i)}
+                    selected={mapType[i]}
+                    onPress={() => updateRadioButtons(i, mapTypes, setMapType)}
                   />
                 </RadioContainer>
               );
@@ -197,18 +201,18 @@ export default function HomeScreen({navigation}) {
         }
       />
       <HomeButton
-        source={require('../assets/globe.png')}
-        bottom={90}
-        onPress={() => {
-          setGlobeClicked(!globeClicked);
-          setArrowClicked(false);
-        }}
-      />
-      <HomeButton
         source={require('../assets/arrow.png')}
+        bottom={90}
         onPress={() => {
           setArrowClicked(!arrowClicked);
           setGlobeClicked(false);
+        }}
+      />
+      <HomeButton
+        source={require('../assets/globe.png')}
+        onPress={() => {
+          setGlobeClicked(!globeClicked);
+          setArrowClicked(false);
         }}
       />
       <HomeButton
@@ -284,7 +288,7 @@ const styles = StyleSheet.create({
 
 const ModalContainer = styled.View`
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: 10px;
 `;
@@ -293,10 +297,10 @@ const RadioContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 140px;
+  width: 150px;
 `;
 
 const RadioLabel = styled.Text`
-  font-size: 18px;
+  font-size: 16px;
   color: ${(props) => props.color || '#202020'};
 `;

@@ -12,44 +12,50 @@ export default function HomeItem(props) {
     require('../../assets/moving.png'),
   );
   const [movementStatus, setMovementStatus] = useState('0');
+  const [wasUpdated, setWasUpdated] = useState(true);
 
-  const getSignalIcon = () => {
-    console.log(props.tracker.gps.signal_level);
-    if (props.tracker.gps.signal_level > 75) {
+  const getSignalIcon = (signal_level) => {
+    if (signal_level > 75) {
       setSignalIcon(require('../../assets/signal/strong.png'));
-    } else if (
-      props.tracker.gps.signal_level <= 75 &&
-      props.tracker.gps.signal_level > 50
-    ) {
+    } else if (signal_level <= 75 && signal_level > 50) {
       setSignalIcon(require('../../assets/signal/good.png'));
-    } else if (
-      props.tracker.gps.signal_level <= 50 &&
-      props.tracker.gps.signal_level > 25
-    ) {
+    } else if (signal_level <= 50 && signal_level > 25) {
       setSignalIcon(require('../../assets/signal/low.png'));
-    } else if (props.tracker.gps.signal_level <= 25) {
+    } else if (signal_level <= 25) {
       setSignalIcon(require('../../assets/signal/poor.png'));
     }
   };
 
-  const getMovementIcon = () => {
-    if (props.tracker.movement_status === 'moving') {
+  const getMovementIcon = (movement_status) => {
+    if (movement_status === 'moving') {
       setMovementIcon(require('../../assets/moving.png'));
-    } else if (props.tracker.movement_status === 'parked') {
+    } else if (movement_status === 'parked') {
       setMovementIcon(require('../../assets/parked.png'));
-    } else if (props.tracker.movement_status === 'stopped') {
+    } else if (movement_status === 'stopped') {
       setMovementIcon(require('../../assets/stop.png'));
     }
   };
 
   useEffect(() => {
-    getMovementIcon();
-    getSignalIcon();
+    getMovementIcon(props.tracker.movement_status);
+    getSignalIcon(props.tracker.gps.signal_level);
     setMovementStatus(
       Utils.getTimeDifference(props.tracker.actual_track_update),
     );
     setTimeStatus(Utils.getTimeDifference(props.tracker.gps.updated));
   }, [props]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      API.getTrackerState(props.tracker.id).then((result) => {
+        getMovementIcon(result.movement_status);
+        getSignalIcon(result.gps.signal_level);
+        setMovementStatus(Utils.getTimeDifference(result.actual_track_update));
+        setTimeStatus(Utils.getTimeDifference(result.gps.updated));
+      });
+      setWasUpdated(!wasUpdated);
+    }, 5000);
+  }, [wasUpdated]);
 
   return (
     <Container onPress={props.onPress} selected={props.selected}>

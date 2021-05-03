@@ -16,6 +16,7 @@ import HomeButton from '../components/buttons/homeButton';
 import HomeModal from '../components/modals/homeModal';
 import RadioInput from '../components/inputs/radioInput';
 import useWindowDimensions from 'react-native/Libraries/Utilities/useWindowDimensions';
+import API from '../api/api';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
@@ -29,23 +30,7 @@ export default function HomeScreen({navigation}) {
   });
   const [latDelta, setLatDelta] = useState(0.05);
   const [longDelta, setLongDelta] = useState(0.05);
-  /**
-   * Supported Map Types
-   * - standard: standard road map (default)
-   * - none: no map Note Not available on MapKit
-   * - satellite: satellite view
-   * - hybrid: satellite view with roads and points of interest overlayed
-   * - terrain: topographic view
-   */
   const [type, setType] = useState('standard');
-  const [location, setLocation] = useState(
-    new AnimatedRegion({
-      latitude: 0.347596,
-      longitude: 32.58252,
-      latitudeDelta: 0.05,
-      longitudeDelta: 0.05,
-    }),
-  );
   const [globeClicked, setGlobeClicked] = useState(false);
   const [arrowClicked, setArrowClicked] = useState(false);
   const [trackersStates, setTrackersStates] = useState({});
@@ -61,7 +46,7 @@ export default function HomeScreen({navigation}) {
   const mapTypes = ['standard', 'satellite', 'hybrid', 'terrain'];
   const trackerSelections = ['All', 'Selected', 'Group'];
 
-  const renderDelay = 2000;
+  const renderDelay = 1500;
   const updateRadioButtons = (index, list, radioCallback, itemCallback) => {
     itemCallback(list[index]);
     let newRadio = Array(list.length).fill(false);
@@ -71,14 +56,6 @@ export default function HomeScreen({navigation}) {
 
   const updateTracker = (trackerData) => {
     if (trackerData) {
-      setLocation(
-        new AnimatedRegion({
-          latitude: trackerData.gps.location.lat,
-          longitude: trackerData.gps.location.lng,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
-        }),
-      );
       setCurrentMarker({
         latitude: trackerData.gps.location.lat,
         longitude: trackerData.gps.location.lng,
@@ -104,14 +81,24 @@ export default function HomeScreen({navigation}) {
   };
 
   useEffect(() => {
+    // if (followObject && currentTracker) {
+    //   setInterval(() => {
+    //     API.getTrackerState(currentTracker.id).then((result) => {
+    //       // console.log(result);
+    //     });
+    //   }, 5000);
+    // }
+  }, [followObject, currentTracker]);
+
+  useEffect(() => {
     // Listener for location update events in dashboard
     const eventListener = eventEmitter.addListener(
       'event.trackerEvent',
       (trackerData) => {
+        updateTracker(trackerData.data);
         setTrackersList(trackerData.trackers);
         setTrackersStates(trackerData.states);
         setCurrentTracker(trackerData.data);
-        updateTracker(trackerData.data);
       },
     );
     return () => {
@@ -125,7 +112,14 @@ export default function HomeScreen({navigation}) {
       <Animated
         ref={mapRef}
         style={styles.map}
-        initialRegion={location}
+        initialRegion={
+          new AnimatedRegion({
+            latitude: 0.347596,
+            longitude: 32.58252,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
+          })
+        }
         mapType={type}>
         {showTrackers === 'Selected' ? (
           <Marker.Animated ref={markerRef} coordinate={currentMarker}>

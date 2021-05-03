@@ -56,21 +56,24 @@ export default function HomeScreen({navigation}) {
   };
 
   const updateTracker = (data) => {
+    console.log(data);
     if (data) {
       setCurrentTracker(data);
       setCurrentMarker({
         latitude: data.gps.location.lat,
         longitude: data.gps.location.lng,
       });
-      mapRef.current.animateToRegion(
-        {
-          latitude: data.gps.location.lat,
-          longitude: data.gps.location.lng,
-          latitudeDelta: latDelta,
-          longitudeDelta: longDelta,
-        },
-        renderDelay,
-      );
+      if (followObject) {
+        mapRef.current.animateToRegion(
+          {
+            latitude: data.gps.location.lat,
+            longitude: data.gps.location.lng,
+            latitudeDelta: latDelta,
+            longitudeDelta: longDelta,
+          },
+          renderDelay,
+        );
+      }
     }
     // TODO Might be useful somewhere -> Animate Marker
     // markerRef.current.animateMarkerToCoordinate(
@@ -83,16 +86,6 @@ export default function HomeScreen({navigation}) {
   };
 
   useEffect(() => {
-    // if (followObject && currentTracker) {
-    //   setInterval(() => {
-    //     API.getTrackerState(currentTracker.id).then((result) => {
-    //       // console.log(result);
-    //     });
-    //   }, 5000);
-    // }
-  }, [followObject, currentTracker]);
-
-  useEffect(() => {
     // Listener for location update events in dashboard
     const eventListener = eventEmitter.addListener(
       'event.trackerEvent',
@@ -101,6 +94,15 @@ export default function HomeScreen({navigation}) {
         setTrackersList(trackerData.trackers);
         setTrackersStates(trackerData.states);
         updateTracker(trackerData.data);
+        mapRef.current.animateToRegion(
+          {
+            latitude: trackerData.data.gps.location.lat,
+            longitude: trackerData.data.gps.location.lng,
+            latitudeDelta: latDelta,
+            longitudeDelta: longDelta,
+          },
+          renderDelay,
+        );
         /**
          * Break linter convention, since setInterval is created anew for each successive render
          */

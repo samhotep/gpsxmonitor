@@ -68,6 +68,19 @@ const Storage = {
       console.log(e);
     }
   },
+  getMarkerSettings: () => {
+    return AsyncStorage.getItem('markersettings');
+  },
+  setMarkerSettings: (data) => {
+    AsyncStorage.setItem('markersettings', JSON.stringify(data));
+  },
+  removeMarkerSettings: async () => {
+    try {
+      return await AsyncStorage.removeItem('markersettings');
+    } catch (e) {
+      console.log(e);
+    }
+  },
   // Billing
   getBillingToken: () => {
     return AsyncStorage.getItem('billingtoken');

@@ -17,6 +17,7 @@ import HomeModal from '../components/modals/homeModal';
 import RadioInput from '../components/inputs/radioInput';
 import useWindowDimensions from 'react-native/Libraries/Utilities/useWindowDimensions';
 import API from '../api/api';
+import Storage from '../storage/storage';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
@@ -46,8 +47,8 @@ export default function HomeScreen({navigation}) {
   const mapTypes = ['standard', 'satellite', 'hybrid', 'terrain'];
   const trackerSelections = ['All', 'Selected', 'Group'];
   let intervalID = 0;
-
   const renderDelay = 1500;
+
   const updateRadioButtons = (index, list, radioCallback, itemCallback) => {
     itemCallback(list[index]);
     let newRadio = Array(list.length).fill(false);
@@ -56,24 +57,26 @@ export default function HomeScreen({navigation}) {
   };
 
   const updateTracker = (data) => {
-    console.log(data);
     if (data) {
-      setCurrentTracker(data);
-      setCurrentMarker({
-        latitude: data.gps.location.lat,
-        longitude: data.gps.location.lng,
+      Storage.getMarkerSettings().then((stored) => {
+        let settings = JSON.parse(stored);
+        setCurrentTracker(data);
+        setCurrentMarker({
+          latitude: data.gps.location.lat,
+          longitude: data.gps.location.lng,
+        });
+        if (settings.followObject) {
+          mapRef.current.animateToRegion(
+            {
+              latitude: data.gps.location.lat,
+              longitude: data.gps.location.lng,
+              latitudeDelta: latDelta,
+              longitudeDelta: longDelta,
+            },
+            renderDelay,
+          );
+        }
       });
-      if (followObject) {
-        mapRef.current.animateToRegion(
-          {
-            latitude: data.gps.location.lat,
-            longitude: data.gps.location.lng,
-            latitudeDelta: latDelta,
-            longitudeDelta: longDelta,
-          },
-          renderDelay,
-        );
-      }
     }
     // TODO Might be useful somewhere -> Animate Marker
     // markerRef.current.animateMarkerToCoordinate(
@@ -84,6 +87,14 @@ export default function HomeScreen({navigation}) {
     //   1000,
     // );
   };
+
+  useEffect(() => {
+    Storage.getMarkerSettings().then((stored) => {
+      let settings = JSON.parse(stored);
+      setFollowObject(settings.followObject);
+      setTrackerSelection(settings.selections);
+    });
+  }, []);
 
   useEffect(() => {
     // Listener for location update events in dashboard
@@ -223,7 +234,13 @@ export default function HomeScreen({navigation}) {
               <CheckBox
                 disabled={false}
                 value={followObject}
-                onValueChange={(newValue) => setFollowObject(newValue)}
+                onValueChange={(newValue) => {
+                  setFollowObject(newValue);
+                  Storage.setMarkerSettings({
+                    selections: trackerSelection,
+                    followObject: newValue,
+                  });
+                }}
                 tintColors={{true: '#1e96dc', false: '#1e96dc'}}
               />
             </RadioContainer>

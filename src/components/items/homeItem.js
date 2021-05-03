@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import API from '../../api/api';
 import Utils from '../../utils/utils';
 
 // TODO Animate the list
@@ -13,16 +12,14 @@ export default function HomeItem(props) {
     require('../../assets/moving.png'),
   );
   const [movementStatus, setMovementStatus] = useState('0');
-  const [notLoaded, setNotLoaded] = useState(true);
-  const [updateSwitch, setUpdateSwitch] = useState(true);
 
   const loadCurrentTrackerData = () => {
-    API.getTrackerState(props.tracker.id).then((result) => {
-      getMovementIcon(result.movement_status);
-      getSignalIcon(result.gps.signal_level);
-      setMovementStatus(Utils.getTimeDifference(result.actual_track_update));
-      setTimeStatus(Utils.getTimeDifference(result.last_update));
-    });
+    getMovementIcon(props.tracker.movement_status);
+    getSignalIcon(props.tracker.gps.signal_level);
+    setMovementStatus(
+      Utils.getTimeDifference(props.tracker.actual_track_update),
+    );
+    setTimeStatus(Utils.getTimeDifference(props.tracker.last_update));
   };
 
   const getSignalIcon = (signal_level) => {
@@ -48,15 +45,8 @@ export default function HomeItem(props) {
   };
 
   useEffect(() => {
-    if (notLoaded) {
-      loadCurrentTrackerData();
-      setNotLoaded(false);
-    }
-    setTimeout(() => {
-      loadCurrentTrackerData();
-      setUpdateSwitch(!updateSwitch);
-    }, 5000);
-  }, [updateSwitch]);
+    loadCurrentTrackerData();
+  }, [props]);
 
   return (
     <Container onPress={props.onPress} selected={props.selected}>

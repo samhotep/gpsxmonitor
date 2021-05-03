@@ -48,6 +48,8 @@ export default function HomeScreen({navigation}) {
   );
   const [globeClicked, setGlobeClicked] = useState(false);
   const [arrowClicked, setArrowClicked] = useState(false);
+  const [trackersStates, setTrackersStates] = useState({});
+  const [trackersList, setTrackersList] = useState([]);
   const [mapType, setMapType] = useState(Array(4).fill(false));
   const [trackerSelection, setTrackerSelection] = useState(
     Array(3).fill(false),
@@ -106,6 +108,8 @@ export default function HomeScreen({navigation}) {
     const eventListener = eventEmitter.addListener(
       'event.trackerEvent',
       (trackerData) => {
+        setTrackersList(trackerData.trackers);
+        setTrackersStates(trackerData.states);
         setCurrentTracker(trackerData);
         updateTracker(trackerData);
       },
@@ -123,14 +127,41 @@ export default function HomeScreen({navigation}) {
         style={styles.map}
         initialRegion={location}
         mapType={type}>
-        <Marker.Animated ref={markerRef} coordinate={currentMarker}>
-          <View style={styles.marker}>
-            <Text style={styles.text}>
-              {currentTracker ? currentTracker.label : ''}
-            </Text>
-            <Image style={styles.icon} source={require('../assets/map.png')} />
-          </View>
-        </Marker.Animated>
+        {showTrackers === 'Selected' ? (
+          <Marker.Animated ref={markerRef} coordinate={currentMarker}>
+            <View style={styles.marker}>
+              <Text style={styles.text}>
+                {currentTracker ? currentTracker.label : ''}
+              </Text>
+              <Image
+                style={styles.icon}
+                source={require('../assets/map.png')}
+              />
+            </View>
+          </Marker.Animated>
+        ) : null}
+        {showTrackers === 'All' ? (
+          <>
+            {trackersList.map((_, i) => {
+              return (
+                <Marker.Animated
+                  key={_.id}
+                  coordinate={{
+                    latitude: trackersStates[_.id].gps.location.lat,
+                    longitude: trackersStates[_.id].gps.location.lng,
+                  }}>
+                  <View style={styles.marker}>
+                    <Text style={styles.text}>{_.label}</Text>
+                    <Image
+                      style={styles.icon}
+                      source={require('../assets/map.png')}
+                    />
+                  </View>
+                </Marker.Animated>
+              );
+            })}
+          </>
+        ) : null}
       </Animated>
       {currentTracker ? (
         <HomeItem

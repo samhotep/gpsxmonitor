@@ -45,6 +45,7 @@ export default function HomeScreen({navigation}) {
   const markerRef = useRef();
   const mapTypes = ['standard', 'satellite', 'hybrid', 'terrain'];
   const trackerSelections = ['All', 'Selected', 'Group'];
+  let intervalID = 0;
 
   const renderDelay = 1500;
   const updateRadioButtons = (index, list, radioCallback, itemCallback) => {
@@ -54,16 +55,17 @@ export default function HomeScreen({navigation}) {
     radioCallback(newRadio);
   };
 
-  const updateTracker = (trackerData) => {
-    if (trackerData) {
+  const updateTracker = (data) => {
+    if (data) {
+      setCurrentTracker(data);
       setCurrentMarker({
-        latitude: trackerData.gps.location.lat,
-        longitude: trackerData.gps.location.lng,
+        latitude: data.gps.location.lat,
+        longitude: data.gps.location.lng,
       });
       mapRef.current.animateToRegion(
         {
-          latitude: trackerData.gps.location.lat,
-          longitude: trackerData.gps.location.lng,
+          latitude: data.gps.location.lat,
+          longitude: data.gps.location.lng,
           latitudeDelta: latDelta,
           longitudeDelta: longDelta,
         },
@@ -95,10 +97,20 @@ export default function HomeScreen({navigation}) {
     const eventListener = eventEmitter.addListener(
       'event.trackerEvent',
       (trackerData) => {
-        updateTracker(trackerData.data);
+        clearInterval(intervalID);
         setTrackersList(trackerData.trackers);
         setTrackersStates(trackerData.states);
-        setCurrentTracker(trackerData.data);
+        updateTracker(trackerData.data);
+        /**
+         * Break linter convention, since setInterval is created anew for each successive render
+         */
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        intervalID = setInterval(() => {
+          API.getTrackerState(trackerData.data.id).then((result) => {
+            const newData = Object.assign(trackerData.data, result);
+            updateTracker(newData);
+          });
+        }, 3000);
       },
     );
     return () => {

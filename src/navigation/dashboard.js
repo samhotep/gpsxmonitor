@@ -108,6 +108,8 @@ function CustomDrawerContent({navigation}) {
       label: tracker.label,
       id: tracker.id,
       ...trackerStates[tracker.id],
+      trackers: trackersList,
+      states: trackerStates,
     });
     navigation.toggleDrawer();
   };

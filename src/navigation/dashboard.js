@@ -105,9 +105,11 @@ function CustomDrawerContent({navigation}) {
     // API.getTrackerLocation().then((result) => {});
     // On item press, get location, close drawer and update home screen marker
     eventEmitter.emit('event.trackerEvent', {
-      label: tracker.label,
-      id: tracker.id,
-      ...trackerStates[tracker.id],
+      data: {
+        id: tracker.id,
+        label: tracker.label,
+        ...trackerStates[tracker.id],
+      },
       trackers: trackersList,
       states: trackerStates,
     });

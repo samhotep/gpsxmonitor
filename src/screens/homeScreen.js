@@ -54,7 +54,7 @@ export default function HomeScreen({navigation}) {
   const [trackerSelection, setTrackerSelection] = useState(
     Array(3).fill(false),
   );
-  const [showTrackers, setShowTrackers] = useState('All');
+  const [showTrackers, setShowTrackers] = useState('Selected');
   const [followObject, setFollowObject] = useState(false);
   const mapRef = useRef();
   const markerRef = useRef();
@@ -110,8 +110,8 @@ export default function HomeScreen({navigation}) {
       (trackerData) => {
         setTrackersList(trackerData.trackers);
         setTrackersStates(trackerData.states);
-        setCurrentTracker(trackerData);
-        updateTracker(trackerData);
+        setCurrentTracker(trackerData.data);
+        updateTracker(trackerData.data);
       },
     );
     return () => {
@@ -144,7 +144,7 @@ export default function HomeScreen({navigation}) {
           <>
             {trackersList.map((_, i) => {
               return (
-                <Marker.Animated
+                <Marker
                   key={_.id}
                   coordinate={{
                     latitude: trackersStates[_.id].gps.location.lat,
@@ -157,7 +157,7 @@ export default function HomeScreen({navigation}) {
                       source={require('../assets/map.png')}
                     />
                   </View>
-                </Marker.Animated>
+                </Marker>
               );
             })}
           </>

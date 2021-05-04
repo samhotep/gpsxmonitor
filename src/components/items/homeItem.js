@@ -83,7 +83,7 @@ export default function HomeItem(props) {
             <TimeLabel size={12} width={150}>
               {props.tracker.movement_status.charAt(0).toUpperCase() +
                 props.tracker.movement_status.slice(1)}{' '}
-              for ${movementStatus}
+              for {movementStatus}
             </TimeLabel>
           ) : null}
           {props.tracker.movement_status === 'moving' ? (

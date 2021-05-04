@@ -2,7 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {NativeEventEmitter, NativeModules} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from '../screens/homeScreen';
+import DetailsScreen from '../screens/detailsScreen';
 import HeaderIcon from '../components/headers/headerIcon';
+import HeaderTitle from '../components/headers/headerTitle';
 import styled from 'styled-components';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
@@ -21,6 +23,7 @@ export default function HomeStack({route, navigation}) {
             <LogoTitle
               title="Map"
               {...props}
+              navigation={navigation}
               onPress={() => {
                 navigation.toggleDrawer();
               }}
@@ -40,6 +43,28 @@ export default function HomeStack({route, navigation}) {
               onPress={() => {
                 let nav = navigation.dangerouslyGetParent();
                 nav.toggleDrawer();
+              }}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="DetailsScreen"
+        component={DetailsScreen}
+        options={{
+          title: 'Subscriptions',
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#1e96dc',
+          },
+          headerTitleStyle: {
+            color: '#ffffff',
+          },
+          headerLeft: () => (
+            <HeaderTitle
+              source={require('../assets/back.png')}
+              onPress={() => {
+                navigation.goBack();
               }}
             />
           ),
@@ -71,7 +96,9 @@ function LogoTitle(props) {
               size={25}
               margin={12}
               source={require('../assets/alert.png')}
-              onPress={props.onPress}
+              onPress={() => {
+                props.navigation.navigate('DetailsScreen');
+              }}
             />
             <HeaderIcon
               size={25}

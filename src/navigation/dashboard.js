@@ -277,8 +277,13 @@ function CustomDrawerContent({navigation}) {
                         trackerStates[tracker.id].connection_status === 'idle'
                       ) {
                         return '#0795fb';
-                      } else {
-                        return '#e11616';
+                      } else if (
+                        trackerStates[tracker.id].connection_status ===
+                          'signal_lost' ||
+                        trackerStates[tracker.id].connection_status ===
+                          'offline'
+                      ) {
+                        return '#0795fb';
                       }
                     }}
                     selected={false}

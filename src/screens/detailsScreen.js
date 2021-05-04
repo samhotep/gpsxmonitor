@@ -1,39 +1,50 @@
 import React, {useEffect, useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
 import styled from 'styled-components';
-import Storage from '../storage/storage';
 import Separator from '../components/separators/separator';
-import FloatingLoader from '../components/loaders/floatingLoader';
+import DrawerLoader from '../components/loaders/drawerLoader';
+import Storage from '../storage/storage';
 import API from '../api/api';
 
 // TODO Pass the location as a state prop, or as an event emitter
-export default function SuccessScreen({route, navigation}) {
+export default function DetailsScreen({route, navigation}) {
+  const [loading, setLoading] = useState(true);
+
+  // if (loading) {
+  //   return (
+  //     <Container>
+  //       <DrawerLoader />
+  //     </Container>
+  //   );
+  // }
+
   return (
     <Container>
       <StatusBar backgroundColor="#007aa6" />
-      <Text>DETAILS!!!</Text>
+      <StatusContainer
+        // eslint-disable-next-line react-native/no-inline-styles
+        contentContainerStyle={{
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+        }}>
+        <Text>DETAILS!!</Text>
+      </StatusContainer>
     </Container>
   );
 }
 
 const Container = styled.View`
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
   height: 100%;
   width: 100%;
-  padding: 10px;
-  background-color: #ffffff;
+  background-color: #e7f1f7;
 `;
 
-const StatusContainer = styled.View`
+const StatusContainer = styled.ScrollView`
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  background-color: #ffffff;
+  height: 100%;
+  width: 100%;
 `;
-
-const TransactionsContainer = styled.ScrollView``;
 
 const Text = styled.Text`
   font-size: ${(props) => props.size || 18}px;

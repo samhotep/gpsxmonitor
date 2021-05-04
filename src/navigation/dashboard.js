@@ -18,6 +18,7 @@ import Input from '../components/inputs/input';
 import Utils from '../utils/utils';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import API from '../api/api';
+import lists from '../components/lists/lists';
 import Storage from '../storage/storage';
 import Separator from '../components/separators/separator';
 
@@ -263,27 +264,9 @@ function CustomDrawerContent({navigation}) {
                     key={tracker.id}
                     text={tracker.label}
                     color={() => {
-                      if (
-                        trackerStates[tracker.id].connection_status === 'active'
-                      ) {
-                        return '#69ce02';
-                      } else if (
-                        trackerStates[tracker.id].connection_status ===
-                        'just_registered'
-                      ) {
-                        return '#999999';
-                      } else if (
-                        trackerStates[tracker.id].connection_status === 'idle'
-                      ) {
-                        return '#0795fb';
-                      } else if (
-                        trackerStates[tracker.id].connection_status ===
-                          'signal_lost' ||
-                        trackerStates[tracker.id].connection_status ===
-                          'offline'
-                      ) {
-                        return '#0795fb';
-                      }
+                      return lists.statusColors[
+                        trackerStates[tracker.id].connection_status
+                      ];
                     }}
                     selected={false}
                     onPress={() => {

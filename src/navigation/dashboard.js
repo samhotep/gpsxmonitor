@@ -257,7 +257,6 @@ function CustomDrawerContent({navigation}) {
               />
               {/* TODO Create refs for selection of item */}
               {category.trackers.map((tracker, j) => {
-                console.log(trackerStates[tracker.id].connection_status);
                 return (
                   <ListItem
                     key={tracker.id}
@@ -282,7 +281,7 @@ function CustomDrawerContent({navigation}) {
                     }}
                     selected={false}
                     onPress={() => {
-                      updateScreenLocation(tracker);
+                      updateScreenLocation({...tracker, group: category.id});
                     }}
                   />
                 );

@@ -21,7 +21,6 @@ import Storage from '../storage/storage';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
-// TODO Pass the location as a state prop, or as an event emitter
 export default function HomeScreen({navigation}) {
   const window = useWindowDimensions();
   const [currentTracker, setCurrentTracker] = useState();

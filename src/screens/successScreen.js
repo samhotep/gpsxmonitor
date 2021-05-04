@@ -3,7 +3,6 @@ import {StatusBar} from 'react-native';
 import BillingButton from '../components/buttons/billingButton';
 import styled from 'styled-components';
 
-// TODO Pass the location as a state prop, or as an event emitter
 export default function SuccessScreen({route, navigation}) {
   const transaction = route.params;
 

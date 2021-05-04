@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import API from '../api/api';
 import ErrorBox from '../components/alerts/errorBox';
 
-// TODO Pass the location as a state prop, or as an event emitter
 export default function SubscribeScreen({navigation}) {
   const [services, setServices] = useState([]);
   const [selectedService, setSelectedService] = useState({});

@@ -8,7 +8,6 @@ import Separator from '../components/separators/separator';
 import FloatingLoader from '../components/loaders/floatingLoader';
 import API from '../api/api';
 
-// TODO Pass the location as a state prop, or as an event emitter
 export default function SuccessScreen({route, navigation}) {
   const [days, setDays] = useState();
   const [email, setEmail] = useState();

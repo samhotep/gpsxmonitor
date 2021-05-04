@@ -36,7 +36,7 @@ export default function HomeItem(props) {
 
   const getMovementIcon = (movement_status) => {
     if (movement_status === 'moving') {
-      setMovementIcon(require('../../assets/moving.png'));
+      setMovementIcon(require('../../assets/speed.png'));
     } else if (movement_status === 'parked') {
       setMovementIcon(require('../../assets/parked.png'));
     } else if (movement_status === 'stopped') {
@@ -77,12 +77,20 @@ export default function HomeItem(props) {
           </Text>
         </InnerContainer>
         <InnerContainer>
-          <ImageContainer source={movementIcon} size={24} margin={1} />
-          <TimeLabel size={12} width={150}>
-            {props.tracker.movement_status.charAt(0).toUpperCase() +
-              props.tracker.movement_status.slice(1)}{' '}
-            for {movementStatus}
-          </TimeLabel>
+          <ImageContainer source={movementIcon} size={24} margin={5} />
+
+          {props.tracker.movement_status === 'parked' ? (
+            <TimeLabel size={12} width={150}>
+              {props.tracker.movement_status.charAt(0).toUpperCase() +
+                props.tracker.movement_status.slice(1)}{' '}
+              for ${movementStatus}
+            </TimeLabel>
+          ) : null}
+          {props.tracker.movement_status === 'moving' ? (
+            <TimeLabel size={14} width={150}>
+              Speed: {props.tracker.gps.speed} km/hr
+            </TimeLabel>
+          ) : null}
         </InnerContainer>
       </RowContainer>
     </Container>
@@ -119,6 +127,7 @@ const ImageContainer = styled.Image`
   width: ${(props) => props.size || 24}px;
   height: ${(props) => props.size || 24}px;
   margin: ${(props) => props.margin || 5}px;
+  padding: ${(props) => props.padding || 1}px;
 `;
 
 const Text = styled.Text.attrs({

@@ -181,6 +181,30 @@ export default function HomeScreen({navigation}) {
             })}
           </>
         ) : null}
+        {showTrackers === 'Group' ? (
+          <>
+            {trackersList.map((_, i) => {
+              if (_.group_id === currentTracker.group_id) {
+                return (
+                  <Marker
+                    key={_.id}
+                    coordinate={{
+                      latitude: trackersStates[_.id].gps.location.lat,
+                      longitude: trackersStates[_.id].gps.location.lng,
+                    }}>
+                    <View style={styles.marker}>
+                      <Text style={styles.text}>{_.label}</Text>
+                      <Image
+                        style={styles.icon}
+                        source={require('../assets/map.png')}
+                      />
+                    </View>
+                  </Marker>
+                );
+              }
+            })}
+          </>
+        ) : null}
       </Animated>
       {currentTracker ? (
         <HomeItem

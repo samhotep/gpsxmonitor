@@ -10,13 +10,13 @@ import API from '../api/api';
 export default function DetailsScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
 
-  // if (loading) {
-  //   return (
-  //     <Container>
-  //       <DrawerLoader />
-  //     </Container>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <Container>
+        <DrawerLoader />
+      </Container>
+    );
+  }
 
   return (
     <Container>

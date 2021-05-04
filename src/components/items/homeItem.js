@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import Utils from '../../utils/utils';
 
 // TODO Animate the list
-// TODO Show time in days, mins, hours
 export default function HomeItem(props) {
   const [signalIcon, setSignalIcon] = useState();
   const [timeStatus, setTimeStatus] = useState('0');

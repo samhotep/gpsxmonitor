@@ -108,6 +108,7 @@ function CustomDrawerContent({navigation}) {
       data: {
         id: tracker.id,
         label: tracker.label,
+        group_id: tracker.group_id,
         ...trackerStates[tracker.id],
       },
       trackers: trackersList,

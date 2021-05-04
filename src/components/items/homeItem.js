@@ -61,7 +61,7 @@ export default function HomeItem(props) {
           </Text>
         </InnerContainer>
         <TimeLabel size={14} width={100} color="#b9b9b9">
-          {timeStatus ? `${timeStatus} ago` : null}
+          {timeStatus ? `${timeStatus} ago` : 'Now'}
         </TimeLabel>
       </RowContainer>
       <RowContainer>

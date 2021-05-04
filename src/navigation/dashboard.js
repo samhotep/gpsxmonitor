@@ -114,6 +114,7 @@ function CustomDrawerContent({navigation}) {
       states: trackerStates,
     });
     navigation.toggleDrawer();
+    createObjects();
   };
 
   const createObjects = () => {

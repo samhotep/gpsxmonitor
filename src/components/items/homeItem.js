@@ -60,9 +60,9 @@ export default function HomeItem(props) {
             {props.tracker.label}
           </Text>
         </InnerContainer>
-        <TimeLabel size={14} width={100} color="#b9b9b9">
+        <Text size={14} width={150} color="#b9b9b9">
           {timeStatus ? `${timeStatus} ago` : 'Now'}
-        </TimeLabel>
+        </Text>
       </RowContainer>
       <RowContainer>
         <InnerContainer>
@@ -80,16 +80,16 @@ export default function HomeItem(props) {
           <ImageContainer source={movementIcon} size={24} margin={5} />
 
           {props.tracker.movement_status === 'parked' ? (
-            <TimeLabel size={12} width={150}>
+            <Text size={12} width={150}>
               {props.tracker.movement_status.charAt(0).toUpperCase() +
                 props.tracker.movement_status.slice(1)}{' '}
               for {movementStatus}
-            </TimeLabel>
+            </Text>
           ) : null}
           {props.tracker.movement_status === 'moving' ? (
-            <TimeLabel size={14} width={150}>
+            <Text size={14} width={150}>
               Speed: {props.tracker.gps.speed} km/hr
-            </TimeLabel>
+            </Text>
           ) : null}
         </InnerContainer>
       </RowContainer>
@@ -130,18 +130,10 @@ const ImageContainer = styled.Image`
   padding: ${(props) => props.padding || 1}px;
 `;
 
-const Text = styled.Text.attrs({
-  numberOfLines: 1,
-})`
+const Text = styled.Text`
   text-align: left;
   font-size: ${(props) => props.size || 18}px;
   color: ${(props) => props.color || '#636261'};
-  width: ${(props) => props.width || 220}px;
-`;
-
-const TimeLabel = styled.Text`
-  text-align: left;
-  font-size: ${(props) => props.size || 18}px;
-  color: ${(props) => props.color || '#636261'};
-  width: ${(props) => props.width || 100}px;
+  flex-wrap: wrap;
+  width: ${(props) => (props.width ? props.width + 'px' : 'auto')};
 `;

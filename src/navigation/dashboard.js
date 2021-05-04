@@ -243,7 +243,6 @@ function CustomDrawerContent({navigation}) {
         <DrawerIcon source={require('../assets/account.png')} />
         <HeaderContent>
           <DrawerLabel bold="bold">{username}</DrawerLabel>
-          {/* TODO Use real user id  */}
           <DrawerLabel underline="underline" color="#4788c7">
             ID #{userID}
           </DrawerLabel>
@@ -365,22 +364,3 @@ const DrawerItemContainer = styled.TouchableHighlight`
   justify-content: flex-start;
   padding: 5px;
 `;
-
-// TODO Add get last GPS point to API
-
-let y = {
-  success: true,
-  value: {
-    lat: 53.445181,
-    lng: -2.276432,
-    alt: 10,
-    satellites: 8,
-    get_time: '2011-06-18 03:39:44',
-    address: '4B Albany Road, Manchester, Great Britain',
-    heading: 298,
-    speed: 70,
-    precision: 100,
-    gsm_lbs: true,
-    parking: true,
-  },
-};

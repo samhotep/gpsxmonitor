@@ -19,7 +19,8 @@ export default function HomeItem(props) {
     setMovementStatus(
       Utils.getTimeDifference(props.tracker.actual_track_update),
     );
-    setTimeStatus(Utils.getTimeDifference(props.tracker.last_update));
+    console.log(props.tracker);
+    setTimeStatus(Utils.getTimeDifference(props.tracker.gps.updated));
   };
 
   const getSignalIcon = (signal_level) => {

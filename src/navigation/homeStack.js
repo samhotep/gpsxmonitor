@@ -52,7 +52,7 @@ export default function HomeStack({route, navigation}) {
         name="DetailsScreen"
         component={DetailsScreen}
         options={{
-          title: 'Subscriptions',
+          title: 'Object Details',
           headerShown: true,
           headerStyle: {
             backgroundColor: '#1e96dc',

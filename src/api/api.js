@@ -144,8 +144,8 @@ const API = {
       }
     });
   },
-  listModel: (tracker_label) => {
-    return API.apiCall('tracker/list/', {labels: [tracker_label]}).then(
+  listModel: (model_code) => {
+    return API.apiCall('tracker/list_models/', {codes: [model_code]}).then(
       (result) => {
         if (result.success === true) {
           return result.list;

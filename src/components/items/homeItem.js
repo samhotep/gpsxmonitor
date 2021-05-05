@@ -14,23 +14,11 @@ export default function HomeItem(props) {
 
   const loadCurrentTrackerData = () => {
     getMovementIcon(props.tracker.movement_status);
-    getSignalIcon(props.tracker.gps.signal_level);
+    setSignalIcon(Utils.getSignalIcon(props.tracker.gps.signal_level));
     setMovementStatus(
       Utils.getTimeDifference(props.tracker.actual_track_update),
     );
     setTimeStatus(Utils.getTimeDifference(props.tracker.gps.updated));
-  };
-
-  const getSignalIcon = (signal_level) => {
-    if (signal_level > 75) {
-      setSignalIcon(require('../../assets/signal/strong.png'));
-    } else if (signal_level <= 75 && signal_level > 50) {
-      setSignalIcon(require('../../assets/signal/good.png'));
-    } else if (signal_level <= 50 && signal_level > 25) {
-      setSignalIcon(require('../../assets/signal/low.png'));
-    } else if (signal_level <= 25) {
-      setSignalIcon(require('../../assets/signal/poor.png'));
-    }
   };
 
   const getMovementIcon = (movement_status) => {

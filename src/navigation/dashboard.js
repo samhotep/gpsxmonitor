@@ -58,6 +58,13 @@ function CustomDrawerContent({navigation}) {
       },
     },
     {
+      name: 'Settings',
+      source: require('../assets/gear.png'),
+      onPress: () => {
+        navigation.navigate('Home', {screen: 'SettingsScreen'});
+      },
+    },
+    {
       name: 'Logout',
       source: require('../assets/logout.png'),
       onPress: () => confirmLogout(),

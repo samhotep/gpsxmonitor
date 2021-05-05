@@ -145,6 +145,7 @@ export default function HomeScreen({navigation}) {
           })
         }
         mapType={type}>
+        {/* TODO Set default selection type */}
         {showTrackers === 'Selected' ? (
           <Marker.Animated ref={markerRef} coordinate={currentMarker}>
             <View style={styles.marker}>
@@ -277,6 +278,7 @@ export default function HomeScreen({navigation}) {
         bottom={90}
         left={68}
         inject={
+          // TODO save default map type and load default
           <ModalContainer>
             <RadioLabel color="#bebebe">Map Type:</RadioLabel>
             {mapTypes.map((_, i) => {

@@ -60,6 +60,17 @@ const Utils = {
       return '';
     }
   },
+  getSignalIcon: (signal_level) => {
+    if (signal_level > 75) {
+      return require('../assets/signal/strong.png');
+    } else if (signal_level <= 75 && signal_level > 50) {
+      return require('../assets/signal/good.png');
+    } else if (signal_level <= 50 && signal_level > 25) {
+      return require('../assets/signal/low.png');
+    } else if (signal_level <= 25) {
+      return require('../assets/signal/poor.png');
+    }
+  },
 };
 
 export default Utils;

@@ -7,7 +7,8 @@ import {
   createDrawerNavigator,
 } from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
-import HomeScreen from '../screens/homeScreen';
+import HeaderTitle from '../components/headers/headerTitle';
+import SettingsScreen from '../screens/settingsScreen';
 import HomeStack from '../navigation/homeStack';
 import HeaderIcon from '../components/headers/headerIcon';
 import styled from 'styled-components';
@@ -27,21 +28,21 @@ export default function ProductStack({route, navigation}) {
         component={HomeStack}
         options={{headerShown: false}}
       />
-    </Drawer.Navigator>
-  );
-}
-
-function LogoTitle(props) {
-  return (
-    <Container>
-      <Title>{props.title}</Title>
-      <HeaderIcon
-        size={25}
-        margin={5}
-        source={require('../assets/mail.png')}
-        onPress={() => {}}
+      <Stack.Screen
+        name="SettingsScreen"
+        component={SettingsScreen}
+        options={{
+          title: 'Settings',
+          headerShown: false,
+          headerStyle: {
+            backgroundColor: '#1e96dc',
+          },
+          headerTitleStyle: {
+            color: '#ffffff',
+          },
+        }}
       />
-    </Container>
+    </Drawer.Navigator>
   );
 }
 
@@ -57,11 +58,3 @@ const Title = styled.Text`
   font-size: 18px;
   color: #ffffff;
 `;
-
-const ImageContainer = styled.Image`
-  width: 20px;
-  height: 20px;
-  margin: 15px;
-`;
-
-const Button = styled.TouchableOpacity``;

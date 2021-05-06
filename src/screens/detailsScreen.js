@@ -13,31 +13,23 @@ export default function DetailsScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
   const [itemList, setItemList] = useState([]);
 
-  const constructModelObject = () => {
-    let trackerID = '';
+  const constructModelObject = (tracker) => {
     let modelObject = {};
     modelObject.details = [];
-    return Storage.getCurrentTracker()
-      .then((tracker) => {
-        trackerID = JSON.parse(tracker).id;
-        modelObject.title = JSON.parse(tracker).label;
-        modelObject.details[1] = {
-          type: 'image',
-          image: require('../assets/hash.png'),
-          text: `ID: ${JSON.parse(tracker).source.device_id.replace(
-            /\d{4}(?=.)/g,
-            '$& ',
-          )}`,
-        };
-        return API.listModel(JSON.parse(tracker).source.model);
-      })
-      .then((tracker) => {
+    modelObject.title = tracker.label;
+    modelObject.details[1] = {
+      type: 'image',
+      image: require('../assets/hash.png'),
+      text: `ID: ${tracker.source.device_id.replace(/\d{4}(?=.)/g, '$& ')}`,
+    };
+    return API.listModel(tracker.source.model)
+      .then((model) => {
         modelObject.details[0] = {
           type: 'image',
           image: require('../assets/chip.png'),
-          text: `Model: ${tracker[0].name}`,
+          text: `Model: ${model.name}`,
         };
-        return API.getTrackerState(trackerID);
+        return API.getTrackerState(tracker.id);
       })
       .then((result) => {
         modelObject.details[2] = {
@@ -48,9 +40,18 @@ export default function DetailsScreen({route, navigation}) {
       });
   };
 
+  const constructLocationObject = () => {
+    return API.getTrackerLocation;
+  };
+
   useEffect(() => {
     let details = [];
-    constructModelObject()
+    let tracker;
+    Storage.getCurrentTracker()
+      .then((result) => {
+        tracker = JSON.parse(result);
+        return constructModelObject(tracker);
+      })
       .then((modelObject) => {
         details.push(modelObject);
         setItemList(details);

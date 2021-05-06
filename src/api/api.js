@@ -93,6 +93,24 @@ const API = {
       }
     });
   },
+  getTracker: (label) => {
+    return API.apiCall('tracker/list/', {labels: [label]}).then((result) => {
+      if (result.success === true) {
+        return result.list;
+      } else {
+        return result.status.description;
+      }
+    });
+  },
+  getTrackers: () => {
+    return API.apiCall('tracker/list/').then((result) => {
+      if (result.success === true) {
+        return result.list;
+      } else {
+        return result.status.description;
+      }
+    });
+  },
   getTrackerState: (tracker_id) => {
     return API.apiCall('tracker/get_state/', {tracker_id: tracker_id}).then(
       (result) => {
@@ -103,15 +121,6 @@ const API = {
         }
       },
     );
-  },
-  getTrackers: () => {
-    return API.apiCall('tracker/list/').then((result) => {
-      if (result.success === true) {
-        return result.list;
-      } else {
-        return result.status.description;
-      }
-    });
   },
   getTrackerLocation: (tracker_id) => {
     return API.apiCall('tracker/get_last_gps_point/', {

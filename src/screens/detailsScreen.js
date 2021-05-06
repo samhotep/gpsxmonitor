@@ -17,20 +17,20 @@ export default function DetailsScreen({route, navigation}) {
     let modelObject = {};
     modelObject.details = [];
     modelObject.title = tracker.label;
-    modelObject.details[1] = {
-      type: 'image',
-      image: require('../assets/hash.png'),
-      text: `ID: ${tracker.source.device_id.replace(/\d{4}(?=.)/g, '$& ')}`,
-    };
-    modelObject.details[0] = {
+    modelObject.details.push({
       type: 'image',
       image: require('../assets/chip.png'),
       text: `Model: ${model.name}`,
-    };
-    modelObject.details[2] = {
+    });
+    modelObject.details.push({
+      type: 'image',
+      image: require('../assets/hash.png'),
+      text: `ID: ${tracker.source.device_id.replace(/\d{4}(?=.)/g, '$& ')}`,
+    });
+    modelObject.details.push({
       type: 'component',
       status: lists.statusColors[state.connection_status],
-    };
+    });
     return modelObject;
   };
 
@@ -38,10 +38,6 @@ export default function DetailsScreen({route, navigation}) {
     const locationObject = {};
     locationObject.details = [];
     locationObject.title = 'Location';
-    return API.getTrackerState(tracker.id).then((result) => {
-      console.log(result);
-      return result;
-    });
   };
 
   useEffect(() => {

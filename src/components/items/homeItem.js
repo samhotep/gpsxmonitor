@@ -13,22 +13,12 @@ export default function HomeItem(props) {
   const [movementStatus, setMovementStatus] = useState('0');
 
   const loadCurrentTrackerData = () => {
-    getMovementIcon(props.tracker.movement_status);
+    setMovementIcon(Utils.getMovementIcon(props.tracker.movement_status));
     setSignalIcon(Utils.getSignalIcon(props.tracker.gps.signal_level));
     setMovementStatus(
       Utils.getTimeDifference(props.tracker.actual_track_update),
     );
     setTimeStatus(Utils.getTimeDifference(props.tracker.gps.updated));
-  };
-
-  const getMovementIcon = (movement_status) => {
-    if (movement_status === 'moving') {
-      setMovementIcon(require('../../assets/speed.png'));
-    } else if (movement_status === 'parked') {
-      setMovementIcon(require('../../assets/parked.png'));
-    } else if (movement_status === 'stopped') {
-      setMovementIcon(require('../../assets/stop.png'));
-    }
   };
 
   useEffect(() => {

@@ -58,6 +58,11 @@ export default function DetailsScreen({route, navigation}) {
       })
       .catch((error) => {
         console.log(error);
+        ToastAndroid.show(
+          error.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
       });
   }, []);
 

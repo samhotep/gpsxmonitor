@@ -1,10 +1,10 @@
 const lists = {
   statusColors: {
-    active: '#69ce02',
-    just_registered: '#999999',
-    idle: '#0795fb',
-    signal_lost: '#fc6701',
-    offline: '#fc6701',
+    active: {color: '#69ce02', text: 'Online'},
+    just_registered: {color: '#999999', text: 'Awaiting Connection'},
+    idle: {color: '#0795fb', text: 'GPS not updated'},
+    signal_lost: {color: '#fc6701', text: 'Connection lost'},
+    offline: {color: '#fc6701', text: 'Offline'},
   },
 };
 

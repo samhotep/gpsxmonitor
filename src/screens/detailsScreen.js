@@ -38,6 +38,7 @@ export default function DetailsScreen({route, navigation}) {
     let locationObject = {};
     locationObject.details = [];
     locationObject.title = 'Location';
+    locationObject.time = Utils.getTimeDifference(state.gps.updated);
     locationObject.details.push({
       type: 'image',
       image: Utils.getSignalIcon(state.gps.signal_level),

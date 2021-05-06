@@ -13,7 +13,7 @@ export default function DetailsScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
   const [itemList, setItemList] = useState([]);
 
-  const constructModelObject = (tracker) => {
+  const constructModelObject = (tracker, model, state) => {
     let modelObject = {};
     modelObject.details = [];
     modelObject.title = tracker.label;
@@ -22,38 +22,45 @@ export default function DetailsScreen({route, navigation}) {
       image: require('../assets/hash.png'),
       text: `ID: ${tracker.source.device_id.replace(/\d{4}(?=.)/g, '$& ')}`,
     };
-    return API.listModel(tracker.source.model)
-      .then((model) => {
-        modelObject.details[0] = {
-          type: 'image',
-          image: require('../assets/chip.png'),
-          text: `Model: ${model.name}`,
-        };
-        return API.getTrackerState(tracker.id);
-      })
-      .then((result) => {
-        modelObject.details[2] = {
-          type: 'component',
-          status: lists.statusColors[result.connection_status],
-        };
-        return modelObject;
-      });
+    modelObject.details[0] = {
+      type: 'image',
+      image: require('../assets/chip.png'),
+      text: `Model: ${model.name}`,
+    };
+    modelObject.details[2] = {
+      type: 'component',
+      status: lists.statusColors[state.connection_status],
+    };
+    return modelObject;
   };
 
-  const constructLocationObject = () => {
-    return API.getTrackerLocation;
+  const constructLocationObject = (tracker) => {
+    const locationObject = {};
+    locationObject.details = [];
+    locationObject.title = 'Location';
+    return API.getTrackerState(tracker.id).then((result) => {
+      console.log(result);
+      return result;
+    });
   };
 
   useEffect(() => {
     let details = [];
     let tracker;
+    let trackerState;
+    let trackerModel;
     Storage.getCurrentTracker()
       .then((result) => {
         tracker = JSON.parse(result);
-        return constructModelObject(tracker);
+        return API.getTrackerState(JSON.parse(result).id);
       })
-      .then((modelObject) => {
-        details.push(modelObject);
+      .then((result) => {
+        trackerState = result;
+        return API.listModel(tracker.source.model);
+      })
+      .then((model) => {
+        trackerModel = model;
+        details.push(constructModelObject(tracker, trackerModel, trackerState));
         setItemList(details);
         setLoading(false);
       })

@@ -47,15 +47,15 @@ export default function DetailsScreen({route, navigation}) {
     locationObject.details.push({
       type: 'image',
       image: require('../assets/location.png'),
-      text: `Latitude: ${state.gps.location.lat.toFixed(
+      text: `Latitude: ${gpsPoint.lat.toFixed(
         5,
-      )} Longitude: ${state.gps.location.lng.toFixed(5)}`,
+      )} Longitude: ${gpsPoint.lng.toFixed(5)}`,
     });
-    state.gps.speed > 0
+    gpsPoint.speed > 0
       ? locationObject.details.push({
           type: 'image',
           image: require('../assets/speed.png'),
-          text: `Speed: ${state.gps.speed} km/h`,
+          text: `Speed: ${gpsPoint.speed} km/h`,
         })
       : locationObject.details.push({
           type: 'image',
@@ -68,12 +68,25 @@ export default function DetailsScreen({route, navigation}) {
     locationObject.details.push({
       type: 'image',
       image: require('../assets/compass.png'),
-      text: `Direction: ${Utils.getDirection(state.gps.heading)}`,
+      text: `Direction: ${Utils.getDirection(gpsPoint.heading)}`,
     });
     locationObject.details.push({
       type: 'image',
       image: require('../assets/address.png'),
       text: `${gpsPoint.address}`,
+    });
+    return locationObject;
+  };
+
+  const constructPowerObject = (state) => {
+    let locationObject = {};
+    locationObject.details = [];
+    locationObject.title = 'PowerSupply';
+    locationObject.time = Utils.getTimeDifference(state.gps.updated);
+    locationObject.details.push({
+      type: 'image',
+      image: Utils.getSignalIcon(state.gps.signal_level),
+      text: `Signal: ${state.gps.signal_level} %`,
     });
     return locationObject;
   };
@@ -99,8 +112,16 @@ export default function DetailsScreen({route, navigation}) {
       })
       .then((gpsPoint) => {
         lastGPSPoint = gpsPoint;
+        return API.getAddress({lat: gpsPoint.lat, lng: gpsPoint.lng});
+      })
+      .then((address) => {
         details.push(constructModelObject(tracker, trackerModel, trackerState));
-        details.push(constructLocationObject(trackerState, gpsPoint));
+        details.push(
+          constructLocationObject(trackerState, {
+            ...lastGPSPoint,
+            address: address,
+          }),
+        );
         setItemList(details);
         setLoading(false);
       })

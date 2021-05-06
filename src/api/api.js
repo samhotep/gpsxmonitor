@@ -127,7 +127,7 @@ const API = {
       tracker_id: tracker_id,
     }).then((result) => {
       if (result.success === true) {
-        return result.list;
+        return result.value;
       } else {
         return result.status.description;
       }

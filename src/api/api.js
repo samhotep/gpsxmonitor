@@ -133,6 +133,17 @@ const API = {
       }
     });
   },
+  getReadings: (tracker_id) => {
+    return API.apiCall('tracker/get_readings/', {
+      tracker_id: tracker_id,
+    }).then((result) => {
+      if (result.success === true) {
+        return result;
+      } else {
+        return result.status.description;
+      }
+    });
+  },
   getStates: (tracker_list) => {
     return API.apiCall('tracker/get_states/', {trackers: tracker_list}).then(
       (result) => {

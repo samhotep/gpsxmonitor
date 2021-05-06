@@ -33,7 +33,7 @@ const Utils = {
     });
     return categories;
   },
-  getTimeDifference: (dateString) => {
+  getTimeDifference: (dateString, showSeconds = true) => {
     if (dateString) {
       let destructuredTime = '';
       let diff = new Date(
@@ -44,17 +44,17 @@ const Utils = {
         {name: 'day', length: 86400000},
         {name: 'hour', length: 3600000},
         {name: 'min', length: 60000},
-        {name: 'second', length: 1000},
       ];
-      ranges.map((_, i) => {
-        let total = Math.floor(millis / _.length);
-        if (total > 0 && total == 1) {
-          destructuredTime += `${total} ${_.name} `;
-        } else if (total > 1) {
-          destructuredTime += `${total} ${_.name}s `;
-        }
-        millis = millis % _.length;
-      });
+      showSeconds ? ranges.push[{name: 'second', length: 1000}] : null,
+        ranges.map((_, i) => {
+          let total = Math.floor(millis / _.length);
+          if (total > 0 && total == 1) {
+            destructuredTime += `${total} ${_.name}. `;
+          } else if (total > 1) {
+            destructuredTime += `${total} ${_.name}s. `;
+          }
+          millis = millis % _.length;
+        });
       return destructuredTime;
     } else {
       return '';

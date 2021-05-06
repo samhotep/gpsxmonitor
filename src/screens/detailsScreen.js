@@ -34,7 +34,7 @@ export default function DetailsScreen({route, navigation}) {
     return modelObject;
   };
 
-  const constructLocationObject = (state) => {
+  const constructLocationObject = (state, gpsPoint) => {
     let locationObject = {};
     locationObject.details = [];
     locationObject.title = 'Location';
@@ -50,19 +50,20 @@ export default function DetailsScreen({route, navigation}) {
         5,
       )} Longitude: ${state.gps.location.lng.toFixed(5)}`,
     });
-    locationObject.details.push({
-      type: 'image',
-      image: require('../assets/speed.png'),
-      text: `Speed: ${state.gps.speed} km/h`,
-    });
-    locationObject.details.push({
-      type: 'image',
-      image: Utils.getMovementIcon(state.movement_status),
-      text: `Parked for ${Utils.getTimeDifference(
-        state.actual_track_update,
-        false,
-      )}`,
-    });
+    state.gps.speed > 0
+      ? locationObject.details.push({
+          type: 'image',
+          image: require('../assets/speed.png'),
+          text: `Speed: ${state.gps.speed} km/h`,
+        })
+      : locationObject.details.push({
+          type: 'image',
+          image: Utils.getMovementIcon(state.movement_status),
+          text: `Parked for ${Utils.getTimeDifference(
+            state.actual_track_update,
+            false,
+          )}`,
+        });
     locationObject.details.push({
       type: 'image',
       image: require('../assets/compass.png'),
@@ -76,6 +77,7 @@ export default function DetailsScreen({route, navigation}) {
     let tracker;
     let trackerState;
     let trackerModel;
+    let lastGPSPoint;
     Storage.getCurrentTracker()
       .then((result) => {
         tracker = JSON.parse(result);
@@ -87,8 +89,12 @@ export default function DetailsScreen({route, navigation}) {
       })
       .then((model) => {
         trackerModel = model;
+        return API.getTrackerLocation(tracker.id);
+      })
+      .then((gpsPoint) => {
+        lastGPSPoint = gpsPoint;
         details.push(constructModelObject(tracker, trackerModel, trackerState));
-        details.push(constructLocationObject(trackerState));
+        details.push(constructLocationObject(trackerState, gpsPoint));
         setItemList(details);
         setLoading(false);
       })

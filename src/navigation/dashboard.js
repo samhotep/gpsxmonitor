@@ -273,7 +273,7 @@ function CustomDrawerContent({navigation}) {
                     color={() => {
                       return lists.statusColors[
                         trackerStates[tracker.id].connection_status
-                      ];
+                      ].color;
                     }}
                     selected={false}
                     onPress={() => {

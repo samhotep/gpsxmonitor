@@ -71,6 +71,15 @@ const Utils = {
       return require('../assets/signal/poor.png');
     }
   },
+  getMovementIcon: (movement_status) => {
+    if (movement_status === 'moving') {
+      return require('../assets/speed.png');
+    } else if (movement_status === 'parked') {
+      return require('../assets/parked.png');
+    } else if (movement_status === 'stopped') {
+      return require('../assets/stop.png');
+    }
+  },
   getDirection: (degrees) => {
     /**
      * Azimuthal direction using quadrants

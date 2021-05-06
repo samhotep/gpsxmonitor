@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
 import styled from 'styled-components';
-import Separator from '../components/separators/separator';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import DetailItem from '../components/items/detailItem';
 import Storage from '../storage/storage';
 import API from '../api/api';
+import Utils from '../utils/utils';
 import lists from '../components/lists/lists';
 
 // TODO Pass the location as a state prop, or as an event emitter
@@ -34,10 +34,41 @@ export default function DetailsScreen({route, navigation}) {
     return modelObject;
   };
 
-  const constructLocationObject = (tracker) => {
-    const locationObject = {};
+  const constructLocationObject = (state) => {
+    let locationObject = {};
     locationObject.details = [];
     locationObject.title = 'Location';
+    locationObject.details.push({
+      type: 'image',
+      image: Utils.getSignalIcon(state.gps.signal_level),
+      text: `Signal: ${state.gps.signal_level} %`,
+    });
+    locationObject.details.push({
+      type: 'image',
+      image: require('../assets/location.png'),
+      text: `Latitude: ${state.gps.location.lat.toFixed(
+        5,
+      )} Longitude: ${state.gps.location.lng.toFixed(5)}`,
+    });
+    locationObject.details.push({
+      type: 'image',
+      image: require('../assets/speed.png'),
+      text: `Speed: ${state.gps.speed} km/h`,
+    });
+    locationObject.details.push({
+      type: 'image',
+      image: Utils.getMovementIcon(state.movement_status),
+      text: `Parked for ${Utils.getTimeDifference(
+        state.actual_track_update,
+        false,
+      )}`,
+    });
+    locationObject.details.push({
+      type: 'image',
+      image: require('../assets/compass.png'),
+      text: `Direction: ${Utils.getDirection(state.gps.heading)}`,
+    });
+    return locationObject;
   };
 
   useEffect(() => {
@@ -57,6 +88,7 @@ export default function DetailsScreen({route, navigation}) {
       .then((model) => {
         trackerModel = model;
         details.push(constructModelObject(tracker, trackerModel, trackerState));
+        details.push(constructLocationObject(trackerState));
         setItemList(details);
         setLoading(false);
       })
@@ -112,19 +144,4 @@ const StatusContainer = styled.ScrollView`
   flex-direction: column;
   height: 100%;
   width: 100%;
-`;
-
-const Text = styled.Text`
-  font-size: ${(props) => props.size || 18}px;
-  color: ${(props) => props.color || '#000000'};
-  font-family: 'Roboto-Regular';
-  font-weight: ${(props) => props.weight || 'normal'};
-  text-align: ${(props) => props.align || 'left'};
-  margin: 5px;
-`;
-
-const ImageContainer = styled.Image`
-  height: ${(props) => props.size || 150}px;
-  width: ${(props) => props.size || 150}px;
-  margin: ${(props) => props.margin || 10}px;
 `;

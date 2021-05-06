@@ -71,6 +71,30 @@ const Utils = {
       return require('../assets/signal/poor.png');
     }
   },
+  getDirection: (degrees) => {
+    /**
+     * Azimuthal direction using quadrants
+     * Approximations for compass rose (leading letters determine direction e.g NNE)
+     * Allowance is 22.5 degrees
+     */
+    if ((degrees <= 22.5 && degrees > 337.5) || degrees === 0) {
+      return 'N';
+    } else if (degrees <= 67.5 && degrees > 22.5) {
+      return 'NE';
+    } else if (degrees <= 112.5 && degrees > 67.5) {
+      return 'E';
+    } else if (degrees <= 157.5 && degrees > 112.5) {
+      return 'SE';
+    } else if (degrees <= 202.5 && degrees > 157.5) {
+      return 'S';
+    } else if (degrees <= 247.5 && degrees > 202.5) {
+      return 'SW';
+    } else if (degrees <= 292.5 && degrees > 247.5) {
+      return 'W';
+    } else if (degrees <= 337.5 && degrees > 292.5) {
+      return 'NW';
+    }
+  },
 };
 
 export default Utils;

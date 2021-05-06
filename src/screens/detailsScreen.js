@@ -69,6 +69,11 @@ export default function DetailsScreen({route, navigation}) {
       image: require('../assets/compass.png'),
       text: `Direction: ${Utils.getDirection(state.gps.heading)}`,
     });
+    locationObject.details.push({
+      type: 'image',
+      image: require('../assets/address.png'),
+      text: `${gpsPoint.address}`,
+    });
     return locationObject;
   };
 
@@ -88,7 +93,7 @@ export default function DetailsScreen({route, navigation}) {
         return API.listModel(tracker.source.model);
       })
       .then((model) => {
-        trackerModel = model;
+        trackerModel = model[0];
         return API.getTrackerLocation(tracker.id);
       })
       .then((gpsPoint) => {

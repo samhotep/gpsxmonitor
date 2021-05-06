@@ -91,5 +91,5 @@ const IdentityColor = styled.View`
 const Text = styled.Text`
   font-family: 'Roboto-Regular';
   font-size: ${(props) => props.size || 16}px;
-  color: ${(props) => props.color || '#808080'};
+  color: ${(props) => props.color || '#626160'};
 `;

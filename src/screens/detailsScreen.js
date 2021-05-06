@@ -96,7 +96,6 @@ const Container = styled.View`
   flex-direction: column;
   height: 100%;
   width: 100%;
-  padding: 20px;
   background-color: #e7f1f7;
 `;
 

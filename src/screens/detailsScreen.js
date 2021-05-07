@@ -97,23 +97,41 @@ export default function DetailsScreen({route, navigation}) {
   };
 
   const constructPowerObject = (state, readings) => {
-    let powerObject = {};
-    powerObject.details = [];
-    powerObject.title = 'Power Supply';
-    powerObject.time = Utils.getTimeDifference(readings.update_time);
-    powerObject.details.push({
-      type: 'image',
-      image: Utils.getBatteryIcon(state.battery_level),
-      text: `Battery level: ${state.battery_level} %`,
-    });
-    powerObject.details.push({
-      type: 'image',
-      image: require('../assets/car_battery.png'),
-      text: `Board voltage: ${readings.inputs[0].value} V`,
-    });
-    return powerObject;
+    return constructObject(
+      'Power Supply',
+      Utils.getTimeDifference(readings.update_time),
+      [
+        {
+          type: 'image',
+          image: Utils.getBatteryIcon(state.battery_level),
+          text: `Battery level: ${state.battery_level} %`,
+        },
+        {
+          type: 'image',
+          image: require('../assets/car_battery.png'),
+          text: `Board voltage: ${readings.inputs[0].value} V`,
+        },
+      ],
+    );
   };
 
+  const constructInputsObject = (inputs) => {
+    let inputObject = {};
+    inputObject.details = [];
+  };
+
+  const constructObject = (title, time, details) => {
+    let trackerObject = {};
+    trackerObject.details = [];
+    trackerObject.title = title;
+    trackerObject.time = time;
+    details.map((_, i) => {
+      trackerObject.details.push(_);
+    });
+    return trackerObject;
+  };
+
+  // For Odometer and engine hours
   const constructCounterObjects = (counters) => {};
 
   useEffect(() => {
@@ -124,6 +142,7 @@ export default function DetailsScreen({route, navigation}) {
     let lastGPSPoint;
     let trackerReadings;
     let trackerCounters;
+    let trackerInputs;
     Storage.getCurrentTracker()
       .then((result) => {
         tracker = JSON.parse(result);
@@ -151,17 +170,23 @@ export default function DetailsScreen({route, navigation}) {
       })
       .then((counters) => {
         trackerCounters = counters;
+        return API.getInputs(tracker.id);
+      })
+      .then((inputs) => {
+        trackerInputs = inputs;
         details.push(constructModelObject(tracker, trackerModel, trackerState));
         details.push(constructLocationObject(trackerState, lastGPSPoint));
         trackerState.gsm
           ? details.push(constructGSMObject(trackerState))
           : null;
         details.push(constructPowerObject(trackerState, trackerReadings));
-        details.push(constructCounterObjects(counters));
+        constructInputsObject(inputs);
+        // details.push(constructCounterObjects(counters));
         setItemList(details);
         setLoading(false);
       })
       .catch((error) => {
+        setLoading(false);
         console.log(error);
         ToastAndroid.show(
           error.message,

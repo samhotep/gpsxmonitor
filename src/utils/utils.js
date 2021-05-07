@@ -104,6 +104,15 @@ const Utils = {
       return 'NW';
     }
   },
+  getBatteryIcon: (level) => {
+    if (level >= 66) {
+      return require('../assets/battery_full.png');
+    } else if (level < 66 && level >= 33) {
+      return require('../assets/battery_medium.png');
+    } else if (level < 33) {
+      return require('../assets/battery_low.png');
+    }
+  },
 };
 
 export default Utils;

@@ -97,6 +97,7 @@ export default function DetailsScreen({route, navigation}) {
     let trackerState;
     let trackerModel;
     let lastGPSPoint;
+    let readings;
     Storage.getCurrentTracker()
       .then((result) => {
         tracker = JSON.parse(result);
@@ -115,13 +116,13 @@ export default function DetailsScreen({route, navigation}) {
         return API.getAddress({lat: gpsPoint.lat, lng: gpsPoint.lng});
       })
       .then((address) => {
+        lastGPSPoint = {...lastGPSPoint, address: address};
+        return API.getReadings(tracker.id);
+      })
+      .then((readings) => {
+        readings = readings;
         details.push(constructModelObject(tracker, trackerModel, trackerState));
-        details.push(
-          constructLocationObject(trackerState, {
-            ...lastGPSPoint,
-            address: address,
-          }),
-        );
+        details.push(constructLocationObject(trackerState, lastGPSPoint));
         setItemList(details);
         setLoading(false);
       })

@@ -104,9 +104,31 @@ export default function DetailsScreen({route, navigation}) {
   };
 
   const constructInputsObject = (inputs) => {
-    let inputObject = {};
-    inputObject.details = [];
+    let serializedInputs = [];
+    inputs.states.map((_, i) => {
+      _.name === 'Custom'
+        ? serializedInputs.push({
+            type: 'component',
+            status: {
+              color: '#626160',
+              size: 18,
+              text: `Input #${_.input_number}: ${
+                _.status ? 'active' : 'inactive'
+              }`,
+              number: 2,
+            },
+          })
+        : serializedInputs.push({
+            type: 'image',
+            image: require('../assets/flash.png'),
+            text: `${_.name}: ${_.status ? 'active' : 'inactive'}`,
+          });
+    });
+    return constructObject('Inputs', inputs.update_time, serializedInputs);
   };
+
+  // For Odometer and engine hours
+  const constructCounterObjects = (counters) => {};
 
   const constructObject = (title, time, details) => {
     let trackerObject = {};
@@ -118,9 +140,6 @@ export default function DetailsScreen({route, navigation}) {
     });
     return trackerObject;
   };
-
-  // For Odometer and engine hours
-  const constructCounterObjects = (counters) => {};
 
   useEffect(() => {
     let details = [];
@@ -168,7 +187,7 @@ export default function DetailsScreen({route, navigation}) {
           ? details.push(constructGSMObject(trackerState))
           : null;
         details.push(constructPowerObject(trackerState, trackerReadings));
-        constructInputsObject(inputs);
+        details.push(constructInputsObject(inputs));
         // details.push(constructCounterObjects(counters));
         setItemList(details);
         setLoading(false);
@@ -226,4 +245,12 @@ const StatusContainer = styled.ScrollView`
   flex-direction: column;
   height: 100%;
   width: 100%;
+`;
+
+const InputNumber = styled.Text`
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-family: 'Roboto-Regular';
+  color: ${(props) => props.color || '#f2994a'};
 `;

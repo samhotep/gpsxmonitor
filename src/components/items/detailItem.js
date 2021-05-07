@@ -36,7 +36,9 @@ export default function DetailItem(props) {
       {props.time ? (
         <RowContainer>
           <Text> </Text>
-          <Text size={14}>{props.time}</Text>
+          <Text size={14} time>
+            {props.time}
+          </Text>
         </RowContainer>
       ) : null}
     </Container>
@@ -93,5 +95,5 @@ const Text = styled.Text`
   font-size: ${(props) => props.size || 16}px;
   color: ${(props) => props.color || '#626160'};
   flex-wrap: wrap;
-  flex: 1;
+  flex: ${(props) => (props.time ? 'none' : 1)};
 `;

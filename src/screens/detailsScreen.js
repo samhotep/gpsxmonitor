@@ -142,7 +142,6 @@ export default function DetailsScreen({route, navigation}) {
         lastGPSPoint = {...lastGPSPoint, address: address};
         return API.getReadings(tracker.id);
       })
-      // TODO Conditional render GSM
       .then((readings) => {
         trackerReadings = readings;
         details.push(constructModelObject(tracker, trackerModel, trackerState));

@@ -100,29 +100,31 @@ export default function HomeScreen({navigation}) {
     const eventListener = eventEmitter.addListener(
       'event.trackerEvent',
       (trackerData) => {
-        clearInterval(intervalID);
-        setTrackersList(trackerData.trackers);
-        setTrackersStates(trackerData.states);
-        updateTracker(trackerData.data);
-        mapRef.current.animateToRegion(
-          {
-            latitude: trackerData.data.gps.location.lat,
-            longitude: trackerData.data.gps.location.lng,
-            latitudeDelta: latDelta,
-            longitudeDelta: longDelta,
-          },
-          renderDelay,
-        );
-        /**
-         * Break linter convention, since setInterval is created anew for each successive render
-         */
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        intervalID = setInterval(() => {
-          API.getTrackerState(trackerData.data.id).then((result) => {
-            const newData = Object.assign(trackerData.data, result);
-            updateTracker(newData);
-          });
-        }, 3000);
+        if (trackerData) {
+          clearInterval(intervalID);
+          setTrackersList(trackerData.trackers);
+          setTrackersStates(trackerData.states);
+          updateTracker(trackerData.data);
+          mapRef.current.animateToRegion(
+            {
+              latitude: trackerData.data.gps.location.lat,
+              longitude: trackerData.data.gps.location.lng,
+              latitudeDelta: latDelta,
+              longitudeDelta: longDelta,
+            },
+            renderDelay,
+          );
+          /**
+           * Break linter convention, since setInterval is created anew for each successive render
+           */
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+          intervalID = setInterval(() => {
+            API.getTrackerState(trackerData.data.id).then((result) => {
+              const newData = Object.assign(trackerData.data, result);
+              updateTracker(newData);
+            });
+          }, 3000);
+        }
       },
     );
     return () => {

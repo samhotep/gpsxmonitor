@@ -114,6 +114,8 @@ export default function DetailsScreen({route, navigation}) {
     return powerObject;
   };
 
+  const constructCounterObjects = (counters) => {};
+
   useEffect(() => {
     let details = [];
     let tracker;
@@ -121,6 +123,7 @@ export default function DetailsScreen({route, navigation}) {
     let trackerModel;
     let lastGPSPoint;
     let trackerReadings;
+    let trackerCounters;
     Storage.getCurrentTracker()
       .then((result) => {
         tracker = JSON.parse(result);
@@ -144,12 +147,17 @@ export default function DetailsScreen({route, navigation}) {
       })
       .then((readings) => {
         trackerReadings = readings;
+        return API.getCounters(tracker.id);
+      })
+      .then((counters) => {
+        trackerCounters = counters;
         details.push(constructModelObject(tracker, trackerModel, trackerState));
         details.push(constructLocationObject(trackerState, lastGPSPoint));
         trackerState.gsm
           ? details.push(constructGSMObject(trackerState))
           : null;
-        details.push(constructPowerObject(trackerState, readings));
+        details.push(constructPowerObject(trackerState, trackerReadings));
+        details.push(constructCounterObjects(counters));
         setItemList(details);
         setLoading(false);
       })

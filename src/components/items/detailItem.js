@@ -27,7 +27,7 @@ export default function DetailItem(props) {
         } else if (_.type === 'component') {
           return (
             <DetailContainer>
-              <IdentityColor color={_.status.color}>
+              <IdentityColor color={_.status.color} radius={_.status.radius}>
                 {_.status.number}
               </IdentityColor>
               <Text size={14}>{_.status.text}</Text>
@@ -39,7 +39,7 @@ export default function DetailItem(props) {
         <RowContainer>
           <Text> </Text>
           <Text size={14} time>
-            {props.time} ago
+            {props.time === 'Now' ? null : `${props.time} ago`}
           </Text>
         </RowContainer>
       ) : null}
@@ -89,7 +89,7 @@ const IdentityColor = styled.Text`
   font-family: 'Roboto-Regular';
   font-size: 12px;
   background-color: ${(props) => props.color || '#4788c7'};
-  border-radius: 15px;
+  border-radius: ${(props) => (props.radius ? 0 : 15)}px;
   border: 1px #ffffff;
   width: ${(props) => props.size || 18}px;
   height: ${(props) => props.size || 18}px;

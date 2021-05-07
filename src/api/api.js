@@ -197,6 +197,15 @@ const API = {
       },
     );
   },
+  getTasks: (tracker_id) => {
+    return API.apiCall('task/list/', [tracker_id]).then((result) => {
+      if (result.success === true) {
+        return result.list;
+      } else {
+        return result.status.description;
+      }
+    });
+  },
   listModel: (model_code) => {
     return API.apiCall('tracker/list_models/', {codes: [model_code]}).then(
       (result) => {

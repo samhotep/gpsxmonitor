@@ -55,7 +55,11 @@ const Utils = {
         }
         millis = millis % _.length;
       });
-      return destructuredTime;
+      if (destructuredTime === '') {
+        return 'Now';
+      } else {
+        return destructuredTime;
+      }
     } else {
       return '';
     }

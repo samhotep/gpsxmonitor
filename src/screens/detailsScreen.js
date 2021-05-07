@@ -127,6 +127,87 @@ export default function DetailsScreen({route, navigation}) {
     return constructObject('Inputs', inputs.update_time, serializedInputs);
   };
 
+  const constructTasksObject = (state, tasks) => {
+    let numberOfTasks = 0;
+    let taskDuration = 0;
+    let taskDelay = 0;
+    let assignedTasks = 0;
+    let doneTasks = 0;
+    let failedTasks = 0;
+    let delayedTasks = 0;
+    tasks.map((_, i) => {
+      if (_.status !== 'unassigned') {
+        numberOfTasks += 1;
+      }
+      if (_.status === 'assigned') {
+        assignedTasks += 1;
+        let diff = new Date(
+          Date.parse(_.to.replace(/-+/g, '/')) -
+            Date.parse(_.from.replace(/-+/g, '/')),
+        );
+        taskDuration += diff.getTime();
+      } else if (_.status === 'done') {
+        doneTasks += 1;
+      } else if (_.status === 'failed') {
+        failedTasks += 1;
+      } else if (_.status === 'delayed') {
+        delayedTasks += 1;
+        let diff = new Date(Date.now() - Date.parse(_.to.replace(/-+/g, '/')));
+        taskDelay += diff.getTime();
+      }
+    });
+    return constructObject('Tasks', state.last_update, [
+      {
+        type: 'component',
+        status: {
+          color: '#2196f3',
+          size: 18,
+          text: `Assigned: ${assignedTasks}`,
+          radius: true,
+        },
+      },
+      {
+        type: 'component',
+        status: {
+          color: '#4caf50',
+          size: 18,
+          text: `Completed: ${doneTasks}`,
+          radius: true,
+        },
+      },
+      {
+        type: 'component',
+        status: {
+          color: '#f44336',
+          size: 18,
+          text: `Failed: ${failedTasks}`,
+          radius: true,
+        },
+      },
+      {
+        type: 'component',
+        status: {
+          color: '#ffb300',
+          size: 18,
+          text: `Delayed: ${delayedTasks}`,
+          radius: true,
+        },
+      },
+      {
+        type: 'text',
+        text: `Total tasks: ${numberOfTasks}`,
+      },
+      {
+        type: 'text',
+        text: `Tasks duration time: ${Utils.getTime(taskDuration)}`,
+      },
+      {
+        type: 'text',
+        text: `Delayed time: ${Utils.getTime(taskDelay)}`,
+      },
+    ]);
+  };
+
   // For Odometer and engine hours
   const constructCounterObjects = (counters) => {};
 
@@ -150,6 +231,7 @@ export default function DetailsScreen({route, navigation}) {
     let trackerReadings;
     let trackerCounters;
     let trackerInputs;
+    let trackerTasks;
     Storage.getCurrentTracker()
       .then((result) => {
         tracker = JSON.parse(result);
@@ -181,13 +263,125 @@ export default function DetailsScreen({route, navigation}) {
       })
       .then((inputs) => {
         trackerInputs = inputs;
+        return API.getTasks(tracker.id);
+      })
+      .then((tasks) => {
+        trackerTasks = tasks;
+        let testTasks = [
+          {
+            arrival_date: null,
+            creation_date: '2020-04-07 13:19:01',
+            description: 'Visiting URA',
+            external_id: null,
+            from: '2020-04-07 00:00:00',
+            to: '2020-04-07 23:59:59',
+            id: 1,
+            label: 'Visiting URA',
+            location: {
+              address: 'Kampala, Central Region, Uganda, P.O. BOX 4365',
+              lat: 0.33036264,
+              lng: 32.63800979,
+              radius: 50,
+            },
+            max_delay: 0,
+            min_arrival_duration: 0,
+            min_stay_duration: 0,
+            origin: 'manual',
+            status: 'unassigned',
+            status_change_date: null,
+            stay_duration: 0,
+            tracker_id: null,
+            type: 'task',
+            user_id: 1,
+          },
+          {
+            arrival_date: null,
+            creation_date: '2020-04-17 08:40:00',
+            description: 'Delivery Parcels in Kampala',
+            external_id: '45156',
+            form: {
+              created: '2020-04-17 08:40:00',
+              description: '',
+              fields: [Array],
+              id: 7,
+              label: 'Delivery Note',
+              submit_in_zone: false,
+              submit_location: [Object],
+              submitted: null,
+              task_id: 10,
+              template_id: 5,
+              values: null,
+            },
+            from: '2020-04-17 00:00:00',
+            id: 10,
+            label: 'Delivering parcels',
+            location: {
+              address: 'Kampala Road, Kampala, Uganda',
+              lat: 0.3133012,
+              lng: 32.5809105,
+              radius: 150,
+            },
+            max_delay: 0,
+            min_arrival_duration: 0,
+            min_stay_duration: 0,
+            origin: 'manual',
+            status: 'unassigned',
+            status_change_date: null,
+            stay_duration: 0,
+            to: '2020-04-18 23:59:59',
+            tracker_id: null,
+            type: 'task',
+            user_id: 1,
+          },
+          {
+            arrival_date: null,
+            creation_date: '2020-04-17 08:53:33',
+            description: '',
+            external_id: null,
+            form: {
+              created: '2020-04-17 08:53:33',
+              description: '',
+              fields: [Array],
+              id: 8,
+              label: 'New form',
+              submit_in_zone: false,
+              submit_location: [Object],
+              submitted: null,
+              task_id: 11,
+              template_id: null,
+              values: null,
+            },
+            from: '2020-04-17 00:00:00',
+            id: 11,
+            label: 'Power Reconnection',
+            location: {
+              address: 'Kampala, Uganda',
+              lat: 0.3475964,
+              lng: 32.5825197,
+              radius: 150,
+            },
+            max_delay: 0,
+            min_arrival_duration: 0,
+            min_stay_duration: 0,
+            origin: 'manual',
+            status: 'unassigned',
+            status_change_date: null,
+            stay_duration: 0,
+            to: '2020-04-17 23:59:59',
+            tracker_id: null,
+            type: 'task',
+            user_id: 1,
+          },
+        ];
+
         details.push(constructModelObject(tracker, trackerModel, trackerState));
         details.push(constructLocationObject(trackerState, lastGPSPoint));
         trackerState.gsm
           ? details.push(constructGSMObject(trackerState))
           : null;
         details.push(constructPowerObject(trackerState, trackerReadings));
-        details.push(constructInputsObject(inputs));
+        details.push(constructInputsObject(trackerInputs));
+        details.push(constructTasksObject(trackerState, testTasks));
         // details.push(constructCounterObjects(counters));
         setItemList(details);
         setLoading(false);

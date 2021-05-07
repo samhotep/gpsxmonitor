@@ -27,7 +27,9 @@ export default function DetailItem(props) {
         } else if (_.type === 'component') {
           return (
             <DetailContainer>
-              <IdentityColor color={_.status.color} />
+              <IdentityColor color={_.status.color}>
+                {_.status.number}
+              </IdentityColor>
               <Text size={14}>{_.status.text}</Text>
             </DetailContainer>
           );
@@ -79,14 +81,18 @@ const ImageContainer = styled.Image`
 
 const Button = styled.TouchableOpacity``;
 
-const IdentityColor = styled.View`
-  align-items: flex-start;
+const IdentityColor = styled.Text`
+  align-items: center;
   justify-content: center;
+  text-align: center;
+  color: #ffffff;
+  font-family: 'Roboto-Regular';
+  font-size: 12px;
   background-color: ${(props) => props.color || '#4788c7'};
   border-radius: 15px;
   border: 1px #ffffff;
-  width: 18px;
-  height: 18px;
+  width: ${(props) => props.size || 18}px;
+  height: ${(props) => props.size || 18}px;
   margin: 0px 13px 0px 3px;
 `;
 

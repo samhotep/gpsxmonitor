@@ -35,47 +35,44 @@ export default function DetailsScreen({route, navigation}) {
   };
 
   const constructLocationObject = (state, gpsPoint) => {
-    let locationObject = {};
-    locationObject.details = [];
-    locationObject.title = 'Location';
-    locationObject.time = Utils.getTimeDifference(state.gps.updated);
-    locationObject.details.push({
-      type: 'image',
-      image: Utils.getSignalIcon(state.gps.signal_level),
-      text: `Signal: ${state.gps.signal_level} %`,
-    });
-    locationObject.details.push({
-      type: 'image',
-      image: require('../assets/location.png'),
-      text: `Latitude: ${gpsPoint.lat.toFixed(
-        5,
-      )} Longitude: ${gpsPoint.lng.toFixed(5)}`,
-    });
-    gpsPoint.speed > 0
-      ? locationObject.details.push({
-          type: 'image',
-          image: require('../assets/speed.png'),
-          text: `Speed: ${gpsPoint.speed} km/h`,
-        })
-      : locationObject.details.push({
-          type: 'image',
-          image: Utils.getMovementIcon(state.movement_status),
-          text: `Parked for ${Utils.getTimeDifference(
-            state.actual_track_update,
-            false,
-          )}`,
-        });
-    locationObject.details.push({
-      type: 'image',
-      image: require('../assets/compass.png'),
-      text: `Direction: ${Utils.getDirection(gpsPoint.heading)}`,
-    });
-    locationObject.details.push({
-      type: 'image',
-      image: require('../assets/address.png'),
-      text: `${gpsPoint.address}`,
-    });
-    return locationObject;
+    return constructObject('Location', state.gps.updated, [
+      {
+        type: 'image',
+        image: Utils.getSignalIcon(state.gps.signal_level),
+        text: `Signal: ${state.gps.signal_level} %`,
+      },
+      {
+        type: 'image',
+        image: require('../assets/location.png'),
+        text: `Latitude: ${gpsPoint.lat.toFixed(
+          5,
+        )} Longitude: ${gpsPoint.lng.toFixed(5)}`,
+      },
+      gpsPoint.speed > 0
+        ? {
+            type: 'image',
+            image: require('../assets/speed.png'),
+            text: `Speed: ${gpsPoint.speed} km/h`,
+          }
+        : {
+            type: 'image',
+            image: Utils.getMovementIcon(state.movement_status),
+            text: `Parked for ${Utils.getTimeDifference(
+              state.actual_track_update,
+              false,
+            )}`,
+          },
+      {
+        type: 'image',
+        image: require('../assets/compass.png'),
+        text: `Direction: ${Utils.getDirection(gpsPoint.heading)}`,
+      },
+      {
+        type: 'image',
+        image: require('../assets/address.png'),
+        text: `${gpsPoint.address}`,
+      },
+    ]);
   };
 
   const constructGSMObject = (state) => {

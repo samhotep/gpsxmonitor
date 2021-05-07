@@ -48,7 +48,7 @@ const Utils = {
       showSeconds ? ranges.push[{name: 'second', length: 1000}] : null;
       ranges.map((_, i) => {
         let total = Math.floor(millis / _.length);
-        if (total > 0 && total == 1) {
+        if (total > 0 && total === 1) {
           destructuredTime += `${total} ${_.name}. `;
         } else if (total > 1) {
           destructuredTime += `${total} ${_.name}s. `;
@@ -62,6 +62,25 @@ const Utils = {
       }
     } else {
       return '';
+    }
+  },
+  getTime: (millis) => {
+    let destructuredTime = '';
+    let ranges = [
+      {name: 'h', length: 3600000},
+      {name: 'min', length: 60000},
+    ];
+    ranges.map((_, i) => {
+      let total = Math.floor(millis / _.length);
+      if (total > 0) {
+        destructuredTime += `${total} ${_.name}. `;
+      }
+      millis = millis % _.length;
+    });
+    if (destructuredTime !== '') {
+      return destructuredTime;
+    } else {
+      return '0';
     }
   },
   getSignalIcon: (signal_level) => {

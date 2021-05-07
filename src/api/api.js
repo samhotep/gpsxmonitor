@@ -164,6 +164,17 @@ const API = {
       }
     });
   },
+  getAddress: (location) => {
+    return API.apiCall('geocoder/search_location/', {
+      location: location,
+    }).then((result) => {
+      if (result.success === true) {
+        return result.value;
+      } else {
+        return result.status.description;
+      }
+    });
+  },
   listModel: (model_code) => {
     return API.apiCall('tracker/list_models/', {codes: [model_code]}).then(
       (result) => {

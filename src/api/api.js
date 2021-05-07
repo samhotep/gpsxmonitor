@@ -175,6 +175,17 @@ const API = {
       }
     });
   },
+  getCounters: (tracker_id) => {
+    return API.apiCall('tracker/get_counters/', {tracker_id: tracker_id}).then(
+      (result) => {
+        if (result.success === true) {
+          return result.list;
+        } else {
+          return result.status.description;
+        }
+      },
+    );
+  },
   listModel: (model_code) => {
     return API.apiCall('tracker/list_models/', {codes: [model_code]}).then(
       (result) => {

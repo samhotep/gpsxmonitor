@@ -78,17 +78,22 @@ export default function DetailsScreen({route, navigation}) {
     return locationObject;
   };
 
-  const constructPowerObject = (state) => {
-    let locationObject = {};
-    locationObject.details = [];
-    locationObject.title = 'PowerSupply';
-    locationObject.time = Utils.getTimeDifference(state.gps.updated);
-    locationObject.details.push({
+  const constructPowerObject = (state, readings) => {
+    let powerObject = {};
+    powerObject.details = [];
+    powerObject.title = 'Power Supply';
+    powerObject.time = Utils.getTimeDifference(readings.update_time);
+    powerObject.details.push({
       type: 'image',
-      image: Utils.getSignalIcon(state.gps.signal_level),
-      text: `Signal: ${state.gps.signal_level} %`,
+      image: Utils.getBatteryIcon(state.battery_level),
+      text: `Battery level: ${state.battery_level} %`,
     });
-    return locationObject;
+    powerObject.details.push({
+      type: 'image',
+      image: require('../assets/car_battery.png'),
+      text: `Board voltage: ${readings.inputs[0].value} V`,
+    });
+    return powerObject;
   };
 
   useEffect(() => {
@@ -97,7 +102,7 @@ export default function DetailsScreen({route, navigation}) {
     let trackerState;
     let trackerModel;
     let lastGPSPoint;
-    let readings;
+    let trackerReadings;
     Storage.getCurrentTracker()
       .then((result) => {
         tracker = JSON.parse(result);
@@ -119,10 +124,12 @@ export default function DetailsScreen({route, navigation}) {
         lastGPSPoint = {...lastGPSPoint, address: address};
         return API.getReadings(tracker.id);
       })
+      // TODO Conditional render GSM
       .then((readings) => {
-        readings = readings;
+        trackerReadings = readings;
         details.push(constructModelObject(tracker, trackerModel, trackerState));
         details.push(constructLocationObject(trackerState, lastGPSPoint));
+        details.push(constructPowerObject(trackerState, readings));
         setItemList(details);
         setLoading(false);
       })

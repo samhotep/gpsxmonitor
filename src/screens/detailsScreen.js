@@ -79,40 +79,33 @@ export default function DetailsScreen({route, navigation}) {
   };
 
   const constructGSMObject = (state) => {
-    let gsmObject = {};
-    gsmObject.details = [];
-    gsmObject.title = 'GSM';
-    gsmObject.time = Utils.getTimeDifference(state.gsm.updated);
-    gsmObject.details.push({
-      type: 'image',
-      image: Utils.getSignalIcon(state.gsm.signal_level),
-      text: `Signal: ${state.gsm.signal_level} %`,
-    });
-    gsmObject.details.push({
-      type: 'image',
-      image: require('../assets/antenna.png'),
-      text: `Operator: ${state.gsm.network_name}`,
-    });
-    return gsmObject;
+    return constructObject('GSM', state.gsm.updated, [
+      {
+        type: 'image',
+        image: Utils.getSignalIcon(state.gsm.signal_level),
+        text: `Signal: ${state.gsm.signal_level} %`,
+      },
+      {
+        type: 'image',
+        image: require('../assets/antenna.png'),
+        text: `Operator: ${state.gsm.network_name}`,
+      },
+    ]);
   };
 
   const constructPowerObject = (state, readings) => {
-    return constructObject(
-      'Power Supply',
-      Utils.getTimeDifference(readings.update_time),
-      [
-        {
-          type: 'image',
-          image: Utils.getBatteryIcon(state.battery_level),
-          text: `Battery level: ${state.battery_level} %`,
-        },
-        {
-          type: 'image',
-          image: require('../assets/car_battery.png'),
-          text: `Board voltage: ${readings.inputs[0].value} V`,
-        },
-      ],
-    );
+    return constructObject('Power Supply', readings.update_time, [
+      {
+        type: 'image',
+        image: Utils.getBatteryIcon(state.battery_level),
+        text: `Battery level: ${state.battery_level} %`,
+      },
+      {
+        type: 'image',
+        image: require('../assets/car_battery.png'),
+        text: `Board voltage: ${readings.inputs[0].value} V`,
+      },
+    ]);
   };
 
   const constructInputsObject = (inputs) => {
@@ -124,7 +117,7 @@ export default function DetailsScreen({route, navigation}) {
     let trackerObject = {};
     trackerObject.details = [];
     trackerObject.title = title;
-    trackerObject.time = time;
+    trackerObject.time = Utils.getTimeDifference(time);
     details.map((_, i) => {
       trackerObject.details.push(_);
     });

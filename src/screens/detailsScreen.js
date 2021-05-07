@@ -14,24 +14,22 @@ export default function DetailsScreen({route, navigation}) {
   const [itemList, setItemList] = useState([]);
 
   const constructModelObject = (tracker, model, state) => {
-    let modelObject = {};
-    modelObject.details = [];
-    modelObject.title = tracker.label;
-    modelObject.details.push({
-      type: 'image',
-      image: require('../assets/chip.png'),
-      text: `Model: ${model.name}`,
-    });
-    modelObject.details.push({
-      type: 'image',
-      image: require('../assets/hash.png'),
-      text: `ID: ${tracker.source.device_id.replace(/\d{4}(?=.)/g, '$& ')}`,
-    });
-    modelObject.details.push({
-      type: 'component',
-      status: lists.statusColors[state.connection_status],
-    });
-    return modelObject;
+    return constructObject(tracker.label, null, [
+      {
+        type: 'image',
+        image: require('../assets/chip.png'),
+        text: `Model: ${model.name}`,
+      },
+      {
+        type: 'image',
+        image: require('../assets/hash.png'),
+        text: `ID: ${tracker.source.device_id.replace(/\d{4}(?=.)/g, '$& ')}`,
+      },
+      {
+        type: 'component',
+        status: lists.statusColors[state.connection_status],
+      },
+    ]);
   };
 
   const constructLocationObject = (state, gpsPoint) => {

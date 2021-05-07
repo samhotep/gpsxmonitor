@@ -78,6 +78,24 @@ export default function DetailsScreen({route, navigation}) {
     return locationObject;
   };
 
+  const constructGSMObject = (state) => {
+    let gsmObject = {};
+    gsmObject.details = [];
+    gsmObject.title = 'GSM';
+    gsmObject.time = Utils.getTimeDifference(state.gsm.updated);
+    gsmObject.details.push({
+      type: 'image',
+      image: Utils.getSignalIcon(state.gsm.signal_level),
+      text: `Signal: ${state.gsm.signal_level} %`,
+    });
+    gsmObject.details.push({
+      type: 'image',
+      image: require('../assets/antenna.png'),
+      text: `Operator: ${state.gsm.network_name}`,
+    });
+    return gsmObject;
+  };
+
   const constructPowerObject = (state, readings) => {
     let powerObject = {};
     powerObject.details = [];
@@ -129,6 +147,9 @@ export default function DetailsScreen({route, navigation}) {
         trackerReadings = readings;
         details.push(constructModelObject(tracker, trackerModel, trackerState));
         details.push(constructLocationObject(trackerState, lastGPSPoint));
+        trackerState.gsm
+          ? details.push(constructGSMObject(trackerState))
+          : null;
         details.push(constructPowerObject(trackerState, readings));
         setItemList(details);
         setLoading(false);

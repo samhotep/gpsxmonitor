@@ -33,6 +33,12 @@ export default function DetailItem(props) {
               <Text size={14}>{_.status.text}</Text>
             </DetailContainer>
           );
+        } else if (_.type === 'text') {
+          return (
+            <DetailContainer>
+              <Text size={14}>{_.text}</Text>
+            </DetailContainer>
+          );
         }
       })}
       {props.time ? (

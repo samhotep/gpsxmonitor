@@ -37,7 +37,7 @@ export default function DetailItem(props) {
         <RowContainer>
           <Text> </Text>
           <Text size={14} time>
-            {props.time}
+            {props.time} ago
           </Text>
         </RowContainer>
       ) : null}

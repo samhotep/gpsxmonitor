@@ -186,6 +186,17 @@ const API = {
       },
     );
   },
+  getInputs: (tracker_id) => {
+    return API.apiCall('tracker/get_inputs/', {tracker_id: tracker_id}).then(
+      (result) => {
+        if (result.success === true) {
+          return result;
+        } else {
+          return result.status.description;
+        }
+      },
+    );
+  },
   listModel: (model_code) => {
     return API.apiCall('tracker/list_models/', {codes: [model_code]}).then(
       (result) => {

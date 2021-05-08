@@ -124,7 +124,6 @@ export default function DetailsScreen({route, navigation}) {
       }
     });
     matchedInputs.map((_, i) => {
-      console.log(i);
       if (_ !== null) {
         serializedInputs.push(_);
       } else {
@@ -142,6 +141,24 @@ export default function DetailsScreen({route, navigation}) {
       }
     });
     return constructObject('Inputs', inputs.update_time, serializedInputs);
+  };
+
+  const constructOutputsObject = (state, tracker_id) => {
+    let serializedOutputs = [];
+    state.outputs.map((_, i) => {
+      serializedOutputs.push({
+        type: 'switch',
+        status: {
+          color: _ ? '#66c011' : '#626160',
+          value: _,
+          size: 18,
+          text: `Output #${i + 1}: ${_ ? 'active' : 'inactive'}`,
+          number: i + 1,
+          tracker_id: tracker_id,
+        },
+      });
+    });
+    return constructObject('Outputs', state.last_update, serializedOutputs);
   };
 
   // TODO Account
@@ -285,115 +302,6 @@ export default function DetailsScreen({route, navigation}) {
       })
       .then((tasks) => {
         trackerTasks = tasks;
-        let testTasks = [
-          {
-            arrival_date: null,
-            creation_date: '2020-04-07 13:19:01',
-            description: 'Visiting URA',
-            external_id: null,
-            from: '2020-04-07 00:00:00',
-            to: '2020-04-07 23:59:59',
-            id: 1,
-            label: 'Visiting URA',
-            location: {
-              address: 'Kampala, Central Region, Uganda, P.O. BOX 4365',
-              lat: 0.33036264,
-              lng: 32.63800979,
-              radius: 50,
-            },
-            max_delay: 0,
-            min_arrival_duration: 0,
-            min_stay_duration: 0,
-            origin: 'manual',
-            status: 'unassigned',
-            status_change_date: null,
-            stay_duration: 0,
-            tracker_id: null,
-            type: 'task',
-            user_id: 1,
-          },
-          {
-            arrival_date: null,
-            creation_date: '2020-04-17 08:40:00',
-            description: 'Delivery Parcels in Kampala',
-            external_id: '45156',
-            form: {
-              created: '2020-04-17 08:40:00',
-              description: '',
-              fields: [Array],
-              id: 7,
-              label: 'Delivery Note',
-              submit_in_zone: false,
-              submit_location: [Object],
-              submitted: null,
-              task_id: 10,
-              template_id: 5,
-              values: null,
-            },
-            from: '2020-04-17 00:00:00',
-            id: 10,
-            label: 'Delivering parcels',
-            location: {
-              address: 'Kampala Road, Kampala, Uganda',
-              lat: 0.3133012,
-              lng: 32.5809105,
-              radius: 150,
-            },
-            max_delay: 0,
-            min_arrival_duration: 0,
-            min_stay_duration: 0,
-            origin: 'manual',
-            status: 'unassigned',
-            status_change_date: null,
-            stay_duration: 0,
-            to: '2020-04-18 23:59:59',
-            tracker_id: null,
-            type: 'task',
-            user_id: 1,
-          },
-          {
-            arrival_date: null,
-            creation_date: '2020-04-17 08:53:33',
-            description: '',
-            external_id: null,
-            form: {
-              created: '2020-04-17 08:53:33',
-              description: '',
-              fields: [Array],
-              id: 8,
-              label: 'New form',
-              submit_in_zone: false,
-              submit_location: [Object],
-              submitted: null,
-              task_id: 11,
-              template_id: null,
-              values: null,
-            },
-            from: '2020-04-17 00:00:00',
-            id: 11,
-            label: 'Power Reconnection',
-            location: {
-              address: 'Kampala, Uganda',
-              lat: 0.3475964,
-              lng: 32.5825197,
-              radius: 150,
-            },
-            max_delay: 0,
-            min_arrival_duration: 0,
-            min_stay_duration: 0,
-            origin: 'manual',
-            status: 'unassigned',
-            status_change_date: null,
-            stay_duration: 0,
-            to: '2020-04-17 23:59:59',
-            tracker_id: null,
-            type: 'task',
-            user_id: 1,
-          },
-        ];
-        API.getDiagnostics(tracker.id).then((diags) => {
-          console.log(diags);
-        });
         details.push(constructModelObject(tracker, trackerModel, trackerState));
         details.push(constructLocationObject(trackerState, lastGPSPoint));
         trackerState.gsm
@@ -401,7 +309,8 @@ export default function DetailsScreen({route, navigation}) {
           : null;
         details.push(constructPowerObject(trackerState, trackerReadings));
         details.push(constructInputsObject(trackerInputs));
-        details.push(constructTasksObject(trackerState, testTasks));
+        details.push(constructOutputsObject(trackerState, tracker.id));
+        details.push(constructTasksObject(trackerState, tasks));
         // details.push(constructCounterObjects(counters));
         setItemList(details);
         setLoading(false);
@@ -459,12 +368,4 @@ const StatusContainer = styled.ScrollView`
   flex-direction: column;
   height: 100%;
   width: 100%;
-`;
-
-const InputNumber = styled.Text`
-  justify-content: center;
-  align-items: center;
-  font-size: 18px;
-  font-family: 'Roboto-Regular';
-  color: ${(props) => props.color || '#f2994a'};
 `;

@@ -206,6 +206,19 @@ const API = {
       }
     });
   },
+  setOutput: (tracker_id, output, enable) => {
+    return API.apiCall('tracker/output/set/', {
+      tracker_id: tracker_id,
+      output: output,
+      enable: enable,
+    }).then((result) => {
+      if (result.success === true) {
+        return result;
+      } else {
+        return result.status.description;
+      }
+    });
+  },
   listModel: (model_code) => {
     return API.apiCall('tracker/list_models/', {codes: [model_code]}).then(
       (result) => {

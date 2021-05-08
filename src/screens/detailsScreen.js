@@ -162,7 +162,10 @@ export default function DetailsScreen({route, navigation}) {
   };
 
   // TODO Account
-  const constructTasksObject = (state, tasks) => {
+  const constructTasksObject = (state, tasks, user) => {
+    let username = user.success
+      ? `${user.value.first_name} ${user.value.last_name}`
+      : 'Anonymous';
     let numberOfTasks = 0;
     let taskDuration = 0;
     let taskDelay = 0;
@@ -192,6 +195,11 @@ export default function DetailsScreen({route, navigation}) {
       }
     });
     return constructObject('Tasks', state.last_update, [
+      {
+        type: 'image',
+        image: require('../assets/user.png'),
+        text: username,
+      },
       {
         type: 'component',
         status: {
@@ -312,6 +320,9 @@ export default function DetailsScreen({route, navigation}) {
       })
       .then((tasks) => {
         trackerTasks = tasks;
+        return API.getUser(tasks[0].user_id);
+      })
+      .then((user) => {
         details.push(constructModelObject(tracker, trackerModel, trackerState));
         details.push(constructLocationObject(trackerState, lastGPSPoint));
         trackerState.gsm
@@ -320,7 +331,7 @@ export default function DetailsScreen({route, navigation}) {
         details.push(constructPowerObject(trackerState, trackerReadings));
         details.push(constructInputsObject(trackerInputs));
         details.push(constructOutputsObject(trackerState, tracker.id));
-        details.push(constructTasksObject(trackerState, tasks));
+        details.push(constructTasksObject(trackerState, trackerTasks, user));
         // details.push(constructCounterObjects(counters));
         setItemList(details);
         setLoading(false);

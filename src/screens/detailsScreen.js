@@ -246,11 +246,13 @@ export default function DetailsScreen({route, navigation}) {
   // For Odometer and engine hours
   const constructCounterObjects = (counters) => {};
 
-  const constructObject = (title, time, details) => {
+  const constructObject = (title, time, details, millis = false) => {
     let trackerObject = {};
     trackerObject.details = [];
     trackerObject.title = title;
-    trackerObject.time = Utils.getTimeDifference(time);
+    trackerObject.time = millis
+      ? Utils.getTime(time)
+      : Utils.getTimeDifference(time);
     details.map((_, i) => {
       trackerObject.details.push(_);
     });

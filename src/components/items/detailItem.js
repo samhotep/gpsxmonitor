@@ -4,6 +4,13 @@ import styled from 'styled-components';
 import API from '../../api/api';
 
 export default function DetailItem(props) {
+  const [updateTime, setUpdateTime] = useState('');
+
+  useEffect(() => {
+    let temp = props.time ? `${props.time} ago` : 'Now';
+    setUpdateTime(temp);
+  }, []);
+
   return (
     <Container>
       <RowContainer>
@@ -54,7 +61,7 @@ export default function DetailItem(props) {
         <RowContainer>
           <Text> </Text>
           <Text size={14} time>
-            {props.time === 'Now' ? null : `${props.time} ago`}
+            {updateTime}
           </Text>
         </RowContainer>
       ) : null}

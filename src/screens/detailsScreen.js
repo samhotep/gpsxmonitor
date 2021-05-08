@@ -258,8 +258,23 @@ export default function DetailsScreen({route, navigation}) {
     ]);
   };
 
-  // For Odometer and engine hours
-  const constructCounterObjects = (counters) => {};
+  const constructCounterObjects = (state, counter) => {
+    return constructObject(
+      lists.counterTypes[counter.type].title,
+      counter.update_time,
+      [
+        {
+          type: 'counter',
+          value: counter.value,
+          states: lists.counterTypes[counter.type],
+        },
+        {
+          type: 'text',
+          text: lists.counterTypes[counter.type].text,
+        },
+      ],
+    );
+  };
 
   const constructObject = (title, time, details, millis = false) => {
     let trackerObject = {};
@@ -331,7 +346,9 @@ export default function DetailsScreen({route, navigation}) {
         details.push(constructInputsObject(trackerInputs));
         details.push(constructOutputsObject(trackerState, tracker.id));
         details.push(constructTasksObject(trackerState, trackerTasks, user));
-        // details.push(constructCounterObjects(counters));
+        trackerCounters.map((_, i) => {
+          details.push(constructCounterObjects(trackerState, _));
+        });
         setItemList(details);
         setLoading(false);
       })

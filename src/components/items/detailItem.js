@@ -1,5 +1,7 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
+import {Alert} from 'react-native';
 import styled from 'styled-components';
+import API from '../../api/api';
 
 export default function DetailItem(props) {
   return (
@@ -39,6 +41,13 @@ export default function DetailItem(props) {
               <Text size={14}>{_.text}</Text>
             </DetailContainer>
           );
+        } else if (_.type === 'switch') {
+          return (
+            <DetailContainer>
+              <OutputSwitch status={_.status} />
+              <Text size={14}>{_.status.text}</Text>
+            </DetailContainer>
+          );
         }
       })}
       {props.time ? (
@@ -50,6 +59,52 @@ export default function DetailItem(props) {
         </RowContainer>
       ) : null}
     </Container>
+  );
+}
+
+function OutputSwitch(props) {
+  const [switchValue, setSwitchValue] = useState();
+
+  const showAlert = (value) => {
+    Alert.alert(
+      'Command confirmation',
+      'Are you sure you want to send control command to the device?',
+      [
+        {
+          text: 'CANCEL',
+          onPress: () => console.log('Logout Cancelled'),
+          style: 'cancel',
+        },
+        {
+          text: 'SEND',
+          onPress: () => {
+            API.setOutput(props.status.tracker_id, props.status.number, value)
+              .then((result) => {
+                setSwitchValue(value);
+                console.log(result);
+              })
+              .catch((error) => {
+                console.log(console.log(error));
+              });
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
+  useEffect(() => {
+    setSwitchValue(props.status.value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <ItemSwitch
+      value={switchValue}
+      onValueChange={(value) => {
+        showAlert(value);
+      }}
+    />
   );
 }
 
@@ -109,3 +164,5 @@ const Text = styled.Text`
   flex-wrap: wrap;
   flex: ${(props) => (props.time ? 'none' : 1)};
 `;
+
+const ItemSwitch = styled.Switch``;

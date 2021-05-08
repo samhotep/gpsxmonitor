@@ -40,6 +40,23 @@ const lists = {
       true: require('../../assets/lock_active.png'),
     },
   },
+  counterTypes: {
+    odometer: {
+      title: 'Odometer',
+      text: 'GPS based estimation for odometer',
+      unit: 'km',
+    },
+    engine_hours: {
+      title: 'Engine Hours',
+      text: 'Calculations based on ignition sensor readings',
+      unit: 'h',
+    },
+    fuel_consumed: {
+      title: 'Fuel Consumed',
+      text: 'Calculations based on fuel sensor readings',
+      unit: 'litres',
+    },
+  },
 };
 
 export default lists;

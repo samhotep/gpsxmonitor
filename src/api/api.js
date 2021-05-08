@@ -230,6 +230,11 @@ const API = {
       },
     );
   },
+  getUser: (id) => {
+    return API.apiCall('panel/user/read/', {user_id: id}).then((result) => {
+      return result;
+    });
+  },
   // Billing API
   billget: (endpoint) => {
     return Storage.getBillingToken().then((result) => {

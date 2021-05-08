@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {Alert} from 'react-native';
+import CounterItem from '../items/counterItem';
 import styled from 'styled-components';
 import API from '../../api/api';
+import lists from '../lists/lists';
 
 export default function DetailItem(props) {
   const [updateTime, setUpdateTime] = useState('');
@@ -9,6 +11,7 @@ export default function DetailItem(props) {
   useEffect(() => {
     let temp = props.time ? `${props.time} ago` : 'Now';
     setUpdateTime(temp);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -53,6 +56,13 @@ export default function DetailItem(props) {
             <DetailContainer>
               <OutputSwitch status={_.status} />
               <Text size={14}>{_.status.text}</Text>
+            </DetailContainer>
+          );
+        } else if (_.type === 'counter') {
+          return (
+            <DetailContainer>
+              <CounterItem value={_.value} />
+              <Text size={14}> {_.states.unit}</Text>
             </DetailContainer>
           );
         }

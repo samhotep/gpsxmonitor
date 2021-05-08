@@ -234,11 +234,19 @@ export default function DetailsScreen({route, navigation}) {
       },
       {
         type: 'text',
-        text: `Tasks duration time: ${Utils.getTime(taskDuration)}`,
+        text: `Tasks duration time: ${
+          Utils.getTime(taskDuration) === '0'
+            ? '0 h 0 min'
+            : Utils.getTime(taskDuration)
+        }`,
       },
       {
         type: 'text',
-        text: `Delayed time: ${Utils.getTime(taskDelay)}`,
+        text: `Delayed time: ${
+          Utils.getTime(taskDelay) === '0'
+            ? '0 h 0 min'
+            : Utils.getTime(taskDelay)
+        }`,
       },
     ]);
   };

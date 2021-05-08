@@ -161,7 +161,6 @@ export default function DetailsScreen({route, navigation}) {
     return constructObject('Outputs', state.last_update, serializedOutputs);
   };
 
-  // TODO Account
   const constructTasksObject = (state, tasks, user) => {
     let username = user.success
       ? `${user.value.first_name} ${user.value.last_name}`

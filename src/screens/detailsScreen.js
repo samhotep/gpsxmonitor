@@ -105,28 +105,46 @@ export default function DetailsScreen({route, navigation}) {
 
   const constructInputsObject = (inputs) => {
     let serializedInputs = [];
-    inputs.states.map((_, i) => {
-      _.name === 'Custom'
-        ? serializedInputs.push({
-            type: 'component',
-            status: {
-              color: '#626160',
-              size: 18,
-              text: `Input #${_.input_number}: ${
-                _.status ? 'active' : 'inactive'
-              }`,
-              number: 2,
-            },
-          })
-        : serializedInputs.push({
+    let matchedInputs = [];
+    inputs.inputs.map((_, i) => {
+      for (var j = 0; j < inputs.states.length; j++) {
+        if (inputs.states[j].input_number === i + 1) {
+          matchedInputs[i] = {
             type: 'image',
-            image: require('../assets/flash.png'),
-            text: `${_.name}: ${_.status ? 'active' : 'inactive'}`,
-          });
+            image:
+              lists.inputTypes[inputs.states[j].type][inputs.states[j].status],
+            text: `${inputs.states[j].name}: ${
+              inputs.states[j].status ? 'active' : 'inactive'
+            }`,
+          };
+          break;
+        } else {
+          matchedInputs[i] = null;
+        }
+      }
+    });
+    matchedInputs.map((_, i) => {
+      console.log(i);
+      if (_ !== null) {
+        serializedInputs.push(_);
+      } else {
+        serializedInputs.push({
+          type: 'component',
+          status: {
+            color: inputs.inputs[i] ? '#66c011' : '#626160',
+            size: 18,
+            text: `Input #${i + 1}: ${
+              inputs.inputs[i] ? 'active' : 'inactive'
+            }`,
+            number: i + 1,
+          },
+        });
+      }
     });
     return constructObject('Inputs', inputs.update_time, serializedInputs);
   };
 
+  // TODO Account
   const constructTasksObject = (state, tasks) => {
     let numberOfTasks = 0;
     let taskDuration = 0;
@@ -373,7 +391,9 @@ export default function DetailsScreen({route, navigation}) {
             user_id: 1,
           },
         ];
-
+        API.getDiagnostics(tracker.id).then((diags) => {
+          console.log(diags);
+        });
         details.push(constructModelObject(tracker, trackerModel, trackerState));
         details.push(constructLocationObject(trackerState, lastGPSPoint));
         trackerState.gsm

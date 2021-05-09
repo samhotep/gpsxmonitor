@@ -15,16 +15,16 @@ export default function GenericButton(props) {
 const Container = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  padding: 12px;
-  width: ${(props) => props.width || 260}px;
+  border-radius: 2px;
+  padding: 10px;
+  width: ${(props) => props.width || 240}px;
   margin: 10px;
-  background-color: ${(props) => props.bgcolor || '#333333'};
+  background-color: ${(props) => props.bgcolor || '#1e96dc'};
   elevation: 5;
 `;
 
 const Title = styled.Text`
-  font-size: 18px;
+  font-size: 14px;
   font-family: 'Roboto-Regular';
-  color: ${(props) => props.color || '#f2994a'};
+  color: ${(props) => props.color || '#ffffff'};
 `;

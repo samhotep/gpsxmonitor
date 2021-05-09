@@ -7,6 +7,8 @@ import HomeStack from '../navigation/homeStack';
 import HeaderIcon from '../components/headers/headerIcon';
 import Separator from '../components/separators/separator';
 import styled from 'styled-components';
+import RadioInput from '../components/inputs/radioInput';
+import GenericButton from '../components/buttons/genericButton';
 
 const Drawer = createDrawerNavigator();
 
@@ -46,6 +48,14 @@ export default function ProductStack({route, navigation}) {
 
 function CustomDrawerContent() {
   const [detail, setDetail] = useState('');
+  let radioItems = [
+    'Today',
+    'Yesterday',
+    'Week',
+    'Current month',
+    'Last month',
+    'Custom period',
+  ];
   useEffect(() => {
     // Listener for location update events in dashboard
     const eventListener = eventEmitter.addListener(
@@ -85,6 +95,18 @@ function CustomDrawerContent() {
         </HeaderContainer>
       ) : null}
       <Separator />
+      {radioItems.map((_, i) => {
+        return (
+          <HeaderContainer>
+            <RadioContainer>
+              <RadioInput color="#1e96dc" selected={true} />
+            </RadioContainer>
+            <Title size={14}>{_}</Title>
+          </HeaderContainer>
+        );
+      })}
+      <GenericButton title="SHOW" />
+      <Separator />
     </Container>
   );
 }
@@ -110,9 +132,18 @@ const ImageContainer = styled.Image`
   margin: ${(props) => props.margin || 10}px;
 `;
 
+const RadioContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  width: ${(props) => props.size || 28}px;
+  height: ${(props) => props.size || 28}px;
+  margin: ${(props) => props.margin || 10}px;
+`;
+
 const Title = styled.Text`
   flex: 5;
   font-family: 'Roboto-Regular';
-  font-size: 18px;
+  font-size: ${(props) => props.size || 18}px;
   color: #202020;
 `;

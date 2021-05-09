@@ -45,14 +45,13 @@ export default function ProductStack({route, navigation}) {
 }
 
 function CustomDrawerContent() {
-  const [type, setType] = useState('');
+  const [detail, setDetail] = useState('');
   useEffect(() => {
     // Listener for location update events in dashboard
     const eventListener = eventEmitter.addListener(
       'event.homeEvent',
       (event) => {
-        console.log(event.screen);
-        setType(event.screen);
+        setDetail(event);
       },
     );
     return () => {
@@ -61,15 +60,30 @@ function CustomDrawerContent() {
   }, []);
   return (
     <Container>
-      {type === 'Notifications' ? null : (
+      {detail.screen === 'Events' ? (
         <HeaderContainer>
           <ImageContainer
             resizeMode="contain"
             source={require('../assets/map_alert_grey.png')}
           />
-          <Title>{type} for the period:</Title>
+          <Title>{detail.screen} for the period:</Title>
         </HeaderContainer>
-      )}
+      ) : null}
+      {detail.screen === 'Tracks' ? (
+        <HeaderContainer>
+          <ImageContainer
+            resizeMode="contain"
+            source={require('../assets/route_grey.png')}
+          />
+          <Title>{detail.screen} for the period:</Title>
+        </HeaderContainer>
+      ) : null}
+      {detail.screen === 'Notifications' ? (
+        <HeaderContainer>
+          <ImageContainer resizeMode="contain" source={detail.icon} />
+          <Title>{detail.screen} for the period:</Title>
+        </HeaderContainer>
+      ) : null}
       <Separator />
     </Container>
   );

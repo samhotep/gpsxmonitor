@@ -94,19 +94,23 @@ function CustomDrawerContent() {
           <Title>{detail.screen} for the period:</Title>
         </HeaderContainer>
       ) : null}
-      <Separator />
-      {radioItems.map((_, i) => {
-        return (
-          <HeaderContainer>
-            <RadioContainer>
-              <RadioInput color="#1e96dc" selected={true} />
-            </RadioContainer>
-            <Title size={14}>{_}</Title>
-          </HeaderContainer>
-        );
-      })}
-      <GenericButton title="SHOW" />
-      <Separator />
+      {detail.screen !== 'Notifications' ? (
+        <>
+          <Separator />
+          {radioItems.map((_, i) => {
+            return (
+              <HeaderContainer>
+                <RadioContainer>
+                  <RadioInput color="#1e96dc" selected={true} />
+                </RadioContainer>
+                <Title size={14}>{_}</Title>
+              </HeaderContainer>
+            );
+          })}
+          <GenericButton title="SHOW" />
+          <Separator />
+        </>
+      ) : null}
     </Container>
   );
 }

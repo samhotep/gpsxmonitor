@@ -13,6 +13,13 @@ const Stack = createStackNavigator();
 
 export default function HomeStack({route, navigation}) {
   //   const navigation = useNavigation();
+
+  const updateDrawerScreen = (screen) => {
+    eventEmitter.emit('event.homeEvent', {
+      screen: screen,
+    });
+  };
+
   return (
     <Stack.Navigator initialRouteName="HomeScreen" headerMode="screen">
       <Stack.Screen
@@ -24,7 +31,8 @@ export default function HomeStack({route, navigation}) {
               title="Map"
               {...props}
               navigation={navigation}
-              onPress={() => {
+              onPress={(event, screen) => {
+                updateDrawerScreen(screen);
                 navigation.toggleDrawer();
               }}
             />
@@ -104,13 +112,17 @@ function LogoTitle(props) {
               size={25}
               margin={12}
               source={require('../assets/map_alert.png')}
-              onPress={props.onPress}
+              onPress={(event) => {
+                props.onPress(event, 'Events');
+              }}
             />
             <HeaderIcon
               size={25}
               margin={12}
               source={require('../assets/route.png')}
-              onPress={props.onPress}
+              onPress={(event) => {
+                props.onPress(event, 'Tracks');
+              }}
             />
           </>
         ) : null}
@@ -118,7 +130,9 @@ function LogoTitle(props) {
           size={25}
           margin={8}
           source={require('../assets/mail_warn.png')}
-          onPress={props.onPress}
+          onPress={(event) => {
+            props.onPress(event, 'Notifications');
+          }}
         />
       </IconsContainer>
     </Container>

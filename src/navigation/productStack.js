@@ -56,6 +56,20 @@ function CustomDrawerContent() {
     'Last month',
     'Custom period',
   ];
+  const [radioSelection, setRadioSelection] = useState(
+    Array(radioItems.length).fill(false),
+  );
+
+  const updateRadioButtons = (index) => {
+    let newRadio = Array(radioItems.length).fill(false);
+    newRadio[index] = true;
+    setRadioSelection(newRadio);
+  };
+
+  useEffect(() => {
+    updateRadioButtons(0);
+  }, []);
+
   useEffect(() => {
     // Listener for location update events in dashboard
     const eventListener = eventEmitter.addListener(
@@ -101,7 +115,13 @@ function CustomDrawerContent() {
             return (
               <HeaderContainer>
                 <RadioContainer>
-                  <RadioInput color="#1e96dc" selected={true} />
+                  <RadioInput
+                    color="#1e96dc"
+                    selected={radioSelection[i]}
+                    onPress={() => {
+                      updateRadioButtons(i);
+                    }}
+                  />
                 </RadioContainer>
                 <Title size={14}>{_}</Title>
               </HeaderContainer>

@@ -294,7 +294,7 @@ function CustomDrawerContent({navigation}) {
               onPress={_.onPress}>
               <>
                 <DrawerIcon source={_.source} size={24} margin={10} />
-                <DrawerLabel bold="bold">{_.name}</DrawerLabel>
+                <DrawerLabel>{_.name}</DrawerLabel>
               </>
             </DrawerItemContainer>
           );
@@ -318,7 +318,7 @@ const DrawerLabel = styled.Text`
   font-weight: ${(props) => (props.bold ? props.bold : 'normal')};
   font-size: 14px;
   text-align: left;
-  color: ${(props) => props.color || '#707070'};
+  color: ${(props) => props.color || '#202020'};
   text-decoration: ${(props) => props.underline || 'none'};
   margin: 5px;
 `;

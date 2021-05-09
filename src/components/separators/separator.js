@@ -7,7 +7,7 @@ const Separator = styled.TouchableOpacity`
   height: 1px;
   width: 100%;
   margin: 5px;
-  background-color: #808080;
+  background-color: #d3d3d3;
 `;
 
 export default Separator;

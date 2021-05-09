@@ -1,10 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NativeEventEmitter, NativeModules} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 import SettingsScreen from '../screens/settingsScreen';
 import HomeStack from '../navigation/homeStack';
 import HeaderIcon from '../components/headers/headerIcon';
+import Separator from '../components/separators/separator';
 import styled from 'styled-components';
 
 const Drawer = createDrawerNavigator();
@@ -44,12 +45,14 @@ export default function ProductStack({route, navigation}) {
 }
 
 function CustomDrawerContent() {
+  const [type, setType] = useState('');
   useEffect(() => {
     // Listener for location update events in dashboard
     const eventListener = eventEmitter.addListener(
       'event.homeEvent',
-      (screen) => {
-        console.log(screen);
+      (event) => {
+        console.log(event.screen);
+        setType(event.screen);
       },
     );
     return () => {
@@ -58,7 +61,16 @@ function CustomDrawerContent() {
   }, []);
   return (
     <Container>
-      <Title>Hello</Title>
+      {type === 'Notifications' ? null : (
+        <HeaderContainer>
+          <ImageContainer
+            resizeMode="contain"
+            source={require('../assets/map_alert_grey.png')}
+          />
+          <Title>{type} for the period:</Title>
+        </HeaderContainer>
+      )}
+      <Separator />
     </Container>
   );
 }
@@ -70,8 +82,23 @@ const Container = styled.View`
   background-color: transparent;
 `;
 
+const HeaderContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+`;
+
+const ImageContainer = styled.Image`
+  flex: 1;
+  width: ${(props) => props.size || 28}px;
+  height: ${(props) => props.size || 28}px;
+  margin: ${(props) => props.margin || 10}px;
+`;
+
 const Title = styled.Text`
+  flex: 5;
   font-family: 'Roboto-Regular';
   font-size: 18px;
-  color: #808080;
+  color: #202020;
 `;

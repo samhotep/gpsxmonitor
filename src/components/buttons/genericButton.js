@@ -7,7 +7,9 @@ export default function GenericButton(props) {
       onPress={props.onPress}
       width={props.width}
       bgcolor={props.bgcolor}>
-      <Title color={props.color}>{props.title}</Title>
+      <Title size={props.size} color={props.color}>
+        {props.title}
+      </Title>
     </Container>
   );
 }
@@ -24,7 +26,7 @@ const Container = styled.TouchableOpacity`
 `;
 
 const Title = styled.Text`
-  font-size: 14px;
+  font-size: ${(props) => props.size || 14}px;
   font-family: 'Roboto-Regular';
   color: ${(props) => props.color || '#ffffff'};
 `;

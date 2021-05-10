@@ -4,7 +4,6 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 import SettingsScreen from '../screens/settingsScreen';
 import HomeStack from '../navigation/homeStack';
-import HeaderIcon from '../components/headers/headerIcon';
 import Separator from '../components/separators/separator';
 import styled from 'styled-components';
 import RadioInput from '../components/inputs/radioInput';
@@ -68,6 +67,7 @@ function CustomDrawerContent() {
 
   useEffect(() => {
     updateRadioButtons(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

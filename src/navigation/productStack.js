@@ -8,6 +8,8 @@ import Separator from '../components/separators/separator';
 import styled from 'styled-components';
 import RadioInput from '../components/inputs/radioInput';
 import GenericButton from '../components/buttons/genericButton';
+import API from '../api/api';
+import Storage from '../storage/storage';
 
 const Drawer = createDrawerNavigator();
 
@@ -63,6 +65,19 @@ function CustomDrawerContent() {
     let newRadio = Array(radioItems.length).fill(false);
     newRadio[index] = true;
     setRadioSelection(newRadio);
+  };
+
+  const showItems = () => {
+    // detail.screen
+    Storage.getCurrentTracker()
+      .then((tracker) => {
+        let p = new Date(Date.now());
+        let today = p.toISOString().replace('T', ' ').substr(0, 19);
+        return API.getTracks(JSON.parse(tracker).id, today, today);
+      })
+      .then((tracks) => {
+        console.log(tracks);
+      });
   };
 
   useEffect(() => {
@@ -127,7 +142,7 @@ function CustomDrawerContent() {
               </HeaderContainer>
             );
           })}
-          <GenericButton title="SHOW" />
+          <GenericButton title="SHOW" onPress={showItems} />
           <Separator />
         </>
       ) : null}

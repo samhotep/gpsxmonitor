@@ -235,6 +235,19 @@ const API = {
       return result;
     });
   },
+  getTracks: (tracker_id, from, to) => {
+    return API.apiCall('track/list/', {
+      tracker_id: tracker_id,
+      from: from,
+      to: to,
+    }).then((result) => {
+      if (result.success === true) {
+        return result.list;
+      } else {
+        return result.status.description;
+      }
+    });
+  },
   // Billing API
   billget: (endpoint) => {
     return Storage.getBillingToken().then((result) => {

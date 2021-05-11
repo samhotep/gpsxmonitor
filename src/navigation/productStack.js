@@ -121,9 +121,13 @@ function CustomDrawerContent() {
           .toISOString()
           .replace('T', ' ')
           .substr(0, 19),
-      ).then((trackList) => {
-        setTracks(trackList);
-      });
+      )
+        .then((trackList) => {
+          setTracks(trackList);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else if (detail.screen === 'Events') {
       API.getEvents(
         currentTracker.id,
@@ -135,9 +139,13 @@ function CustomDrawerContent() {
           .toISOString()
           .replace('T', ' ')
           .substr(0, 19),
-      ).then((eventList) => {
-        setEvents(eventList);
-      });
+      )
+        .then((eventList) => {
+          setEvents(eventList);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 

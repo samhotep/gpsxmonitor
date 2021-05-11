@@ -65,6 +65,7 @@ function CustomDrawerContent() {
   const [currentTracker, setCurrentTracker] = useState();
   const [tracks, setTracks] = useState([]);
   const [events, setEvents] = useState([]);
+  const [notifications, setNotifications] = useState([]);
 
   const createDate = () => {
     let event = new Date(Date.now());
@@ -124,8 +125,35 @@ function CustomDrawerContent() {
         setTracks(trackList);
       });
     } else if (detail.screen === 'Events') {
+      API.getEvents(
+        currentTracker.id,
+        timeRange[timeSelection].from
+          .toISOString()
+          .replace('T', ' ')
+          .substr(0, 19),
+        timeRange[timeSelection].to
+          .toISOString()
+          .replace('T', ' ')
+          .substr(0, 19),
+      ).then((eventList) => {
+        setEvents(eventList);
+      });
     }
   };
+
+  const showNotifications = () => {};
+
+  useEffect(() => {
+    if (detail.screen === 'Notifications') {
+      API.getNotifications()
+        .then((result) => {
+          setNotifications(result);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [detail]);
 
   useEffect(() => {
     initTimeSettings();
@@ -148,6 +176,7 @@ function CustomDrawerContent() {
       eventListener.remove();
     };
   }, []);
+
   return (
     <Container>
       {detail.screen === 'Events' ? (

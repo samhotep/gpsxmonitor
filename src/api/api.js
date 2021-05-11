@@ -248,6 +248,20 @@ const API = {
       }
     });
   },
+  getEvents: (tracker_id, from, to) => {
+    return API.apiCall('history/tracker/list/', {
+      trackers: [tracker_id],
+      from: from,
+      to: to,
+      limit: '50',
+    }).then((result) => {
+      if (result.success === true) {
+        return result.list;
+      } else {
+        return result.status.description;
+      }
+    });
+  },
   // Billing API
   billget: (endpoint) => {
     return Storage.getBillingToken().then((result) => {

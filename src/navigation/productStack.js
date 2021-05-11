@@ -62,6 +62,7 @@ function CustomDrawerContent() {
   );
   const [timeSelection, setTimeSelection] = useState('Today');
   const [timeRange, setTimeRange] = useState({});
+  const [currentTracker, setCurrentTracker] = useState();
 
   const createDate = () => {
     let event = new Date(Date.now());
@@ -106,38 +107,30 @@ function CustomDrawerContent() {
 
   const showItems = () => {
     // detail.screen
-    console.log(timeRange.Today);
-    console.log(
-      timeRange[timeSelection].from
-        .toISOString()
-        .replace('T', ' ')
-        .substr(0, 19),
-    );
-    Storage.getCurrentTracker()
-      .then((tracker) => {
-        if (detail.screen === 'Tracks') {
-          return API.getTracks(
-            JSON.parse(tracker).id,
-            timeRange[timeSelection].from
-              .toISOString()
-              .replace('T', ' ')
-              .substr(0, 19),
-            timeRange[timeSelection].to
-              .toISOString()
-              .replace('T', ' ')
-              .substr(0, 19),
-          );
-        } else if (detail.screen === 'Events') {
-        }
-      })
-      .then((tracks) => {
+    if (detail.screen === 'Tracks') {
+      API.getTracks(
+        currentTracker.id,
+        timeRange[timeSelection].from
+          .toISOString()
+          .replace('T', ' ')
+          .substr(0, 19),
+        timeRange[timeSelection].to
+          .toISOString()
+          .replace('T', ' ')
+          .substr(0, 19),
+      ).then((tracks) => {
         console.log(tracks);
       });
+    } else if (detail.screen === 'Events') {
+    }
   };
 
   useEffect(() => {
     initTimeSettings();
     updateRadioButtons(0);
+    Storage.getCurrentTracker().then((tracker) => {
+      setCurrentTracker(JSON.parse(tracker));
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

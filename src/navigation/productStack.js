@@ -57,35 +57,36 @@ function CustomDrawerContent() {
     'Last month',
     'Custom period',
   ];
-  let timeSettings = [];
   const [radioSelection, setRadioSelection] = useState(
     Array(radioItems.length).fill(false),
   );
+  const [timeIndex, setTimeIndex] = useState(0);
+  let timeSettings = [];
+
+  const createDate = () => {
+    let event = new Date(Date.now());
+    return event.setHours(0, 0, 0, 0);
+  };
 
   const setTimeSettings = () => {
-    let p = new Date(Date.now());
-    timeSettings[0] = p.toISOString().replace('T', ' ').substr(0, 19);
-    timeSettings[1] = p
-      .setDate(p.getDate() - 1)
-      .toISOString()
-      .replace('T', ' ')
-      .substr(0, 19);
-    timeSettings[2] = p
-      .setDate(p.getDate() - 7)
-      .toISOString()
-      .replace('T', ' ')
-      .substr(0, 19);
-    timeSettings[3] = p
-      .setDate(1)
-      .toISOString()
-      .replace('T', ' ')
-      .substr(0, 19);
-    timeSettings[4] = p
-      .setDate(1)
-      .setMonth(p.getMonth() - 1)
-      .toISOString()
-      .replace('T', ' ')
-      .substr(0, 19);
+    // January 01 2000 00:00:00 toISOString().replace('T', ' ').substr(0, 19)
+    // From beginning of day till now
+    let toDate = createDate();
+    timeSettings[0] = [toDate, new Date(Date.now())];
+    // From beginning to end of yesterday
+    timeSettings[1] = [createDate().setDate(toDate.getDate() - 1), toDate];
+    // From Beginning of this week to today
+    timeSettings[2] = [createDate().setDate(toDate.getDate() - 7), toDate];
+    // From Beginning of this month to today
+    let monthDate = createDate().setDate(1);
+    timeSettings[3] = [monthDate, toDate];
+    // From Beginning to end of last month
+    timeSettings[4] = [
+      createDate()
+        .setDate(1)
+        .setMonth(monthDate.getMonth() - 1),
+      monthDate,
+    ];
   };
 
   const updateRadioButtons = (index) => {
@@ -99,9 +100,11 @@ function CustomDrawerContent() {
     Storage.getCurrentTracker()
       .then((tracker) => {
         if (detail.screen === 'Tracks') {
-          let p = new Date(Date.now());
-          let today = p.toISOString().replace('T', ' ').substr(0, 19);
-          return API.getTracks(JSON.parse(tracker).id, today, today);
+          return API.getTracks(
+            JSON.parse(tracker).id,
+            timeSettings[timeIndex],
+            timeSettings[timeIndex],
+          );
         } else if (detail.screen === 'Events') {
         }
       })

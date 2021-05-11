@@ -69,7 +69,6 @@ function CustomDrawerContent() {
   };
 
   const initTimeSettings = () => {
-    // January 01 2000 00:00:00 toISOString().replace('T', ' ').substr(0, 19)
     // From beginning of day till now
     let toDate = createDate();
     timeSettings.Today = {from: toDate, to: new Date(Date.now())};
@@ -109,8 +108,14 @@ function CustomDrawerContent() {
         if (detail.screen === 'Tracks') {
           return API.getTracks(
             JSON.parse(tracker).id,
-            timeSettings[timeIndex][0],
-            timeSettings[timeIndex][1],
+            timeSettings[timeSelection].from
+              .toISOString()
+              .replace('T', ' ')
+              .substr(0, 19),
+            timeSettings[timeSelection].to
+              .toISOString()
+              .replace('T', ' ')
+              .substr(0, 19),
           );
         } else if (detail.screen === 'Events') {
         }

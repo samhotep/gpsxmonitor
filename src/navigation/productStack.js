@@ -60,39 +60,46 @@ function CustomDrawerContent() {
   const [radioSelection, setRadioSelection] = useState(
     Array(radioItems.length).fill(false),
   );
-  const [timeIndex, setTimeIndex] = useState(0);
-  let timeSettings = [];
+  const [timeSelection, setTimeSelection] = useState('Today');
+  let timeSettings = {};
 
   const createDate = () => {
     let event = new Date(Date.now());
     return event.setHours(0, 0, 0, 0);
   };
 
-  const setTimeSettings = () => {
+  const initTimeSettings = () => {
     // January 01 2000 00:00:00 toISOString().replace('T', ' ').substr(0, 19)
     // From beginning of day till now
     let toDate = createDate();
-    timeSettings[0] = [toDate, new Date(Date.now())];
+    timeSettings.Today = {from: toDate, to: new Date(Date.now())};
     // From beginning to end of yesterday
-    timeSettings[1] = [createDate().setDate(toDate.getDate() - 1), toDate];
+    timeSettings.Yesterday = {
+      from: createDate().setDate(toDate.getDate() - 1),
+      to: toDate,
+    };
     // From Beginning of this week to today
-    timeSettings[2] = [createDate().setDate(toDate.getDate() - 7), toDate];
+    timeSettings.Week = {
+      from: createDate().setDate(toDate.getDate() - 7),
+      to: toDate,
+    };
     // From Beginning of this month to today
     let monthDate = createDate().setDate(1);
-    timeSettings[3] = [monthDate, toDate];
+    timeSettings['Current month'] = {from: monthDate, to: toDate};
     // From Beginning to end of last month
-    timeSettings[4] = [
-      createDate()
+    timeSettings['Last month'] = {
+      from: createDate()
         .setDate(1)
         .setMonth(monthDate.getMonth() - 1),
-      monthDate,
-    ];
+      to: monthDate,
+    };
   };
 
   const updateRadioButtons = (index) => {
     let newRadio = Array(radioItems.length).fill(false);
     newRadio[index] = true;
     setRadioSelection(newRadio);
+    setTimeSelection(radioItems[index]);
   };
 
   const showItems = () => {
@@ -102,8 +109,8 @@ function CustomDrawerContent() {
         if (detail.screen === 'Tracks') {
           return API.getTracks(
             JSON.parse(tracker).id,
-            timeSettings[timeIndex],
-            timeSettings[timeIndex],
+            timeSettings[timeIndex][0],
+            timeSettings[timeIndex][1],
           );
         } else if (detail.screen === 'Events') {
         }
@@ -114,6 +121,7 @@ function CustomDrawerContent() {
   };
 
   useEffect(() => {
+    initTimeSettings();
     updateRadioButtons(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

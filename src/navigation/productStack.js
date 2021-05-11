@@ -61,15 +61,17 @@ function CustomDrawerContent() {
     Array(radioItems.length).fill(false),
   );
   const [timeSelection, setTimeSelection] = useState('Today');
-  let timeSettings = {};
+  const [timeRange, setTimeRange] = useState({});
 
   const createDate = () => {
     let event = new Date(Date.now());
-    event.setHours(0, 0, 0, 0);
+    let offset = event.getTimezoneOffset() / 60;
+    event.setHours(offset * -1, 0, 0);
     return event;
   };
 
   const initTimeSettings = () => {
+    let timeSettings = {};
     // From beginning of day till now
     let toDate = createDate();
     timeSettings.Today = {from: toDate, to: new Date(Date.now())};
@@ -92,6 +94,7 @@ function CustomDrawerContent() {
       from: lastMonthDate.setMonth(monthDate.getMonth() - 1),
       to: monthDate,
     };
+    setTimeRange(timeSettings);
   };
 
   const updateRadioButtons = (index) => {
@@ -103,16 +106,23 @@ function CustomDrawerContent() {
 
   const showItems = () => {
     // detail.screen
+    console.log(timeRange.Today);
+    console.log(
+      timeRange[timeSelection].from
+        .toISOString()
+        .replace('T', ' ')
+        .substr(0, 19),
+    );
     Storage.getCurrentTracker()
       .then((tracker) => {
         if (detail.screen === 'Tracks') {
           return API.getTracks(
             JSON.parse(tracker).id,
-            timeSettings[timeSelection].from
+            timeRange[timeSelection].from
               .toISOString()
               .replace('T', ' ')
               .substr(0, 19),
-            timeSettings[timeSelection].to
+            timeRange[timeSelection].to
               .toISOString()
               .replace('T', ' ')
               .substr(0, 19),

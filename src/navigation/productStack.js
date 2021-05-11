@@ -65,7 +65,8 @@ function CustomDrawerContent() {
 
   const createDate = () => {
     let event = new Date(Date.now());
-    return event.setHours(0, 0, 0, 0);
+    event.setHours(0, 0, 0, 0);
+    return event;
   };
 
   const initTimeSettings = () => {
@@ -74,22 +75,21 @@ function CustomDrawerContent() {
     timeSettings.Today = {from: toDate, to: new Date(Date.now())};
     // From beginning to end of yesterday
     timeSettings.Yesterday = {
-      from: createDate().setDate(toDate.getDate() - 1),
+      from: new Date(createDate().setDate(toDate.getDate() - 1)),
       to: toDate,
     };
     // From Beginning of this week to today
     timeSettings.Week = {
-      from: createDate().setDate(toDate.getDate() - 7),
+      from: new Date(createDate().setDate(toDate.getDate() - 7)),
       to: toDate,
     };
     // From Beginning of this month to today
-    let monthDate = createDate().setDate(1);
+    let monthDate = new Date(createDate().setDate(1));
     timeSettings['Current month'] = {from: monthDate, to: toDate};
     // From Beginning to end of last month
+    let lastMonthDate = new Date(createDate().setDate(1));
     timeSettings['Last month'] = {
-      from: createDate()
-        .setDate(1)
-        .setMonth(monthDate.getMonth() - 1),
+      from: lastMonthDate.setMonth(monthDate.getMonth() - 1),
       to: monthDate,
     };
   };

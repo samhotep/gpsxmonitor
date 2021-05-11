@@ -262,6 +262,15 @@ const API = {
       }
     });
   },
+  getNotifications: () => {
+    return API.apiCall('notification/list/').then((result) => {
+      if (result.success === true) {
+        return result.list;
+      } else {
+        return result.status.description;
+      }
+    });
+  },
   // Billing API
   billget: (endpoint) => {
     return Storage.getBillingToken().then((result) => {

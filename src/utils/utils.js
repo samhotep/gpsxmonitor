@@ -132,6 +132,14 @@ const Utils = {
       return require('../assets/battery_low.png');
     }
   },
+  sortIntoDateGroups: (items) => {
+    let dates = [];
+    items.map((_, i) => {
+      // TODO get date from each item and put into group list
+      // TODO Sort dates chronologically
+      // TODO Create object list with each date string as a key, and items as list of values
+    });
+  },
 };
 
 export default Utils;

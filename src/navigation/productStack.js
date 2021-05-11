@@ -70,6 +70,22 @@ function CustomDrawerContent() {
       .toISOString()
       .replace('T', ' ')
       .substr(0, 19);
+    timeSettings[2] = p
+      .setDate(p.getDate() - 7)
+      .toISOString()
+      .replace('T', ' ')
+      .substr(0, 19);
+    timeSettings[3] = p
+      .setDate(1)
+      .toISOString()
+      .replace('T', ' ')
+      .substr(0, 19);
+    timeSettings[4] = p
+      .setDate(1)
+      .setMonth(p.getMonth() - 1)
+      .toISOString()
+      .replace('T', ' ')
+      .substr(0, 19);
   };
 
   const updateRadioButtons = (index) => {

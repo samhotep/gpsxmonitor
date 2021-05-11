@@ -57,9 +57,20 @@ function CustomDrawerContent() {
     'Last month',
     'Custom period',
   ];
+  let timeSettings = [];
   const [radioSelection, setRadioSelection] = useState(
     Array(radioItems.length).fill(false),
   );
+
+  const setTimeSettings = () => {
+    let p = new Date(Date.now());
+    timeSettings[0] = p.toISOString().replace('T', ' ').substr(0, 19);
+    timeSettings[1] = p
+      .setDate(p.getDate() - 1)
+      .toISOString()
+      .replace('T', ' ')
+      .substr(0, 19);
+  };
 
   const updateRadioButtons = (index) => {
     let newRadio = Array(radioItems.length).fill(false);
@@ -71,9 +82,12 @@ function CustomDrawerContent() {
     // detail.screen
     Storage.getCurrentTracker()
       .then((tracker) => {
-        let p = new Date(Date.now());
-        let today = p.toISOString().replace('T', ' ').substr(0, 19);
-        return API.getTracks(JSON.parse(tracker).id, today, today);
+        if (detail.screen === 'Tracks') {
+          let p = new Date(Date.now());
+          let today = p.toISOString().replace('T', ' ').substr(0, 19);
+          return API.getTracks(JSON.parse(tracker).id, today, today);
+        } else if (detail.screen === 'Events') {
+        }
       })
       .then((tracks) => {
         console.log(tracks);

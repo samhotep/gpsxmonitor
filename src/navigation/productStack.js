@@ -63,6 +63,8 @@ function CustomDrawerContent() {
   const [timeSelection, setTimeSelection] = useState('Today');
   const [timeRange, setTimeRange] = useState({});
   const [currentTracker, setCurrentTracker] = useState();
+  const [tracks, setTracks] = useState([]);
+  const [events, setEvents] = useState([]);
 
   const createDate = () => {
     let event = new Date(Date.now());
@@ -118,8 +120,8 @@ function CustomDrawerContent() {
           .toISOString()
           .replace('T', ' ')
           .substr(0, 19),
-      ).then((tracks) => {
-        console.log(tracks);
+      ).then((trackList) => {
+        setTracks(trackList);
       });
     } else if (detail.screen === 'Events') {
     }

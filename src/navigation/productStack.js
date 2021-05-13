@@ -64,6 +64,7 @@ function CustomDrawerContent() {
   const [timeSelection, setTimeSelection] = useState('Today');
   const [timeRange, setTimeRange] = useState({});
   const [currentTracker, setCurrentTracker] = useState();
+  const [detailsLoaded, setDetailsLoaded] = useState(false);
   const [tracks, setTracks] = useState([]);
   const [events, setEvents] = useState([]);
   const [notifications, setNotifications] = useState([]);
@@ -158,6 +159,7 @@ function CustomDrawerContent() {
               gsm_lbs: false,
             },
           ]);
+          setDetailsLoaded(true);
         })
         .catch((error) => {
           console.log(error);
@@ -200,6 +202,7 @@ function CustomDrawerContent() {
   useEffect(() => {
     setTracks([]);
     setEvents([]);
+    setDetailsLoaded(false);
     initTimeSettings();
     updateRadioButtons(0);
     Storage.getCurrentTracker().then((tracker) => {
@@ -226,7 +229,7 @@ function CustomDrawerContent() {
     <Container
       // eslint-disable-next-line react-native/no-inline-styles
       contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}}>
-      {detail.screen === 'Events' ? (
+      {detail.screen === 'Events' && !detailsLoaded ? (
         <HeaderContainer>
           <ImageContainer
             resizeMode="contain"
@@ -235,7 +238,7 @@ function CustomDrawerContent() {
           <Title>{detail.screen} for the period:</Title>
         </HeaderContainer>
       ) : null}
-      {detail.screen === 'Tracks' ? (
+      {detail.screen === 'Tracks' && !detailsLoaded ? (
         <>
           <HeaderContainer>
             <ImageContainer
@@ -252,7 +255,7 @@ function CustomDrawerContent() {
           <Title>{detail.screen} for the period:</Title>
         </HeaderContainer>
       ) : null}
-      {detail.screen !== 'Notifications' ? (
+      {detail.screen !== 'Notifications' && !detailsLoaded ? (
         <>
           <Separator />
           {radioItems.map((_, i) => {
@@ -275,6 +278,7 @@ function CustomDrawerContent() {
           <Separator />
         </>
       ) : null}
+      {detailsLoaded ? <EventItem /> : null}
     </Container>
   );
 }

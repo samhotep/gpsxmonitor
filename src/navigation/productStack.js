@@ -6,6 +6,7 @@ import SettingsScreen from '../screens/settingsScreen';
 import HomeStack from '../navigation/homeStack';
 import Separator from '../components/separators/separator';
 import styled from 'styled-components';
+import EventItem from '../components/items/eventItem';
 import RadioInput from '../components/inputs/radioInput';
 import GenericButton from '../components/buttons/genericButton';
 import API from '../api/api';
@@ -124,6 +125,39 @@ function CustomDrawerContent() {
       )
         .then((trackList) => {
           setTracks(trackList);
+          // TODO TEMP DATA
+          setTracks([
+            {
+              id: 123456,
+              start_date: '2020-09-23 03:39:44',
+              start_address: '1255 6th Ave, New York, NY 10020, USA',
+              max_speed: 62,
+              end_date: '2020-09-23 06:39:44',
+              end_address: '888 5th Ave, New York, NY 10021, USA',
+              length: 5.5,
+              points: 327,
+              avg_speed: 49,
+              event_count: 3,
+              norm_fuel_consumed: 1.07,
+              type: 'regular',
+              gsm_lbs: false,
+            },
+            {
+              id: 123456,
+              start_date: '2020-09-23 03:39:44',
+              start_address: '1255 6th Ave, New York, NY 10020, USA',
+              max_speed: 62,
+              end_date: '2020-09-23 06:39:44',
+              end_address: '888 5th Ave, New York, NY 10021, USA',
+              length: 5.5,
+              points: 327,
+              avg_speed: 49,
+              event_count: 3,
+              norm_fuel_consumed: 1.07,
+              type: 'regular',
+              gsm_lbs: false,
+            },
+          ]);
         })
         .catch((error) => {
           console.log(error);
@@ -164,11 +198,14 @@ function CustomDrawerContent() {
   }, [detail]);
 
   useEffect(() => {
+    setTracks([]);
+    setEvents([]);
     initTimeSettings();
     updateRadioButtons(0);
     Storage.getCurrentTracker().then((tracker) => {
       setCurrentTracker(JSON.parse(tracker));
     });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -186,7 +223,9 @@ function CustomDrawerContent() {
   }, []);
 
   return (
-    <Container>
+    <Container
+      // eslint-disable-next-line react-native/no-inline-styles
+      contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}}>
       {detail.screen === 'Events' ? (
         <HeaderContainer>
           <ImageContainer
@@ -197,13 +236,15 @@ function CustomDrawerContent() {
         </HeaderContainer>
       ) : null}
       {detail.screen === 'Tracks' ? (
-        <HeaderContainer>
-          <ImageContainer
-            resizeMode="contain"
-            source={require('../assets/route_grey.png')}
-          />
-          <Title>{detail.screen} for the period:</Title>
-        </HeaderContainer>
+        <>
+          <HeaderContainer>
+            <ImageContainer
+              resizeMode="contain"
+              source={require('../assets/route_grey.png')}
+            />
+            <Title>{detail.screen} for the period:</Title>
+          </HeaderContainer>
+        </>
       ) : null}
       {detail.screen === 'Notifications' ? (
         <HeaderContainer>
@@ -238,10 +279,8 @@ function CustomDrawerContent() {
   );
 }
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   background-color: transparent;
 `;
 

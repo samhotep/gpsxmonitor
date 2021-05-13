@@ -278,7 +278,7 @@ function CustomDrawerContent() {
           <Separator />
         </>
       ) : null}
-      {detailsLoaded ? <EventItem /> : null}
+      {detailsLoaded ? <EventItem track={tracks[0]} /> : null}
     </Container>
   );
 }

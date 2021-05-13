@@ -199,12 +199,16 @@ function CustomDrawerContent() {
     }
   }, [detail]);
 
-  useEffect(() => {
+  const initializeObjects = () => {
     setTracks([]);
     setEvents([]);
     setDetailsLoaded(false);
     initTimeSettings();
     updateRadioButtons(0);
+  };
+
+  useEffect(() => {
+    initializeObjects();
     Storage.getCurrentTracker().then((tracker) => {
       setCurrentTracker(JSON.parse(tracker));
     });
@@ -218,6 +222,7 @@ function CustomDrawerContent() {
       'event.homeEvent',
       (event) => {
         setDetail(event);
+        initializeObjects();
       },
     );
     return () => {

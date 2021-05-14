@@ -28,22 +28,6 @@ export default function EventItem(props) {
   );
 }
 
-// {
-//     id: 123456,
-//     start_date: '2020-09-23 03:39:44',
-//     start_address: '1255 6th Ave, New York, NY 10020, USA',
-//     max_speed: 62,
-//     end_date: '2020-09-23 06:39:44',
-//     end_address: '888 5th Ave, New York, NY 10021, USA',
-//     length: 5.5,
-//     points: 327,
-//     avg_speed: 49,
-//     event_count: 3,
-//     norm_fuel_consumed: 1.07,
-//     type: 'regular',
-//     gsm_lbs: false,
-//   },
-
 const Container = styled.View`
   flex-direction: row;
   align-items: flex-start;

@@ -133,12 +133,16 @@ const Utils = {
     }
   },
   sortIntoDateGroups: (items) => {
-    let dates = [];
+    let dates = {};
     items.map((_, i) => {
-      // TODO get date from each item and put into group list
-      // TODO Sort dates chronologically
-      // TODO Create object list with each date string as a key, and items as list of values
+      let item_date = _.start_date.split(' ')[0];
+      if (dates[item_date]) {
+        dates[item_date].push(_);
+      } else {
+        dates[item_date] = [_];
+      }
     });
+    return dates;
   },
 };
 

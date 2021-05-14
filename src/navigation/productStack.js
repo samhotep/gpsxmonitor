@@ -352,13 +352,12 @@ const Title = styled.Text`
 `;
 
 const DateLabel = styled.Text`
-  /* text-align: left; */
   width: 100%;
   font-family: 'Roboto-Regular';
   font-size: ${(props) => props.size || 14}px;
   font-weight: bold;
   color: #737373;
   border: 1px #d3d3d3;
-  padding: 5px;
+  padding: 5px 5px 5px 15px;
   background-color: #e0e0e0;
 `;

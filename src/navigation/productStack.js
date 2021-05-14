@@ -68,6 +68,7 @@ function CustomDrawerContent() {
   const [detailsLoaded, setDetailsLoaded] = useState(false);
   const [testT, setTestT] = useState({});
   const [tracks, setTracks] = useState([]);
+  const [rawTracks, setRawTracks] = useState([]);
   const [events, setEvents] = useState([]);
   const [notifications, setNotifications] = useState([]);
 
@@ -177,6 +178,7 @@ function CustomDrawerContent() {
             },
           ];
           setTracks(Utils.sortIntoDateGroups(testlist));
+          setRawTracks(testlist);
           setDetailsLoaded(true);
         })
         .catch((error) => {
@@ -310,6 +312,15 @@ function CustomDrawerContent() {
               </>
             );
           })}
+          <TotalContainer>
+            <Title size={14} color="#737373">
+              Total: {rawTracks.length} tracks
+            </Title>
+            <TotalContainerRow>
+              <TotalText>HAHAHA</TotalText>
+              <TotalText>HAHAHA</TotalText>
+            </TotalContainerRow>
+          </TotalContainer>
         </>
       ) : null}
     </Container>
@@ -348,7 +359,7 @@ const Title = styled.Text`
   flex: 5;
   font-family: 'Roboto-Regular';
   font-size: ${(props) => props.size || 18}px;
-  color: #202020;
+  color: ${(props) => props.color || '#202020'};
 `;
 
 const DateLabel = styled.Text`
@@ -360,4 +371,26 @@ const DateLabel = styled.Text`
   border: 1px #d3d3d3;
   padding: 5px 5px 5px 15px;
   background-color: #e0e0e0;
+`;
+
+const TotalContainer = styled.View`
+  flex-direction: column;
+  background-color: #e0e0e0;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 5px;
+`;
+
+const TotalContainerRow = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
+
+const TotalText = styled.Text`
+  font-family: 'Roboto-Regular';
+  font-size: ${(props) => props.size || 14}px;
+  color: ${(props) => props.color || '#737373'};
 `;

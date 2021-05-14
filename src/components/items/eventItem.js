@@ -27,7 +27,7 @@ export default function EventItem(props) {
           </DetailsContainer>
         </ColumnContainer>
       </Container>
-      <Separator />
+      <Separator nomargin />
     </>
   );
 }
@@ -37,6 +37,7 @@ const Container = styled.View`
   align-items: flex-start;
   justify-content: flex-start;
   background-color: #ffffff;
+  padding: 3px;
   width: 100%;
 `;
 

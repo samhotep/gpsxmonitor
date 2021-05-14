@@ -11,6 +11,7 @@ import RadioInput from '../components/inputs/radioInput';
 import GenericButton from '../components/buttons/genericButton';
 import API from '../api/api';
 import Storage from '../storage/storage';
+import Utils from '../utils/utils';
 
 const Drawer = createDrawerNavigator();
 
@@ -65,6 +66,7 @@ function CustomDrawerContent() {
   const [timeRange, setTimeRange] = useState({});
   const [currentTracker, setCurrentTracker] = useState();
   const [detailsLoaded, setDetailsLoaded] = useState(false);
+  const [testT, setTestT] = useState({});
   const [tracks, setTracks] = useState([]);
   const [events, setEvents] = useState([]);
   const [notifications, setNotifications] = useState([]);
@@ -127,13 +129,28 @@ function CustomDrawerContent() {
         .then((trackList) => {
           setTracks(trackList);
           // TODO TEMP DATA
-          setTracks([
+          let testlist = [
             {
               id: 123456,
               start_date: '2020-09-23 03:39:44',
               start_address: '1255 6th Ave, New York, NY 10020, USA',
               max_speed: 62,
               end_date: '2020-09-23 06:39:44',
+              end_address: '888 5th Ave, New York, NY 10021, USA',
+              length: 5.5,
+              points: 327,
+              avg_speed: 49,
+              event_count: 3,
+              norm_fuel_consumed: 1.07,
+              type: 'regular',
+              gsm_lbs: false,
+            },
+            {
+              id: 123456,
+              start_date: '2020-10-24 03:39:44',
+              start_address: '1255 6th Ave, New York, NY 10020, USA',
+              max_speed: 62,
+              end_date: '2020-10-24 06:39:44',
               end_address: '888 5th Ave, New York, NY 10021, USA',
               length: 5.5,
               points: 327,
@@ -158,7 +175,8 @@ function CustomDrawerContent() {
               type: 'regular',
               gsm_lbs: false,
             },
-          ]);
+          ];
+          setTracks(Utils.sortIntoDateGroups(testlist));
           setDetailsLoaded(true);
         })
         .catch((error) => {
@@ -280,7 +298,20 @@ function CustomDrawerContent() {
           <Separator />
         </>
       ) : null}
-      {detailsLoaded ? <EventItem track={tracks[0]} /> : null}
+      {detailsLoaded ? (
+        <>
+          {Object.keys(tracks).map((key) => {
+            return (
+              <>
+                <Title>{key}</Title>
+                {tracks[key].map((_, i) => {
+                  return <EventItem track={_} />;
+                })}
+              </>
+            );
+          })}
+        </>
+      ) : null}
     </Container>
   );
 }

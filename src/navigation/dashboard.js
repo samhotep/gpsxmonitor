@@ -318,7 +318,7 @@ const DrawerLabel = styled.Text`
   font-weight: ${(props) => (props.bold ? props.bold : 'normal')};
   font-size: 14px;
   text-align: left;
-  color: ${(props) => props.color || '#202020'};
+  color: ${(props) => props.color || '#737373'};
   text-decoration: ${(props) => props.underline || 'none'};
   margin: 5px;
 `;

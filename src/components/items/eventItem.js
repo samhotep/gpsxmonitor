@@ -77,5 +77,5 @@ const Text = styled.Text`
 const BoldText = styled.Text`
   font-size: 14px;
   font-weight: bold;
-  color: ${(props) => props.color || '#202020'};
+  color: ${(props) => props.color || '#737373'};
 `;

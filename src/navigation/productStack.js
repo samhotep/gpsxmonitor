@@ -113,6 +113,19 @@ function CustomDrawerContent() {
     setTimeSelection(radioItems[index]);
   };
 
+  const countTracks = (trackList) => {
+    let totalDistance = 0;
+    let totalTime = 0;
+    trackList.map((_, i) => {
+      let start = new Date(_.start_date.replace(/-+/g, '/'));
+      let end = new Date(_.end_date.replace(/-+/g, '/'));
+      totalTime += end.getTime() - start.getTime();
+      totalDistance += _.length;
+    });
+    totalTime = new Date(totalTime);
+    return [trackList.length, totalDistance, totalTime];
+  };
+
   const showItems = () => {
     // detail.screen
     if (detail.screen === 'Tracks') {
@@ -178,7 +191,7 @@ function CustomDrawerContent() {
             },
           ];
           setTracks(Utils.sortIntoDateGroups(testlist));
-          setRawTracks(testlist);
+          setRawTracks(countTracks(testlist));
           setDetailsLoaded(true);
         })
         .catch((error) => {
@@ -313,19 +326,19 @@ function CustomDrawerContent() {
             );
           })}
           <TotalContainer>
-            <TotalText>Total: {rawTracks.length} tracks</TotalText>
+            <TotalText>Total: {rawTracks[0]} tracks</TotalText>
             <TotalContainerRow>
               <TotalContainerItem>
                 <TotalImageContainer
                   source={require('../assets/route_total.png')}
                 />
-                <TotalText>HAHAHA</TotalText>
+                <TotalText>{rawTracks[1]} km</TotalText>
               </TotalContainerItem>
               <TotalContainerItem>
                 <TotalImageContainer
                   source={require('../assets/time_grey.png')}
                 />
-                <TotalText>HAHAHA</TotalText>
+                <TotalText>{`${rawTracks[2].getHours()} h ${rawTracks[2].getMinutes()} m`}</TotalText>
               </TotalContainerItem>
             </TotalContainerRow>
           </TotalContainer>

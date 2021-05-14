@@ -313,12 +313,20 @@ function CustomDrawerContent() {
             );
           })}
           <TotalContainer>
-            <Title size={14} color="#737373">
-              Total: {rawTracks.length} tracks
-            </Title>
+            <TotalText>Total: {rawTracks.length} tracks</TotalText>
             <TotalContainerRow>
-              <TotalText>HAHAHA</TotalText>
-              <TotalText>HAHAHA</TotalText>
+              <TotalContainerItem>
+                <TotalImageContainer
+                  source={require('../assets/route_total.png')}
+                />
+                <TotalText>HAHAHA</TotalText>
+              </TotalContainerItem>
+              <TotalContainerItem>
+                <TotalImageContainer
+                  source={require('../assets/time_grey.png')}
+                />
+                <TotalText>HAHAHA</TotalText>
+              </TotalContainerItem>
             </TotalContainerRow>
           </TotalContainer>
         </>
@@ -389,8 +397,21 @@ const TotalContainerRow = styled.View`
   width: 100%;
 `;
 
+const TotalContainerItem = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
 const TotalText = styled.Text`
   font-family: 'Roboto-Regular';
   font-size: ${(props) => props.size || 14}px;
-  color: ${(props) => props.color || '#737373'};
+  color: ${(props) => props.color || '#8c8c8c'};
+  font-weight: 700;
+`;
+
+const TotalImageContainer = styled.Image`
+  width: ${(props) => props.size || 28}px;
+  height: ${(props) => props.size || 28}px;
+  margin: 5px;
 `;

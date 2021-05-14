@@ -196,7 +196,13 @@ function CustomDrawerContent() {
         .catch((error) => {
           console.log(error);
         });
+    } else {
+      initializeObjects();
+      Storage.getCurrentTracker().then((tracker) => {
+        setCurrentTracker(JSON.parse(tracker));
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [detail]);
 
   const initializeObjects = () => {
@@ -206,15 +212,6 @@ function CustomDrawerContent() {
     initTimeSettings();
     updateRadioButtons(0);
   };
-
-  useEffect(() => {
-    initializeObjects();
-    Storage.getCurrentTracker().then((tracker) => {
-      setCurrentTracker(JSON.parse(tracker));
-    });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     // Listener for location update events in dashboard

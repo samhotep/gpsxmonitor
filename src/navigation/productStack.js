@@ -12,6 +12,7 @@ import GenericButton from '../components/buttons/genericButton';
 import API from '../api/api';
 import Storage from '../storage/storage';
 import Utils from '../utils/utils';
+import ClearButton from '../components/buttons/clearButton';
 
 const Drawer = createDrawerNavigator();
 
@@ -315,6 +316,7 @@ function CustomDrawerContent() {
       ) : null}
       {detailsLoaded ? (
         <>
+          <ClearButton onPress={() => setDetailsLoaded(false)} />
           {Object.keys(tracks).map((key) => {
             return (
               <>

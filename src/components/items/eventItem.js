@@ -9,7 +9,7 @@ export default function EventItem(props) {
   console.log(difference.getTime());
   return (
     <>
-      <Container>
+      <Container onPress={props.onPress}>
         <ImageContainer source={require('../../assets/track.png')} />
         <ColumnContainer>
           <RowContainer>
@@ -32,12 +32,12 @@ export default function EventItem(props) {
   );
 }
 
-const Container = styled.View`
+const Container = styled.TouchableOpacity`
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
   background-color: #ffffff;
-  padding: 3px;
+  padding: 5px;
   width: 100%;
 `;
 

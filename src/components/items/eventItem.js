@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Separator from '../separators/separator';
 import styled from 'styled-components';
 
 export default function EventItem(props) {
@@ -7,24 +8,27 @@ export default function EventItem(props) {
   let difference = new Date(end.getTime() - start.getTime());
   console.log(difference.getTime());
   return (
-    <Container>
-      <ImageContainer source={require('../../assets/track.png')} />
-      <ColumnContainer>
-        <RowContainer>
-          <BoldText
-            bold>{`${start.getHours()}:${start.getMinutes()} `}</BoldText>
-          <Text>{props.track.start_address}</Text>
-        </RowContainer>
-        <RowContainer>
-          <BoldText bold>{`${end.getHours()}:${end.getMinutes()} `}</BoldText>
-          <Text>{props.track.end_address}</Text>
-        </RowContainer>
-        <DetailsContainer>
-          <Text>{`${props.track.length} km`}</Text>
-          <Text>{`${difference.getHours()} h ${difference.getMinutes()} m`}</Text>
-        </DetailsContainer>
-      </ColumnContainer>
-    </Container>
+    <>
+      <Container>
+        <ImageContainer source={require('../../assets/track.png')} />
+        <ColumnContainer>
+          <RowContainer>
+            <BoldText
+              bold>{`${start.getHours()}:${start.getMinutes()} `}</BoldText>
+            <Text>{props.track.start_address}</Text>
+          </RowContainer>
+          <RowContainer>
+            <BoldText bold>{`${end.getHours()}:${end.getMinutes()} `}</BoldText>
+            <Text>{props.track.end_address}</Text>
+          </RowContainer>
+          <DetailsContainer>
+            <Text>{`${props.track.length} km`}</Text>
+            <Text>{`${difference.getHours()} h ${difference.getMinutes()} m`}</Text>
+          </DetailsContainer>
+        </ColumnContainer>
+      </Container>
+      <Separator />
+    </>
   );
 }
 

@@ -6,7 +6,7 @@ const Separator = styled.TouchableOpacity`
   justify-content: flex-start;
   height: 1px;
   width: 100%;
-  margin: 5px;
+  ${(props) => (props.nomargin ? null : 'margin: 5px;')}
   background-color: #d3d3d3;
 `;
 

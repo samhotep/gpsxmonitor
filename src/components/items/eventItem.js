@@ -6,7 +6,6 @@ export default function EventItem(props) {
   let start = new Date(props.track.start_date.replace(/-+/g, '/'));
   let end = new Date(props.track.end_date.replace(/-+/g, '/'));
   let difference = new Date(end.getTime() - start.getTime());
-  console.log(difference.getTime());
   return (
     <>
       <Container onPress={props.onPress}>

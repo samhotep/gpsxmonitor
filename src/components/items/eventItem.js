@@ -71,7 +71,7 @@ const Text = styled.Text`
   flex-wrap: wrap;
   font-size: 14px;
   font-weight: ${(props) => (props.bold ? 'bold' : 'normal')};
-  color: ${(props) => (props.selected ? '#ffffff' : '#202020')};
+  color: ${(props) => (props.selected ? '#ffffff' : '#737373')};
   width: 80%;
 `;
 

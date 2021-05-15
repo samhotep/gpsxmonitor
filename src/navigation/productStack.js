@@ -6,7 +6,7 @@ import SettingsScreen from '../screens/settingsScreen';
 import HomeStack from '../navigation/homeStack';
 import Separator from '../components/separators/separator';
 import styled from 'styled-components';
-import EventItem from '../components/items/eventItem';
+import TrackItem from '../components/items/trackItem';
 import RadioInput from '../components/inputs/radioInput';
 import GenericButton from '../components/buttons/genericButton';
 import API from '../api/api';
@@ -322,7 +322,7 @@ function CustomDrawerContent() {
               <>
                 <DateLabel>{key.replace(/-/g, '.')}</DateLabel>
                 {tracks[key].map((_, i) => {
-                  return <EventItem track={_} />;
+                  return <TrackItem track={_} />;
                 })}
               </>
             );

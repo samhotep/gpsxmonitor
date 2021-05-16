@@ -290,7 +290,38 @@ function CustomDrawerContent() {
             <Title>{detail.screen} for the period:</Title>
           </HeaderContainer>
         </>
-      ) : (
+      ) : null}
+      {detail.screen === 'Notifications' ? (
+        <HeaderContainer>
+          <ImageContainer resizeMode="contain" source={detail.icon} />
+          <Title>{detail.screen} for the period:</Title>
+        </HeaderContainer>
+      ) : null}
+      {detail.screen !== 'Notifications' && !detailsLoaded ? (
+        <>
+          <Separator />
+          {radioItems.map((_, i) => {
+            return (
+              <HeaderContainer>
+                <RadioContainer>
+                  <RadioInput
+                    color="#1e96dc"
+                    selected={radioSelection[i]}
+                    onPress={() => {
+                      updateRadioButtons(i);
+                    }}
+                  />
+                </RadioContainer>
+                <Title size={14}>{_}</Title>
+              </HeaderContainer>
+            );
+          })}
+          <GenericButton title="SHOW" onPress={showItems} />
+          <Separator />
+          {loading ? <DrawerLoader /> : null}
+        </>
+      ) : null}
+      {detailsLoaded ? (
         <>
           <ClearButton onPress={() => setDetailsLoaded(false)} />
           {Object.keys(tracks).map((key) => {
@@ -320,36 +351,6 @@ function CustomDrawerContent() {
               </TotalContainerItem>
             </TotalContainerRow>
           </TotalContainer>
-        </>
-      )}
-      {detail.screen === 'Notifications' ? (
-        <HeaderContainer>
-          <ImageContainer resizeMode="contain" source={detail.icon} />
-          <Title>{detail.screen} for the period:</Title>
-        </HeaderContainer>
-      ) : null}
-      {detail.screen !== 'Notifications' && !detailsLoaded ? (
-        <>
-          <Separator />
-          {radioItems.map((_, i) => {
-            return (
-              <HeaderContainer>
-                <RadioContainer>
-                  <RadioInput
-                    color="#1e96dc"
-                    selected={radioSelection[i]}
-                    onPress={() => {
-                      updateRadioButtons(i);
-                    }}
-                  />
-                </RadioContainer>
-                <Title size={14}>{_}</Title>
-              </HeaderContainer>
-            );
-          })}
-          <GenericButton title="SHOW" onPress={showItems} />
-          <Separator />
-          {loading ? <DrawerLoader /> : null}
         </>
       ) : null}
     </Container>

@@ -52,7 +52,7 @@ export default function ProductStack({route, navigation}) {
   );
 }
 
-function CustomDrawerContent() {
+function CustomDrawerContent(props) {
   const [detail, setDetail] = useState('');
   let radioItems = [
     'Today',
@@ -79,34 +79,53 @@ function CustomDrawerContent() {
   const createDate = () => {
     let event = new Date(Date.now());
     let offset = event.getTimezoneOffset() / 60;
-    event.setHours(offset * -1, 0, 0);
+    event.setHours(event.getHours() + offset * -1);
     return event;
   };
 
   const initTimeSettings = () => {
     let timeSettings = {};
+    let now = new Date(Date.now());
+    let offset = now.getTimezoneOffset() / 60;
+    now.setHours(now.getHours() + offset * -1);
     // From beginning of day till now
+    // new Date(year, monthIndex, day, hours, minutes, seconds, milliseconds)
+    let today = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      (24 + offset) * -1,
+      0,
+      0,
+    );
     let toDate = createDate();
-    timeSettings.Today = {from: toDate, to: new Date(Date.now())};
+    timeSettings.Today = {
+      from: today,
+      to: now,
+    };
     // From beginning to end of yesterday
+    let yesterdayStart = new Date(today.setDate(today.getDate() - 1));
+    let yesterdayEnd = new Date();
+    // yesterdayStart.setHours(24 - offset - 1, 59, 59),
     timeSettings.Yesterday = {
-      from: new Date(createDate().setDate(toDate.getDate() - 1)),
-      to: toDate,
+      from: yesterdayStart,
+      to: yesterdayEnd,
     };
-    // From Beginning of this week to today
+    // From Beginning of this week to now
     timeSettings.Week = {
-      from: new Date(createDate().setDate(toDate.getDate() - 7)),
-      to: toDate,
+      from: new Date(yesterdayStart.setDate(toDate.getDate() - 7)),
+      to: now,
     };
-    // From Beginning of this month to today
+    // From Beginning of this month to now
     let monthDate = new Date(createDate().setDate(1));
-    timeSettings['Current month'] = {from: monthDate, to: toDate};
+    timeSettings['Current month'] = {from: monthDate, to: now};
     // From Beginning to end of last month
     let lastMonthDate = new Date(createDate().setDate(1));
     timeSettings['Last month'] = {
       from: lastMonthDate.setMonth(monthDate.getMonth() - 1),
       to: monthDate,
     };
+    // TODO Custom settings
     setTimeRange(timeSettings);
   };
 
@@ -146,77 +165,7 @@ function CustomDrawerContent() {
       )
         .then((trackList) => {
           setTracks(Utils.sortIntoDateGroups(trackList));
-          // TODO TEMP DATA
-          let testlist = [
-            {
-              avg_speed: 14,
-              end_address:
-                'Ariena Enterprises, Old Butabika (Mutungo) Road, Kampala, Central Region, Uganda, 2359',
-              end_date: '2021-05-16 13:20:16',
-              id: 442,
-              length: 6.85,
-              max_speed: 45,
-              points: 112,
-              start_address:
-                'Parliamentary Pensions, Parliament Avenue, Kampala, Central Region, Uganda, 7096',
-              start_date: '2021-05-16 12:50:22',
-              type: 'regular',
-            },
-            {
-              avg_speed: 20,
-              end_address:
-                'Magala and Sons limited, Kireka Road, Kampala, Wakiso, Uganda, 2359',
-              end_date: '2021-05-16 13:27:28',
-              id: 443,
-              length: 0.58,
-              max_speed: 30,
-              points: 12,
-              start_address:
-                'Ariena Enterprises, Old Butabika (Mutungo) Road, Kampala, Central Region, Uganda, 2359',
-              start_date: '2021-05-16 13:25:42',
-              type: 'regular',
-            },
-            {
-              avg_speed: 21,
-              end_address: 'Kampala, Central Region, Uganda, 2359',
-              end_date: '2021-05-16 13:42:24',
-              id: 444,
-              length: 1.45,
-              max_speed: 41,
-              points: 25,
-              start_address:
-                'Magala and Sons limited, Kireka Road, Kampala, Wakiso, Uganda, 2359',
-              start_date: '2021-05-16 13:38:12',
-              type: 'regular',
-            },
-            {
-              avg_speed: 17,
-              end_address: 'Kireka Road, Kira, Wakiso, Uganda, 2359',
-              end_date: '2021-05-16 16:59:20',
-              id: 446,
-              length: 1.68,
-              max_speed: 41,
-              points: 28,
-              start_address: 'Kampala, Central Region, Uganda, 2359',
-              start_date: '2021-05-16 16:53:26',
-              type: 'regular',
-            },
-            {
-              avg_speed: 20,
-              end_address: '52b Cecilia Rd, Kampala, Uganda',
-              end_date: '2021-05-16 17:40:12',
-              id: 447,
-              length: 2.11,
-              max_speed: 34,
-              points: 20,
-              start_address: 'Kireka Road, Kira, Wakiso, Uganda, 2359',
-              start_date: '2021-05-16 17:33:48',
-              type: 'regular',
-            },
-          ];
-
-          setTracks(Utils.sortIntoDateGroups(testlist));
-          setRawTracks(countTracks(testlist));
+          setRawTracks(countTracks(trackList));
           setDetailsLoaded(true);
           setLoading(false);
         })
@@ -439,7 +388,9 @@ function CustomDrawerContent() {
             let label = new Date(key);
             return (
               <>
-                <DateLabel>{`${label.getDate()}.${label.getMonth()}.${label.getFullYear()}`}</DateLabel>
+                <DateLabel>{`${label.getDate()}.${
+                  label.getMonth() + 1
+                }.${label.getFullYear()}`}</DateLabel>
                 {tracks[key].map((_, i) => {
                   return <TrackItem track={_} />;
                 })}

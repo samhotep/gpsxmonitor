@@ -362,18 +362,15 @@ function CustomDrawerContent(props) {
           <Separator />
           {radioItems.map((_, i) => {
             return (
-              <HeaderContainer>
+              <RadioHeaderContainer
+                onPress={() => {
+                  updateRadioButtons(i);
+                }}>
                 <RadioContainer>
-                  <RadioInput
-                    color="#1e96dc"
-                    selected={radioSelection[i]}
-                    onPress={() => {
-                      updateRadioButtons(i);
-                    }}
-                  />
+                  <RadioInput color="#1e96dc" selected={radioSelection[i]} />
                 </RadioContainer>
                 <Title size={14}>{_}</Title>
-              </HeaderContainer>
+              </RadioHeaderContainer>
             );
           })}
           <GenericButton title="SHOW" onPress={showItems} />
@@ -452,6 +449,13 @@ const ImageContainer = styled.Image`
   width: ${(props) => props.size || 28}px;
   height: ${(props) => props.size || 28}px;
   margin: ${(props) => props.margin || 10}px;
+`;
+
+const RadioHeaderContainer = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
 `;
 
 const RadioContainer = styled.View`

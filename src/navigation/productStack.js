@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {NativeEventEmitter, NativeModules} from 'react-native';
+import {NativeEventEmitter, NativeModules, ToastAndroid} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 import SettingsScreen from '../screens/settingsScreen';
@@ -198,7 +198,15 @@ function CustomDrawerContent(props) {
         .then((trackList) => {
           setTracks(Utils.sortIntoDateGroups(trackList));
           setRawTracks(countTracks(trackList));
-          setDetailsLoaded(true);
+          if (trackList.length > 0) {
+            setDetailsLoaded(true);
+          } else {
+            ToastAndroid.show(
+              'No tracks in the specified period',
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER,
+            );
+          }
           setLoading(false);
         })
         .catch((error) => {

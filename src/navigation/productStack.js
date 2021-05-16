@@ -14,6 +14,7 @@ import Storage from '../storage/storage';
 import Utils from '../utils/utils';
 import ClearButton from '../components/buttons/clearButton';
 import DrawerLoader from '../components/loaders/drawerLoader';
+import EventItem from '../components/items/eventItem';
 
 const Drawer = createDrawerNavigator();
 
@@ -144,7 +145,7 @@ function CustomDrawerContent() {
           .substr(0, 19),
       )
         .then((trackList) => {
-          setTracks(trackList);
+          setTracks(Utils.sortIntoDateGroups(trackList));
           // TODO TEMP DATA
           let testlist = [
             {
@@ -215,8 +216,97 @@ function CustomDrawerContent() {
           .substr(0, 19),
       )
         .then((eventList) => {
+          setEvents(Utils.sortIntoDateGroups(eventList, 'Events'));
+          // TODO TEMP DATA
+          let testlist = [
+            {
+              id: 1,
+              type: 'tracker',
+              is_read: false,
+              message: 'Alarm',
+              time: '2020-01-01 00:00:00',
+              event: 'offline',
+              tracker_id: 2,
+              rule_id: 3,
+              track_id: 4,
+              location: {
+                lat: 50.0,
+                lng: 60.0,
+                precision: 50,
+              },
+              address: 'address',
+              extra: {
+                task_id: null,
+                parent_task_id: null,
+                counter_id: null,
+                service_task_id: null,
+                checkin_id: null,
+                place_ids: null,
+                last_known_location: false,
+                tracker_label: 'Tracker label',
+                emergency: false,
+              },
+            },
+            {
+              id: 1,
+              type: 'tracker',
+              is_read: false,
+              message: 'Fuel Low',
+              time: '2021-03-04 00:00:00',
+              event: 'offline',
+              tracker_id: 2,
+              rule_id: 3,
+              track_id: 4,
+              location: {
+                lat: 50.0,
+                lng: 60.0,
+                precision: 50,
+              },
+              address: 'address',
+              extra: {
+                task_id: null,
+                parent_task_id: null,
+                counter_id: null,
+                service_task_id: null,
+                checkin_id: null,
+                place_ids: null,
+                last_known_location: false,
+                tracker_label: 'Tracker label',
+                emergency: false,
+              },
+            },
+            {
+              id: 1,
+              type: 'tracker',
+              is_read: false,
+              message: 'BOOM!',
+              time: '2020-05-06 00:00:00',
+              event: 'offline',
+              tracker_id: 2,
+              rule_id: 3,
+              track_id: 4,
+              location: {
+                lat: 50.0,
+                lng: 60.0,
+                precision: 50,
+              },
+              address: 'address',
+              extra: {
+                task_id: null,
+                parent_task_id: null,
+                counter_id: null,
+                service_task_id: null,
+                checkin_id: null,
+                place_ids: null,
+                last_known_location: false,
+                tracker_label: 'Tracker label',
+                emergency: false,
+              },
+            },
+          ];
+          setEvents(Utils.sortIntoDateGroups(testlist, 'Events'));
+          setDetailsLoaded(true);
           setLoading(false);
-          setEvents(eventList);
         })
         .catch((error) => {
           setLoading(false);
@@ -351,6 +441,21 @@ function CustomDrawerContent() {
               </TotalContainerItem>
             </TotalContainerRow>
           </TotalContainer>
+        </>
+      ) : null}
+      {detailsLoaded && detail.screen === 'Events' ? (
+        <>
+          <ClearButton onPress={() => setDetailsLoaded(false)} />
+          {Object.keys(events).map((key) => {
+            return (
+              <>
+                <DateLabel>{key.replace(/-/g, '.')}</DateLabel>
+                {events[key].map((_, i) => {
+                  return <EventItem event={_} />;
+                })}
+              </>
+            );
+          })}
         </>
       ) : null}
     </Container>

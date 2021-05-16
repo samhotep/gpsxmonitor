@@ -76,54 +76,91 @@ function CustomDrawerContent(props) {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const createDate = () => {
-    let event = new Date(Date.now());
-    let offset = event.getTimezoneOffset() / 60;
-    event.setHours(event.getHours() + offset * -1);
-    return event;
-  };
-
   const initTimeSettings = () => {
     let timeSettings = {};
     let now = new Date(Date.now());
     let offset = now.getTimezoneOffset() / 60;
     now.setHours(now.getHours() + offset * -1);
     // From beginning of day till now
-    // new Date(year, monthIndex, day, hours, minutes, seconds, milliseconds)
     let today = new Date(
       now.getFullYear(),
       now.getMonth(),
       now.getDate(),
-      (24 + offset) * -1,
+      offset * -1,
       0,
       0,
     );
-    let toDate = createDate();
     timeSettings.Today = {
-      from: today,
-      to: now,
+      from: today.toISOString(),
+      to: now.toISOString(),
     };
     // From beginning to end of yesterday
-    let yesterdayStart = new Date(today.setDate(today.getDate() - 1));
-    let yesterdayEnd = new Date();
-    // yesterdayStart.setHours(24 - offset - 1, 59, 59),
+    let yesterdayStart = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - 1,
+      offset * -1,
+      0,
+      0,
+    );
+    let yesterdayEnd = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      offset * -1 - 1,
+      59,
+      59,
+    );
     timeSettings.Yesterday = {
-      from: yesterdayStart,
-      to: yesterdayEnd,
+      from: yesterdayStart.toISOString(),
+      to: yesterdayEnd.toISOString(),
     };
     // From Beginning of this week to now
+    let lastWeek = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - 7,
+      offset * -1,
+      0,
+      0,
+    );
     timeSettings.Week = {
-      from: new Date(yesterdayStart.setDate(toDate.getDate() - 7)),
-      to: now,
+      from: lastWeek.toISOString(),
+      to: now.toISOString(),
     };
     // From Beginning of this month to now
-    let monthDate = new Date(createDate().setDate(1));
-    timeSettings['Current month'] = {from: monthDate, to: now};
+    let monthDate = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1,
+      offset * -1,
+      0,
+      0,
+    );
+    timeSettings['Current month'] = {
+      from: monthDate.toISOString(),
+      to: now.toISOString(),
+    };
     // From Beginning to end of last month
-    let lastMonthDate = new Date(createDate().setDate(1));
+    let lastMonthStart = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      1,
+      offset * -1,
+      0,
+      0,
+    );
+    let lastMonthEnd = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      0,
+      offset * -1,
+      59,
+      59,
+    );
     timeSettings['Last month'] = {
-      from: lastMonthDate.setMonth(monthDate.getMonth() - 1),
-      to: monthDate,
+      from: lastMonthStart.toISOString(),
+      to: lastMonthEnd.toISOString(),
     };
     // TODO Custom settings
     setTimeRange(timeSettings);
@@ -151,17 +188,12 @@ function CustomDrawerContent(props) {
 
   const showItems = () => {
     setLoading(true);
+    console.log('SELECTION: ', timeRange[timeSelection]);
     if (detail.screen === 'Tracks') {
       API.getTracks(
         currentTracker.id,
-        timeRange[timeSelection].from
-          .toISOString()
-          .replace('T', ' ')
-          .substr(0, 19),
-        timeRange[timeSelection].to
-          .toISOString()
-          .replace('T', ' ')
-          .substr(0, 19),
+        timeRange[timeSelection].from.replace('T', ' ').substr(0, 19),
+        timeRange[timeSelection].to.replace('T', ' ').substr(0, 19),
       )
         .then((trackList) => {
           setTracks(Utils.sortIntoDateGroups(trackList));
@@ -176,14 +208,8 @@ function CustomDrawerContent(props) {
     } else if (detail.screen === 'Events') {
       API.getEvents(
         currentTracker.id,
-        timeRange[timeSelection].from
-          .toISOString()
-          .replace('T', ' ')
-          .substr(0, 19),
-        timeRange[timeSelection].to
-          .toISOString()
-          .replace('T', ' ')
-          .substr(0, 19),
+        timeRange[timeSelection].from.replace('T', ' ').substr(0, 19),
+        timeRange[timeSelection].to.replace('T', ' ').substr(0, 19),
       )
         .then((eventList) => {
           setEvents(Utils.sortIntoDateGroups(eventList, 'Events'));

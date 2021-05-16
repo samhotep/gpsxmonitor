@@ -13,6 +13,7 @@ import API from '../api/api';
 import Storage from '../storage/storage';
 import Utils from '../utils/utils';
 import ClearButton from '../components/buttons/clearButton';
+import DrawerLoader from '../components/loaders/drawerLoader';
 
 const Drawer = createDrawerNavigator();
 
@@ -72,6 +73,7 @@ function CustomDrawerContent() {
   const [rawTracks, setRawTracks] = useState([]);
   const [events, setEvents] = useState([]);
   const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const createDate = () => {
     let event = new Date(Date.now());
@@ -128,7 +130,7 @@ function CustomDrawerContent() {
   };
 
   const showItems = () => {
-    // detail.screen
+    setLoading(true);
     if (detail.screen === 'Tracks') {
       API.getTracks(
         currentTracker.id,
@@ -194,8 +196,10 @@ function CustomDrawerContent() {
           setTracks(Utils.sortIntoDateGroups(testlist));
           setRawTracks(countTracks(testlist));
           setDetailsLoaded(true);
+          setLoading(false);
         })
         .catch((error) => {
+          setLoading(false);
           console.log(error);
         });
     } else if (detail.screen === 'Events') {
@@ -211,9 +215,11 @@ function CustomDrawerContent() {
           .substr(0, 19),
       )
         .then((eventList) => {
+          setLoading(false);
           setEvents(eventList);
         })
         .catch((error) => {
+          setLoading(false);
           console.log(error);
         });
     }
@@ -312,6 +318,7 @@ function CustomDrawerContent() {
           })}
           <GenericButton title="SHOW" onPress={showItems} />
           <Separator />
+          {loading ? <DrawerLoader /> : null}
         </>
       ) : null}
       {detailsLoaded ? (

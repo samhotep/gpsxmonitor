@@ -3,26 +3,17 @@ import Separator from '../separators/separator';
 import styled from 'styled-components';
 
 export default function EventItem(props) {
-  let start = new Date(props.track.start_date.replace(/-+/g, '/'));
-  let end = new Date(props.track.end_date.replace(/-+/g, '/'));
-  let difference = new Date(end.getTime() - start.getTime());
   return (
     <>
       <Container onPress={props.onPress}>
-        <ImageContainer source={require('../../assets/track.png')} />
+        <ImageContainer source={require('../../assets/bell_blue.png')} />
         <ColumnContainer>
           <RowContainer>
-            <BoldText
-              bold>{`${start.getHours()}:${start.getMinutes()} `}</BoldText>
-            <Text>{props.track.start_address}</Text>
+            <Text>{props.event.start_address}</Text>
           </RowContainer>
-          <RowContainer>
-            <BoldText bold>{`${end.getHours()}:${end.getMinutes()} `}</BoldText>
-            <Text>{props.track.end_address}</Text>
-          </RowContainer>
+
           <DetailsContainer>
-            <Text>{`${props.track.length} km`}</Text>
-            <Text>{`${difference.getHours()} h ${difference.getMinutes()} m`}</Text>
+            <Text>{`${props.event.time.replace(/-+/g, '/')}`}</Text>
           </DetailsContainer>
         </ColumnContainer>
       </Container>
@@ -54,8 +45,8 @@ const ColumnContainer = styled.View`
 `;
 
 const ImageContainer = styled.Image`
-  height: ${(props) => props.size || 56}px;
-  width: ${(props) => props.size || 36}px;
+  height: ${(props) => props.size || 24}px;
+  width: ${(props) => props.size || 24}px;
 `;
 
 const DetailsContainer = styled.View`

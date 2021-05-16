@@ -69,7 +69,6 @@ const Text = styled.Text`
   text-align: left;
   flex-wrap: wrap;
   font-size: 14px;
-  font-weight: 700;
   color: ${(props) => (props.selected ? '#ffffff' : '#a8a8a8')};
   width: 80%;
 `;

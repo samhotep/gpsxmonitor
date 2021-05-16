@@ -54,7 +54,7 @@ const ColumnContainer = styled.View`
 `;
 
 const ImageContainer = styled.Image`
-  height: ${(props) => props.size || 56}px;
+  height: ${(props) => props.size || 48}px;
   width: ${(props) => props.size || 36}px;
 `;
 

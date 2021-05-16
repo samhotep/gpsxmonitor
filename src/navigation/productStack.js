@@ -149,51 +149,72 @@ function CustomDrawerContent() {
           // TODO TEMP DATA
           let testlist = [
             {
-              id: 123456,
-              start_date: '2020-09-23 03:39:44',
-              start_address: '1255 6th Ave, New York, NY 10020, USA',
-              max_speed: 62,
-              end_date: '2020-09-23 06:39:44',
-              end_address: '888 5th Ave, New York, NY 10021, USA',
-              length: 5.5,
-              points: 327,
-              avg_speed: 49,
-              event_count: 3,
-              norm_fuel_consumed: 1.07,
+              avg_speed: 14,
+              end_address:
+                'Ariena Enterprises, Old Butabika (Mutungo) Road, Kampala, Central Region, Uganda, 2359',
+              end_date: '2021-05-16 13:20:16',
+              id: 442,
+              length: 6.85,
+              max_speed: 45,
+              points: 112,
+              start_address:
+                'Parliamentary Pensions, Parliament Avenue, Kampala, Central Region, Uganda, 7096',
+              start_date: '2021-05-16 12:50:22',
               type: 'regular',
-              gsm_lbs: false,
             },
             {
-              id: 123456,
-              start_date: '2020-10-24 03:39:44',
-              start_address: '1255 6th Ave, New York, NY 10020, USA',
-              max_speed: 62,
-              end_date: '2020-10-24 06:39:44',
-              end_address: '888 5th Ave, New York, NY 10021, USA',
-              length: 5.5,
-              points: 327,
-              avg_speed: 49,
-              event_count: 3,
-              norm_fuel_consumed: 1.07,
+              avg_speed: 20,
+              end_address:
+                'Magala and Sons limited, Kireka Road, Kampala, Wakiso, Uganda, 2359',
+              end_date: '2021-05-16 13:27:28',
+              id: 443,
+              length: 0.58,
+              max_speed: 30,
+              points: 12,
+              start_address:
+                'Ariena Enterprises, Old Butabika (Mutungo) Road, Kampala, Central Region, Uganda, 2359',
+              start_date: '2021-05-16 13:25:42',
               type: 'regular',
-              gsm_lbs: false,
             },
             {
-              id: 123456,
-              start_date: '2020-09-23 03:39:44',
-              start_address: '1255 6th Ave, New York, NY 10020, USA',
-              max_speed: 62,
-              end_date: '2020-09-23 06:39:44',
-              end_address: '888 5th Ave, New York, NY 10021, USA',
-              length: 5.5,
-              points: 327,
-              avg_speed: 49,
-              event_count: 3,
-              norm_fuel_consumed: 1.07,
+              avg_speed: 21,
+              end_address: 'Kampala, Central Region, Uganda, 2359',
+              end_date: '2021-05-16 13:42:24',
+              id: 444,
+              length: 1.45,
+              max_speed: 41,
+              points: 25,
+              start_address:
+                'Magala and Sons limited, Kireka Road, Kampala, Wakiso, Uganda, 2359',
+              start_date: '2021-05-16 13:38:12',
               type: 'regular',
-              gsm_lbs: false,
+            },
+            {
+              avg_speed: 17,
+              end_address: 'Kireka Road, Kira, Wakiso, Uganda, 2359',
+              end_date: '2021-05-16 16:59:20',
+              id: 446,
+              length: 1.68,
+              max_speed: 41,
+              points: 28,
+              start_address: 'Kampala, Central Region, Uganda, 2359',
+              start_date: '2021-05-16 16:53:26',
+              type: 'regular',
+            },
+            {
+              avg_speed: 20,
+              end_address: '52b Cecilia Rd, Kampala, Uganda',
+              end_date: '2021-05-16 17:40:12',
+              id: 447,
+              length: 2.11,
+              max_speed: 34,
+              points: 20,
+              start_address: 'Kireka Road, Kira, Wakiso, Uganda, 2359',
+              start_date: '2021-05-16 17:33:48',
+              type: 'regular',
             },
           ];
+
           setTracks(Utils.sortIntoDateGroups(testlist));
           setRawTracks(countTracks(testlist));
           setDetailsLoaded(true);
@@ -415,9 +436,10 @@ function CustomDrawerContent() {
         <>
           <ClearButton onPress={() => setDetailsLoaded(false)} />
           {Object.keys(tracks).map((key) => {
+            let label = new Date(key);
             return (
               <>
-                <DateLabel>{key.replace(/-/g, '.')}</DateLabel>
+                <DateLabel>{`${label.getDate()}.${label.getMonth()}.${label.getFullYear()}`}</DateLabel>
                 {tracks[key].map((_, i) => {
                   return <TrackItem track={_} />;
                 })}
@@ -431,7 +453,7 @@ function CustomDrawerContent() {
                 <TotalImageContainer
                   source={require('../assets/route_total.png')}
                 />
-                <TotalText>{rawTracks[1]} km</TotalText>
+                <TotalText>{rawTracks[1].toFixed(1)} km</TotalText>
               </TotalContainerItem>
               <TotalContainerItem>
                 <TotalImageContainer

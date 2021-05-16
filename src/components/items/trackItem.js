@@ -65,7 +65,9 @@ const DetailsContainer = styled.View`
   width: 90%;
 `;
 
-const Text = styled.Text`
+const Text = styled.Text.attrs({
+  numberOfLines: 2,
+})`
   text-align: left;
   flex-wrap: wrap;
   font-size: 12px;

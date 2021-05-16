@@ -321,7 +321,7 @@ function CustomDrawerContent() {
           {loading ? <DrawerLoader /> : null}
         </>
       ) : null}
-      {detailsLoaded ? (
+      {detailsLoaded && detail.screen === 'Tracks' ? (
         <>
           <ClearButton onPress={() => setDetailsLoaded(false)} />
           {Object.keys(tracks).map((key) => {

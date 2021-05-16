@@ -68,13 +68,13 @@ const DetailsContainer = styled.View`
 const Text = styled.Text`
   text-align: left;
   flex-wrap: wrap;
-  font-size: 14px;
-  color: ${(props) => (props.selected ? '#ffffff' : '#a8a8a8')};
+  font-size: 12px;
+  color: ${(props) => (props.selected ? '#ffffff' : '#9a9a9a')};
   width: 80%;
 `;
 
 const BoldText = styled.Text`
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   color: ${(props) => props.color || '#737373'};
 `;

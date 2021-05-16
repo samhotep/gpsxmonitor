@@ -393,7 +393,13 @@ function CustomDrawerContent(props) {
                   updateRadioButtons(i);
                 }}>
                 <RadioContainer>
-                  <RadioInput color="#1e96dc" selected={radioSelection[i]} />
+                  <RadioInput
+                    color="#1e96dc"
+                    selected={radioSelection[i]}
+                    onPress={() => {
+                      updateRadioButtons(i);
+                    }}
+                  />
                 </RadioContainer>
                 <Title size={14}>{_}</Title>
               </RadioHeaderContainer>

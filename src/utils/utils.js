@@ -132,10 +132,11 @@ const Utils = {
       return require('../assets/battery_low.png');
     }
   },
-  sortIntoDateGroups: (items) => {
+  sortIntoDateGroups: (items, type = 'Tracks') => {
     let dates = {};
     items.map((_, i) => {
-      let item_date = _.start_date.split(' ')[0];
+      let item_date =
+        type === 'Tracks' ? _.start_date.split(' ')[0] : _.time.split(' ')[0];
       if (dates[item_date]) {
         dates[item_date].push(_);
       } else {

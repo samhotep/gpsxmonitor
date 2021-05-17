@@ -88,11 +88,15 @@ export default function HomeScreen({navigation}) {
   };
 
   useEffect(() => {
-    Storage.getMarkerSettings().then((stored) => {
-      let settings = JSON.parse(stored);
-      setFollowObject(settings.followObject);
-      setTrackerSelection(settings.selections);
-    });
+    try {
+      Storage.getMarkerSettings().then((stored) => {
+        let settings = JSON.parse(stored);
+        setFollowObject(settings.followObject);
+        setTrackerSelection(settings.selections);
+      });
+    } catch (error) {
+      console.warn(error);
+    }
   }, []);
 
   useEffect(() => {

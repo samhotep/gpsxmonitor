@@ -64,7 +64,7 @@ export default function HomeScreen({navigation}) {
           latitude: data.gps.location.lat,
           longitude: data.gps.location.lng,
         });
-        if (settings.followObject) {
+        try {
           mapRef.current.animateToRegion(
             {
               latitude: data.gps.location.lat,
@@ -74,7 +74,7 @@ export default function HomeScreen({navigation}) {
             },
             renderDelay,
           );
-        }
+        } catch (error) {}
       });
     }
     // TODO Might be useful somewhere -> Animate Marker

@@ -15,6 +15,7 @@ import Utils from '../utils/utils';
 import ClearButton from '../components/buttons/clearButton';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import EventItem from '../components/items/eventItem';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const Drawer = createDrawerNavigator();
 
@@ -60,21 +61,51 @@ function CustomDrawerContent(props) {
     'Week',
     'Current month',
     'Last month',
-    'Custom period',
   ];
   const [radioSelection, setRadioSelection] = useState(
     Array(radioItems.length).fill(false),
   );
   const [timeSelection, setTimeSelection] = useState('Today');
+  const [customPeriodSelected, setCustomPeriodSelected] = useState(false);
   const [timeRange, setTimeRange] = useState({});
   const [currentTracker, setCurrentTracker] = useState();
   const [detailsLoaded, setDetailsLoaded] = useState(false);
-  const [testT, setTestT] = useState({});
   const [tracks, setTracks] = useState([]);
   const [rawTracks, setRawTracks] = useState([]);
   const [events, setEvents] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [dateFrom, setDateFrom] = useState(new Date(Date.now()));
+  const [dateTo, setDateTo] = useState(new Date(Date.now()));
+  const [isDatePickerToVisible, setDatePickerToVisibility] = useState(false);
+  const [isDatePickerFromVisible, setDatePickerFromVisibility] = useState(
+    false,
+  );
+
+  const showDatePicker = (picker) => {
+    if (picker === 1) {
+      setDatePickerFromVisibility(true);
+    } else if (picker === 2) {
+      setDatePickerToVisibility(true);
+    }
+  };
+
+  const hideDatePicker = (picker) => {
+    if (picker === 1) {
+      setDatePickerFromVisibility(false);
+    } else if (picker === 2) {
+      setDatePickerToVisibility(false);
+    }
+  };
+
+  const handleConfirm = (date, picker) => {
+    if (picker === 1) {
+      setDateFrom(date);
+    } else if (picker === 2) {
+      setDateTo(date);
+    }
+    hideDatePicker(picker);
+  };
 
   const initTimeSettings = () => {
     let timeSettings = {};
@@ -169,6 +200,7 @@ function CustomDrawerContent(props) {
   const updateRadioButtons = (index) => {
     let newRadio = Array(radioItems.length).fill(false);
     newRadio[index] = true;
+    setCustomPeriodSelected(false);
     setRadioSelection(newRadio);
     setTimeSelection(radioItems[index]);
   };
@@ -188,13 +220,19 @@ function CustomDrawerContent(props) {
 
   const showItems = () => {
     setLoading(true);
-    console.log('SELECTION: ', timeRange[timeSelection]);
     if (detail.screen === 'Tracks') {
-      API.getTracks(
-        currentTracker.id,
-        timeRange[timeSelection].from.replace('T', ' ').substr(0, 19),
-        timeRange[timeSelection].to.replace('T', ' ').substr(0, 19),
-      )
+      let from;
+      let to;
+      if (customPeriodSelected) {
+        // "2021-05-17 04:28:39"
+
+        from = dateFrom.toISOString().replace('T', ' ').substr(0, 19);
+        to = dateTo.toISOString().replace('T', ' ').substr(0, 19);
+      } else {
+        from = timeRange[timeSelection].from.replace('T', ' ').substr(0, 19);
+        to = timeRange[timeSelection].to.replace('T', ' ').substr(0, 19);
+      }
+      API.getTracks(currentTracker.id, from, to)
         .then((trackList) => {
           setTracks(Utils.sortIntoDateGroups(trackList));
           setRawTracks(countTracks(trackList));
@@ -413,6 +451,74 @@ function CustomDrawerContent(props) {
               </RadioHeaderContainer>
             );
           })}
+          <RadioHeaderContainer
+            onPress={() => {
+              updateRadioButtons(10);
+              setCustomPeriodSelected(!customPeriodSelected);
+            }}>
+            <RadioContainer>
+              <RadioInput
+                color="#1e96dc"
+                selected={customPeriodSelected}
+                onPress={() => {
+                  updateRadioButtons(10);
+                  setCustomPeriodSelected(!customPeriodSelected);
+                }}
+              />
+            </RadioContainer>
+            <Title size={14}>Custom period</Title>
+          </RadioHeaderContainer>
+          {customPeriodSelected ? (
+            <DatePickerContainer>
+              <RadioContainer>
+                <ImageContainer
+                  resizeMode="stretch"
+                  size={50}
+                  source={require('../assets/bracket.png')}
+                />
+              </RadioContainer>
+              <DatePickerCol>
+                <Button onPress={() => showDatePicker(1)}>
+                  <DatePickerTitle size={14}>
+                    {`${dateFrom
+                      .toLocaleString('default', {
+                        weekday: 'short',
+                        month: 'short',
+                      })
+                      .substr(
+                        4,
+                        6,
+                      )}, ${dateFrom.getFullYear()} ${dateFrom.toLocaleTimeString(
+                      'en-US',
+                      {
+                        hour: 'numeric',
+                        hour12: true,
+                      },
+                    )}`}
+                  </DatePickerTitle>
+                </Button>
+                <Button onPress={() => showDatePicker(2)}>
+                  <DatePickerTitle size={14}>
+                    {`${dateTo
+                      .toLocaleString('default', {
+                        weekday: 'short',
+                        month: 'short',
+                      })
+                      .substr(
+                        4,
+                        6,
+                      )}, ${dateFrom.getFullYear()} ${dateFrom.toLocaleTimeString(
+                      [],
+                      {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      },
+                    )}`}
+                  </DatePickerTitle>
+                </Button>
+              </DatePickerCol>
+            </DatePickerContainer>
+          ) : null}
           <GenericButton title="SHOW" onPress={showItems} />
           <Separator />
           {loading ? <DrawerLoader /> : null}
@@ -468,6 +574,18 @@ function CustomDrawerContent(props) {
           })}
         </>
       ) : null}
+      <DateTimePickerModal
+        isVisible={isDatePickerFromVisible}
+        mode="datetime"
+        onConfirm={(date) => handleConfirm(date, 1)}
+        onCancel={() => hideDatePicker(1)}
+      />
+      <DateTimePickerModal
+        isVisible={isDatePickerToVisible}
+        mode="datetime"
+        onConfirm={(date) => handleConfirm(date, 2)}
+        onCancel={() => hideDatePicker(2)}
+      />
     </Container>
   );
 }
@@ -485,7 +603,6 @@ const HeaderContainer = styled.View`
 `;
 
 const ImageContainer = styled.Image`
-  flex: 1;
   width: ${(props) => props.size || 28}px;
   height: ${(props) => props.size || 28}px;
   margin: ${(props) => props.margin || 10}px;
@@ -512,6 +629,7 @@ const Title = styled.Text`
   font-family: 'Roboto-Regular';
   font-size: ${(props) => props.size || 18}px;
   color: ${(props) => props.color || '#202020'};
+  margin: 5px;
 `;
 
 const DateLabel = styled.Text`
@@ -558,4 +676,29 @@ const TotalImageContainer = styled.Image`
   width: ${(props) => props.size || 28}px;
   height: ${(props) => props.size || 28}px;
   margin: 5px;
+`;
+
+const DatePickerContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+`;
+
+const DatePickerCol = styled.View`
+  flex: 5;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+
+const DatePickerTitle = styled.Text`
+  font-family: 'Roboto-Regular';
+  font-size: ${(props) => props.size || 18}px;
+  color: ${(props) => props.color || '#1e96dc'};
+  text-decoration: underline;
+`;
+
+const Button = styled.TouchableOpacity`
+  flex: 5;
 `;

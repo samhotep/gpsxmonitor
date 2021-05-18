@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import Separator from '../separators/separator';
 import styled from 'styled-components';
+import Storage from '../../storage/storage';
 
 export default function EventItem(props) {
   const [statusDate, setStatusDate] = useState('');
-  const [user, setUser] = useState();
+  const [trackerLabel, setTrackerLabel] = useState('');
 
   useEffect(() => {
     let date = new Date(props.event.status_change_date.replace(/-+/g, '/'));
@@ -20,6 +21,19 @@ export default function EventItem(props) {
         minute: '2-digit',
       })}`,
     );
+
+    Storage.getAllTrackers()
+      .then((trackers) => {
+        JSON.parse(trackers).map((_, i) => {
+          if (_.id === props.event.tracker_id) {
+            setTrackerLabel(_.label);
+          }
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -29,7 +43,7 @@ export default function EventItem(props) {
         <ImageContainer source={require('../../assets/bell_blue.png')} />
         <ColumnContainer>
           <Text color="#737373">
-            Rahul (Kamaz): Rahul Adenaur: task: "{props.event.description}"{' '}
+            {trackerLabel}: task: "{props.event.label}"{' '}
             {props.event.status.toUpperCase()}
           </Text>
           <Text align="right" size={12}>

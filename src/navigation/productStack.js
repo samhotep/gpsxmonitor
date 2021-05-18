@@ -117,7 +117,7 @@ function CustomDrawerContent(props) {
       now.getFullYear(),
       now.getMonth(),
       now.getDate(),
-      offset * -1,
+      0,
       0,
       0,
     );
@@ -337,6 +337,7 @@ function CustomDrawerContent(props) {
               type: 'task',
             },
           ];
+          console.log(Utils.sortIntoDateGroups(testlist, 'Events'));
           setEvents(Utils.sortIntoDateGroups(testlist, 'Events'));
           setDetailsLoaded(true);
           setLoading(false);

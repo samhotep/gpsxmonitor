@@ -253,7 +253,7 @@ const API = {
       trackers: [tracker_id],
       from: from,
       to: to,
-      limit: '50',
+      limit: 50,
     }).then((result) => {
       if (result.success === true) {
         return result.list;

@@ -136,6 +136,7 @@ function CustomDrawerContent({navigation}) {
         return API.getTrackers();
       })
       .then((trackers) => {
+        Storage.setAllTrackers(trackers);
         setTrackersList(trackers);
         _trackers = trackers;
         // Get detailed state info for each tracker

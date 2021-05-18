@@ -9,11 +9,14 @@ export default function EventItem(props) {
         <ImageContainer source={require('../../assets/bell_blue.png')} />
         <ColumnContainer>
           <RowContainer>
-            <Text>{props.event.start_address}</Text>
+            <Text>{props.event.location.address}</Text>
           </RowContainer>
 
           <DetailsContainer>
-            <Text>{`${props.event.time.replace(/-+/g, '/')}`}</Text>
+            <Text>{`${props.event.status_change_date.replace(
+              /-+/g,
+              '/',
+            )}`}</Text>
           </DetailsContainer>
         </ColumnContainer>
       </Container>

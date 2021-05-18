@@ -32,7 +32,9 @@ export default function EventItem(props) {
             Rahul (Kamaz): Rahul Adenaur: task: "{props.event.description}"{' '}
             {props.event.status.toUpperCase()}
           </Text>
-          <Text align="right">{statusDate.slice(0, -3)}</Text>
+          <Text align="right" size={12}>
+            {statusDate.slice(0, -3)}
+          </Text>
         </ColumnContainer>
       </Container>
       <Separator nomargin />
@@ -64,7 +66,7 @@ const ImageContainer = styled.Image`
 const Text = styled.Text`
   text-align: ${(props) => props.align || 'left'};
   flex-wrap: wrap;
-  font-size: 14px;
+  font-size: ${(props) => props.size || 14}px;
   color: ${(props) => props.color || '#a8a8a8'};
   width: 250px;
   padding: 2px;

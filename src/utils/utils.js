@@ -136,7 +136,9 @@ const Utils = {
     let dates = {};
     items.map((_, i) => {
       let item_date =
-        type === 'Tracks' ? _.start_date.split(' ')[0] : _.time.split(' ')[0];
+        type === 'Tracks'
+          ? _.start_date.split(' ')[0]
+          : _.status_change_date.split(' ')[0];
       if (dates[item_date]) {
         dates[item_date].push(_);
       } else {

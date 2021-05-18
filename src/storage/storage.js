@@ -68,6 +68,19 @@ const Storage = {
       console.log(e);
     }
   },
+  getAllTrackers: () => {
+    return AsyncStorage.getItem('trackerset');
+  },
+  setAllTrackers: (data) => {
+    AsyncStorage.setItem('trackerset', JSON.stringify(data));
+  },
+  removeAllTrackers: async () => {
+    try {
+      await AsyncStorage.removeItem('trackerset');
+    } catch (e) {
+      console.log(e);
+    }
+  },
   getMarkerSettings: () => {
     return AsyncStorage.getItem('markersettings');
   },

@@ -99,14 +99,25 @@ const Utils = {
       return require('../assets/signal/poor.png');
     }
   },
-  getMovementIcon: (movement_status) => {
-    if (movement_status === 'moving') {
-      return require('../assets/speed.png');
-    } else if (movement_status === 'parked') {
-      return require('../assets/parked.png');
-    } else if (movement_status === 'stopped') {
-      return require('../assets/stop.png');
+  getMovementComponents: (tracker, seconds = true) => {
+    let icon;
+    let text;
+    if (tracker.movement_status === 'moving') {
+      icon = require('../assets/speed.png');
+      text = `Speed: ${tracker.gps.speed} km/hr`;
+    } else if (tracker.movement_status === 'parked') {
+      icon = require('../assets/parked.png');
+      text = `Parked for: ${Utils.getTimeDifference(
+        tracker.actual_track_update,
+      )}`;
+    } else if (tracker.movement_status === 'stopped') {
+      icon = require('../assets/stop.png');
+      text = `Stopped for: ${Utils.getTimeDifference(
+        tracker.actual_track_update,
+        seconds,
+      )}`;
     }
+    return {icon: icon, text: text};
   },
   getDirection: (degrees) => {
     /**

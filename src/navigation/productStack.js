@@ -74,7 +74,7 @@ function CustomDrawerContent(props) {
     'Smart filter',
   ];
   const [checkSelection, setCheckSelection] = useState(
-    Array(checkItems.length).fill(false),
+    Array(checkItems.length).fill(true),
   );
   const [trackFilter, setTrackFilter] = useState('');
   const [customPeriodSelected, setCustomPeriodSelected] = useState(false);

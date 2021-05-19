@@ -67,6 +67,7 @@ function CustomDrawerContent(props) {
   );
   const [timeSelection, setTimeSelection] = useState('Today');
   const [customPeriodSelected, setCustomPeriodSelected] = useState(false);
+  const [settingsSelected, setSettingsSelected] = useState(false);
   const [timeRange, setTimeRange] = useState({});
   const [currentTracker, setCurrentTracker] = useState();
   const [detailsLoaded, setDetailsLoaded] = useState(false);
@@ -432,6 +433,39 @@ function CustomDrawerContent(props) {
               </DatePickerCol>
             </DatePickerContainer>
           ) : null}
+          <RadioHeaderContainer
+            onPress={() => {
+              setSettingsSelected(!settingsSelected);
+            }}>
+            <RadioContainer>
+              <ImageContainer
+                source={
+                  settingsSelected
+                    ? require('../assets/expand_less.png')
+                    : require('../assets/expand_more.png')
+                }
+                resizeMode="cover"
+              />
+            </RadioContainer>
+            <Title size={14}>Settings</Title>
+          </RadioHeaderContainer>
+          {settingsSelected && (
+            <RadioHeaderContainer
+              onPress={() => {
+                setSettingsSelected(!settingsSelected);
+              }}>
+              <RadioContainer>
+                <RadioInput
+                  color="#1e96dc"
+                  selected={customPeriodSelected}
+                  onPress={() => {
+                    setSettingsSelected(!settingsSelected);
+                  }}
+                />
+              </RadioContainer>
+              <Title size={14}>Setting 1</Title>
+            </RadioHeaderContainer>
+          )}
           <GenericButton title="SHOW" onPress={showItems} />
           <Separator />
           {loading ? <DrawerLoader /> : null}
@@ -525,11 +559,9 @@ const RadioHeaderContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
 `;
 
 const RadioContainer = styled.View`
-  flex: 1;
   align-items: center;
   justify-content: center;
   width: ${(props) => props.size || 28}px;

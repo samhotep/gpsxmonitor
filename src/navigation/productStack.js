@@ -238,6 +238,7 @@ function CustomDrawerContent(props) {
 
   const showItems = () => {
     setLoading(true);
+    // TODO Fix time calculation bug
     if (detail.screen === 'Tracks') {
       let from;
       let to;

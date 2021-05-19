@@ -45,7 +45,7 @@ const Utils = {
         {name: 'hour', length: 3600000},
         {name: 'min', length: 60000},
       ];
-      showSeconds ? ranges.push[{name: 'second', length: 1000}] : null;
+      showSeconds ? ranges.push({name: 'second', length: 1000}) : null;
       ranges.map((_, i) => {
         let total = Math.floor(millis / _.length);
         if (total > 0 && total === 1) {

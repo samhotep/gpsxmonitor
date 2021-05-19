@@ -33,6 +33,7 @@ export default function DetailsScreen({route, navigation}) {
   };
 
   const constructLocationObject = (state, gpsPoint) => {
+    let {icon, text} = Utils.getMovementComponents(state, false);
     return constructObject('Location', state.gps.updated, [
       {
         type: 'image',
@@ -54,11 +55,8 @@ export default function DetailsScreen({route, navigation}) {
           }
         : {
             type: 'image',
-            image: Utils.getMovementIcon(state.movement_status),
-            text: `Parked for ${Utils.getTimeDifference(
-              state.actual_track_update,
-              false,
-            )}`,
+            image: icon,
+            text: text,
           },
       {
         type: 'image',

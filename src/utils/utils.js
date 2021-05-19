@@ -60,13 +60,18 @@ const Utils = {
       return '';
     }
   },
-  calculateTimeDifference: (start, end) => {
+  getHoursAndMinutes: (start, end) => {
     let hours = end.getHours() - start.getHours();
     let minutes = end.getMinutes() - start.getMinutes();
     if (minutes < 0) {
       hours -= 1;
       minutes = 60 + minutes;
     }
+    return {hours: hours, minutes: minutes};
+  },
+  calculateTimeDifference: (start, end) => {
+    let hours,
+      minutes = Utils.getHoursAndMinutes(start, end);
     return `${hours} h ${minutes} m`;
   },
   getTime: (millis) => {

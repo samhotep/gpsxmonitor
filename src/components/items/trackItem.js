@@ -22,7 +22,8 @@ export default function TrackItem(props) {
     let end = new Date(props.track.end_date.replace(/-+/g, '/'));
     setStartDate(formatDate(start));
     setEndDate(formatDate(end));
-    setDifference(Utils.calculateTimeDifference(start, end));
+    let {hours, minutes} = Utils.getHoursAndMinutes(start, end);
+    setDifference(`${hours} h ${minutes} m`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

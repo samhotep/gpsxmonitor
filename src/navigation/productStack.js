@@ -205,7 +205,6 @@ function CustomDrawerContent(props) {
       from: lastMonthStart.toISOString(),
       to: lastMonthEnd.toISOString(),
     };
-    // TODO Custom settings
     setTimeRange(timeSettings);
   };
 
@@ -243,8 +242,6 @@ function CustomDrawerContent(props) {
       let from;
       let to;
       if (customPeriodSelected) {
-        // "2021-05-17 04:28:39"
-
         from = dateFrom.toISOString().replace('T', ' ').substr(0, 19);
         to = dateTo.toISOString().replace('T', ' ').substr(0, 19);
       } else {

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {NativeEventEmitter, NativeModules, ToastAndroid} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
+import CheckBox from '@react-native-community/checkbox';
 import SettingsScreen from '../screens/settingsScreen';
 import HomeStack from '../navigation/homeStack';
 import Separator from '../components/separators/separator';
@@ -62,10 +63,20 @@ function CustomDrawerContent(props) {
     'Current month',
     'Last month',
   ];
+  const [timeSelection, setTimeSelection] = useState('Today');
   const [radioSelection, setRadioSelection] = useState(
     Array(radioItems.length).fill(false),
   );
-  const [timeSelection, setTimeSelection] = useState('Today');
+  let checkItems = [
+    'Split with parkings',
+    'Show LBS',
+    'Clustered',
+    'Smart filter',
+  ];
+  const [checkSelection, setCheckSelection] = useState(
+    Array(checkItems.length).fill(false),
+  );
+  const [trackFilter, setTrackFilter] = useState('');
   const [customPeriodSelected, setCustomPeriodSelected] = useState(false);
   const [settingsSelected, setSettingsSelected] = useState(false);
   const [timeRange, setTimeRange] = useState({});
@@ -204,6 +215,13 @@ function CustomDrawerContent(props) {
     setCustomPeriodSelected(false);
     setRadioSelection(newRadio);
     setTimeSelection(radioItems[index]);
+  };
+
+  const updateCheckButtons = (index) => {
+    let newChecks = [...checkSelection];
+    newChecks[index] = !newChecks[index];
+    setCheckSelection(newChecks);
+    setTrackFilter(checkItems[index]);
   };
 
   const countTracks = (trackList) => {
@@ -451,23 +469,27 @@ function CustomDrawerContent(props) {
                 </RadioContainer>
                 <Title size={14}>Settings</Title>
               </RadioHeaderContainer>
-              {settingsSelected && (
-                <RadioHeaderContainer
-                  onPress={() => {
-                    setSettingsSelected(!settingsSelected);
-                  }}>
-                  <RadioContainer>
-                    <RadioInput
-                      color="#1e96dc"
-                      selected={customPeriodSelected}
+              {settingsSelected &&
+                checkItems.map((_, i) => {
+                  return (
+                    <RadioHeaderContainer
                       onPress={() => {
-                        setSettingsSelected(!settingsSelected);
-                      }}
-                    />
-                  </RadioContainer>
-                  <Title size={14}>Setting 1</Title>
-                </RadioHeaderContainer>
-              )}
+                        updateCheckButtons(i);
+                      }}>
+                      <RadioContainer>
+                        <CheckBox
+                          disabled={false}
+                          value={checkSelection[i]}
+                          onValueChange={(newValue) => {
+                            updateCheckButtons(i);
+                          }}
+                          tintColors={{true: '#1e96dc', false: '#1e96dc'}}
+                        />
+                      </RadioContainer>
+                      <Title size={14}>{_}</Title>
+                    </RadioHeaderContainer>
+                  );
+                })}
             </>
           )}
 

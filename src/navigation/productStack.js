@@ -223,20 +223,27 @@ function CustomDrawerContent(props) {
 
   const countTracks = (trackList) => {
     let totalDistance = 0;
-    let totalTime = 0;
+    let totalHours = 0;
+    let totalMinutes = 0;
     trackList.map((_, i) => {
       let start = new Date(_.start_date.replace(/-+/g, '/'));
       let end = new Date(_.end_date.replace(/-+/g, '/'));
-      totalTime += end.getTime() - start.getTime();
+      let {hours, minutes} = Utils.getHoursAndMinutes(start, end);
+      totalHours += hours;
+      totalMinutes += minutes;
       totalDistance += _.length;
     });
-    totalTime = new Date(totalTime);
-    return [trackList.length, totalDistance, totalTime];
+    totalHours += Math.floor(totalMinutes / 60);
+    totalMinutes = totalMinutes % 60;
+    return [
+      trackList.length,
+      totalDistance,
+      `${totalHours} h ${totalMinutes} m`,
+    ];
   };
 
   const showItems = () => {
     setLoading(true);
-    // TODO Fix time calculation bug
     if (detail.screen === 'Tracks') {
       let from;
       let to;
@@ -531,7 +538,7 @@ function CustomDrawerContent(props) {
                 <TotalImageContainer
                   source={require('../assets/time_grey.png')}
                 />
-                <TotalText>{`${rawTracks[2].getHours()} h ${rawTracks[2].getMinutes()} m`}</TotalText>
+                <TotalText>{rawTracks[2]}</TotalText>
               </TotalContainerItem>
             </TotalContainerRow>
           </TotalContainer>

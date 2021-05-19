@@ -235,11 +235,23 @@ const API = {
       return result;
     });
   },
-  getTracks: (tracker_id, from, to) => {
+  getTracks: (
+    tracker_id,
+    from,
+    to,
+    split = false,
+    lbs = false,
+    cluster = false,
+    filter = false,
+  ) => {
     return API.apiCall('track/list/', {
       tracker_id: tracker_id,
       from: from,
       to: to,
+      split: split,
+      include_gsm_lbs: lbs,
+      cluster_single_reports: cluster,
+      filter: filter,
     }).then((result) => {
       if (result.success === true) {
         return result.list;

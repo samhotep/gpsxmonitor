@@ -10,15 +10,14 @@ export default function HomeItem(props) {
   const [movementIcon, setMovementIcon] = useState(
     require('../../assets/moving.png'),
   );
-  const [movementStatus, setMovementStatus] = useState('0');
+  const [movementText, setMovementText] = useState([]);
 
   const loadCurrentTrackerData = () => {
-    setMovementIcon(Utils.getMovementIcon(props.tracker.movement_status));
     setSignalIcon(Utils.getSignalIcon(props.tracker.gps.signal_level));
-    setMovementStatus(
-      Utils.getTimeDifference(props.tracker.actual_track_update),
-    );
     setTimeStatus(Utils.getTimeDifference(props.tracker.gps.updated));
+    let {icon, text} = Utils.getMovementComponents(props.tracker);
+    setMovementIcon(icon);
+    setMovementText(text);
   };
 
   useEffect(() => {
@@ -55,19 +54,9 @@ export default function HomeItem(props) {
         </InnerContainer>
         <InnerContainer>
           <ImageContainer source={movementIcon} size={24} margin={5} />
-
-          {props.tracker.movement_status === 'parked' ? (
-            <Text size={12} width={150}>
-              {props.tracker.movement_status.charAt(0).toUpperCase() +
-                props.tracker.movement_status.slice(1)}{' '}
-              for {movementStatus}
-            </Text>
-          ) : null}
-          {props.tracker.movement_status === 'moving' ? (
-            <Text size={14} width={150}>
-              Speed: {props.tracker.gps.speed} km/hr
-            </Text>
-          ) : null}
+          <Text size={12} width={150}>
+            {movementText}
+          </Text>
         </InnerContainer>
       </RowContainer>
     </Container>

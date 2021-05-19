@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import Separator from '../separators/separator';
 import styled from 'styled-components';
+import Utils from '../../utils/utils';
 
 export default function TrackItem(props) {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [difference, setDifference] = useState(new Date(Date.now()));
+  const [difference, setDifference] = useState('');
 
   const formatDate = (date) => {
     return `${date.toLocaleTimeString([], {
@@ -19,10 +20,9 @@ export default function TrackItem(props) {
   useEffect(() => {
     let start = new Date(props.track.start_date.replace(/-+/g, '/'));
     let end = new Date(props.track.end_date.replace(/-+/g, '/'));
-    let diff = new Date(end.getTime() - start.getTime());
     setStartDate(formatDate(start));
     setEndDate(formatDate(end));
-    setDifference(diff);
+    setDifference(Utils.calculateTimeDifference(start, end));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -40,7 +40,7 @@ export default function TrackItem(props) {
           </RowContainer>
           <DetailsContainer>
             <Text>{`${props.track.length} km`}</Text>
-            <Text>{`${difference.getHours()} h ${difference.getMinutes()} m`}</Text>
+            <Text>{difference}</Text>
           </DetailsContainer>
         </ColumnContainer>
       </Container>

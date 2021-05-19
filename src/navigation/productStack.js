@@ -76,7 +76,6 @@ function CustomDrawerContent(props) {
   const [checkSelection, setCheckSelection] = useState(
     Array(checkItems.length).fill(true),
   );
-  const [trackFilter, setTrackFilter] = useState('');
   const [customPeriodSelected, setCustomPeriodSelected] = useState(false);
   const [settingsSelected, setSettingsSelected] = useState(false);
   const [timeRange, setTimeRange] = useState({});
@@ -220,7 +219,6 @@ function CustomDrawerContent(props) {
     let newChecks = [...checkSelection];
     newChecks[index] = !newChecks[index];
     setCheckSelection(newChecks);
-    setTrackFilter(checkItems[index]);
   };
 
   const countTracks = (trackList) => {
@@ -249,7 +247,15 @@ function CustomDrawerContent(props) {
         from = timeRange[timeSelection].from.replace('T', ' ').substr(0, 19);
         to = timeRange[timeSelection].to.replace('T', ' ').substr(0, 19);
       }
-      API.getTracks(currentTracker.id, from, to)
+      API.getTracks(
+        currentTracker.id,
+        from,
+        to,
+        checkSelection[0],
+        checkSelection[1],
+        checkSelection[2],
+        checkSelection[3],
+      )
         .then((trackList) => {
           setTracks(Utils.sortIntoDateGroups(trackList));
           setRawTracks(countTracks(trackList));

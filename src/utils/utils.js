@@ -69,11 +69,6 @@ const Utils = {
     }
     return {hours: hours, minutes: minutes};
   },
-  calculateTimeDifference: (start, end) => {
-    let hours,
-      minutes = Utils.getHoursAndMinutes(start, end);
-    return `${hours} h ${minutes} m`;
-  },
   getTime: (millis) => {
     let destructuredTime = '';
     let ranges = [

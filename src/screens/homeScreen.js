@@ -86,19 +86,6 @@ export default function HomeScreen({navigation}) {
     // );
   };
 
-  const memoizedInterval = useCallback(() => {
-    clearInterval(intervalID);
-    setIntervalID(
-      setInterval(() => {
-        if (currentTracker) {
-          API.getTrackerState(currentTracker.id).then((result) => {
-            updateTracker(result);
-          });
-        }
-      }, 3000),
-    );
-  }, [intervalID]);
-
   useEffect(() => {
     try {
       Storage.getMarkerSettings().then((stored) => {
@@ -113,14 +100,15 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     // Update interval when params change
-    clearInterval(intervalID);
-    // clearInterval(interval);
-    // if (trackersList.length > 0) {
-    //   interval = setInterval(() => {
-    //     updateTracker(currentTracker);
-    //   }, 3000);
-    //   // setIntervalID(interval);
-    // }
+    if (trackerEventData) {
+      interval = setInterval(() => {
+        API.getTrackerState(trackerEventData.data.id).then((result) => {
+          const newData = Object.assign(trackerEventData.data, result);
+          updateTracker(newData);
+        });
+      }, 3000);
+      setIntervalID(interval);
+    }
     return () => clearInterval(interval);
   }, [latDelta, longDelta, followObject]);
 
@@ -129,20 +117,20 @@ export default function HomeScreen({navigation}) {
     const eventListener = eventEmitter.addListener(
       'event.trackerEvent',
       (trackerData) => {
+        clearInterval(interval);
+        clearInterval(intervalID);
         if (trackerData) {
-          // clearInterval(interval);
-          // clearInterval(intervalID);
           setMapRoute([]);
           setTrackerEventData(trackerData);
           updateTracker(trackerData.data);
-          setIntervalID(
-            setInterval(() => {
-              API.getTrackerState(trackerData.data.id).then((result) => {
-                const newData = Object.assign(trackerData.data, result);
-                updateTracker(newData);
-              });
-            }, 3000),
-          );
+          interval = setInterval(() => {
+            console.log('lat', latDelta);
+            API.getTrackerState(trackerData.data.id).then((result) => {
+              const newData = Object.assign(trackerData.data, result);
+              updateTracker(newData);
+            });
+          }, 3000);
+          setIntervalID(interval);
         }
       },
     );
@@ -304,6 +292,7 @@ export default function HomeScreen({navigation}) {
                     selections: trackerSelection,
                     followObject: newValue,
                   });
+                  clearInterval(intervalID);
                 }}
                 tintColors={{true: '#1e96dc', false: '#1e96dc'}}
               />
@@ -374,6 +363,7 @@ export default function HomeScreen({navigation}) {
           );
           setLatDelta(newLat);
           setLongDelta(newLong);
+          clearInterval(intervalID);
         }}
       />
       <HomeButton
@@ -393,6 +383,7 @@ export default function HomeScreen({navigation}) {
           );
           setLatDelta(newLat);
           setLongDelta(newLong);
+          clearInterval(intervalID);
         }}
       />
     </View>

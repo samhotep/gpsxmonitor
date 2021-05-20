@@ -1,4 +1,5 @@
-import React, {useEffect, useState, useRef} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState, useRef, useCallback} from 'react';
 import {
   NativeEventEmitter,
   NativeModules,
@@ -23,6 +24,7 @@ const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
 export default function HomeScreen({navigation}) {
   const window = useWindowDimensions();
+  const [trackerEventData, setTrackerEventData] = useState();
   const [currentTracker, setCurrentTracker] = useState();
   const [currentMarker, setCurrentMarker] = useState({
     latitude: 0.347596,
@@ -33,8 +35,6 @@ export default function HomeScreen({navigation}) {
   const [type, setType] = useState('standard');
   const [globeClicked, setGlobeClicked] = useState(false);
   const [arrowClicked, setArrowClicked] = useState(false);
-  const [trackersStates, setTrackersStates] = useState({});
-  const [trackersList, setTrackersList] = useState([]);
   const [mapType, setMapType] = useState(Array(4).fill(false));
   const [trackerSelection, setTrackerSelection] = useState(
     Array(3).fill(false),
@@ -45,7 +45,8 @@ export default function HomeScreen({navigation}) {
   const markerRef = useRef();
   const mapTypes = ['standard', 'satellite', 'hybrid', 'terrain'];
   const trackerSelections = ['All', 'Selected', 'Group'];
-  let intervalID = 0;
+  const [intervalID, setIntervalID] = useState(0);
+  let interval = 0;
   const renderDelay = 1500;
   const [mapRoute, setMapRoute] = useState([]);
 
@@ -56,29 +57,25 @@ export default function HomeScreen({navigation}) {
     radioCallback(newRadio);
   };
 
-  const updateTracker = (data) => {
-    API.getTrackerState(data.id).then((result) => {
-      const newData = Object.assign(data, result);
-      if (newData) {
-        setCurrentTracker(newData);
-
-        setCurrentMarker({
-          latitude: newData.gps.location.lat,
-          longitude: newData.gps.location.lng,
-        });
-        try {
-          mapRef.current.animateToRegion(
-            {
-              latitude: newData.gps.location.lat,
-              longitude: newData.gps.location.lng,
-              latitudeDelta: latDelta,
-              longitudeDelta: longDelta,
-            },
-            renderDelay,
-          );
-        } catch (error) {}
-      }
-    });
+  const updateTracker = (newData) => {
+    if (newData) {
+      setCurrentTracker(newData);
+      setCurrentMarker({
+        latitude: newData.gps.location.lat,
+        longitude: newData.gps.location.lng,
+      });
+      try {
+        mapRef.current.animateToRegion(
+          {
+            latitude: newData.gps.location.lat,
+            longitude: newData.gps.location.lng,
+            latitudeDelta: latDelta,
+            longitudeDelta: longDelta,
+          },
+          renderDelay,
+        );
+      } catch (error) {}
+    }
     // TODO Might be useful somewhere -> Animate Marker
     // markerRef.current.animateMarkerToCoordinate(
     //   {
@@ -88,6 +85,19 @@ export default function HomeScreen({navigation}) {
     //   1000,
     // );
   };
+
+  const memoizedInterval = useCallback(() => {
+    clearInterval(intervalID);
+    setIntervalID(
+      setInterval(() => {
+        if (currentTracker) {
+          API.getTrackerState(currentTracker.id).then((result) => {
+            updateTracker(result);
+          });
+        }
+      }, 3000),
+    );
+  }, [intervalID]);
 
   useEffect(() => {
     try {
@@ -102,40 +112,42 @@ export default function HomeScreen({navigation}) {
   }, []);
 
   useEffect(() => {
+    // Update interval when params change
+    clearInterval(intervalID);
+    // clearInterval(interval);
+    // if (trackersList.length > 0) {
+    //   interval = setInterval(() => {
+    //     updateTracker(currentTracker);
+    //   }, 3000);
+    //   // setIntervalID(interval);
+    // }
+    return () => clearInterval(interval);
+  }, [latDelta, longDelta, followObject]);
+
+  useEffect(() => {
     // Listener for location update events in dashboard
     const eventListener = eventEmitter.addListener(
       'event.trackerEvent',
       (trackerData) => {
         if (trackerData) {
-          clearInterval(intervalID);
-          setTrackersList(trackerData.trackers);
-          setTrackersStates(trackerData.states);
-          updateTracker(trackerData.data);
+          // clearInterval(interval);
+          // clearInterval(intervalID);
           setMapRoute([]);
-          setCurrentMarker({
-            latitude: trackerData.data.gps.location.lat,
-            longitude: trackerData.data.gps.location.lng,
-          });
-          mapRef.current.animateToRegion(
-            {
-              latitude: trackerData.data.gps.location.lat,
-              longitude: trackerData.data.gps.location.lng,
-              latitudeDelta: latDelta,
-              longitudeDelta: longDelta,
-            },
-            renderDelay,
+          setTrackerEventData(trackerData);
+          updateTracker(trackerData.data);
+          setIntervalID(
+            setInterval(() => {
+              API.getTrackerState(trackerData.data.id).then((result) => {
+                const newData = Object.assign(trackerData.data, result);
+                updateTracker(newData);
+              });
+            }, 3000),
           );
-          /**
-           * Break linter convention, since setInterval is created anew for each successive render
-           */
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-          intervalID = setInterval(() => {
-            updateTracker(trackerData.data);
-          }, 3000);
         }
       },
     );
     return () => {
+      clearInterval(interval);
       eventListener.remove();
     };
   }, []);
@@ -184,13 +196,13 @@ export default function HomeScreen({navigation}) {
         ) : null}
         {showTrackers === 'All' ? (
           <>
-            {trackersList.map((_, i) => {
+            {trackerEventData.trackers.map((_, i) => {
               return (
                 <Marker
                   key={_.id}
                   coordinate={{
-                    latitude: trackersStates[_.id].gps.location.lat,
-                    longitude: trackersStates[_.id].gps.location.lng,
+                    latitude: trackerEventData.states[_.id].gps.location.lat,
+                    longitude: trackerEventData.states[_.id].gps.location.lng,
                   }}>
                   <View style={styles.marker}>
                     <Text style={styles.text}>{_.label}</Text>
@@ -206,14 +218,14 @@ export default function HomeScreen({navigation}) {
         ) : null}
         {showTrackers === 'Group' ? (
           <>
-            {trackersList.map((_, i) => {
+            {trackerEventData.trackers.map((_, i) => {
               if (_.group_id === currentTracker.group_id) {
                 return (
                   <Marker
                     key={_.id}
                     coordinate={{
-                      latitude: trackersStates[_.id].gps.location.lat,
-                      longitude: trackersStates[_.id].gps.location.lng,
+                      latitude: trackerEventData.states[_.id].gps.location.lat,
+                      longitude: trackerEventData.states[_.id].gps.location.lng,
                     }}>
                     <View style={styles.marker}>
                       <Text style={styles.text}>{_.label}</Text>
@@ -230,7 +242,7 @@ export default function HomeScreen({navigation}) {
         ) : null}
         <Polyline
           coordinates={mapRoute}
-          strokeColor="#1e96dc" // fallback for when `strokeColors` is not supported by the map-provider
+          strokeColor="#1e96dc"
           strokeWidth={6}
         />
       </Animated>

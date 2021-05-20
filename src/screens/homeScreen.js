@@ -47,6 +47,7 @@ export default function HomeScreen({navigation}) {
   const trackerSelections = ['All', 'Selected', 'Group'];
   let intervalID = 0;
   const renderDelay = 1500;
+  const [mapPolygon, setMapPolygon] = useState();
 
   const updateRadioButtons = (index, list, radioCallback, itemCallback) => {
     itemCallback(list[index]);
@@ -140,8 +141,9 @@ export default function HomeScreen({navigation}) {
     // Listener for track update events
     const eventListener = eventEmitter.addListener(
       'event.trackPolygonEvent',
-      (trackerData) => {
-        console.log('SHOW TRACK POLYGON');
+      (polygonEvent) => {
+        // TODO Default empty polygon
+        setMapPolygon(polygonEvent);
       },
     );
     return () => {

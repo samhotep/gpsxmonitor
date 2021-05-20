@@ -21,8 +21,8 @@ export default function TrackItem(props) {
   };
 
   const showTrackPolygon = () => {
+    props.navigation.toggleDrawer();
     eventEmitter.emit('event.trackPolygonEvent', {});
-    // navigation.toggleDrawer();
   };
 
   useEffect(() => {

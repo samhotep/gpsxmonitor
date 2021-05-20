@@ -11,8 +11,7 @@ export default function TrackItem(props) {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [difference, setDifference] = useState('');
-  const [startLocation, setStartLocation] = useState('');
-  const [endLocation, setEndLocation] = useState('');
+  const [route, setRoute] = useState([]);
 
   const formatDate = (date) => {
     return `${date.toLocaleTimeString([], {
@@ -23,11 +22,9 @@ export default function TrackItem(props) {
     })}`.slice(0, -3);
   };
 
-  const showTrackPolygon = () => {
+  const sendRouteEvent = () => {
     eventEmitter.emit('event.routeEvent', {
-      track: props.track,
-      start: startLocation,
-      end: endLocation,
+      route: route,
     });
     props.navigation.toggleDrawer();
   };
@@ -42,13 +39,19 @@ export default function TrackItem(props) {
   };
 
   const getAddressPoints = () => {
+    let start;
+    let end;
     API.getLocation(props.track.start_address)
       .then((locations) => {
-        setStartLocation(locations[0]);
+        start = locations[0];
         return API.getLocation(props.track.end_address);
       })
       .then((locations) => {
-        setEndLocation(locations[0]);
+        end = locations[0];
+        return API.getRoute(start, end);
+      })
+      .then((route) => {
+        setRoute(route);
       })
       .catch((error) => {
         console.log(error);
@@ -62,7 +65,7 @@ export default function TrackItem(props) {
   }, []);
   return (
     <>
-      <Container onPress={showTrackPolygon}>
+      <Container onPress={sendRouteEvent}>
         <ImageContainer source={require('../../assets/track.png')} />
         <ColumnContainer>
           <RowContainer>

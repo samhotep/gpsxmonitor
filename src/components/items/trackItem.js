@@ -23,8 +23,9 @@ export default function TrackItem(props) {
   };
 
   const sendRouteEvent = () => {
+    let serializedRoute = Utils.renameLocationKeys(route);
     eventEmitter.emit('event.routeEvent', {
-      route: route,
+      route: serializedRoute,
     });
     props.navigation.toggleDrawer();
   };

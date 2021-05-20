@@ -109,12 +109,13 @@ const Utils = {
       icon = require('../assets/parked.png');
       text = `Parked for: ${Utils.getTimeDifference(
         tracker.actual_track_update,
+        false,
       )}`;
     } else if (tracker.movement_status === 'stopped') {
       icon = require('../assets/stop.png');
       text = `Stopped for: ${Utils.getTimeDifference(
         tracker.actual_track_update,
-        seconds,
+        false,
       )}`;
     }
     return {icon: icon, text: text};

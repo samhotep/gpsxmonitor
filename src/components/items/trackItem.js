@@ -3,6 +3,7 @@ import {NativeEventEmitter, NativeModules} from 'react-native';
 import Separator from '../separators/separator';
 import styled from 'styled-components';
 import Utils from '../../utils/utils';
+import API from '../../api/api';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
@@ -10,6 +11,8 @@ export default function TrackItem(props) {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [difference, setDifference] = useState('');
+  const [startLocation, setStartLocation] = useState('');
+  const [endLocation, setEndLocation] = useState('');
 
   const formatDate = (date) => {
     return `${date.toLocaleTimeString([], {
@@ -25,13 +28,32 @@ export default function TrackItem(props) {
     eventEmitter.emit('event.trackPolygonEvent', {});
   };
 
-  useEffect(() => {
+  const getDates = () => {
     let start = new Date(props.track.start_date.replace(/-+/g, '/'));
     let end = new Date(props.track.end_date.replace(/-+/g, '/'));
     setStartDate(formatDate(start));
     setEndDate(formatDate(end));
     let {hours, minutes} = Utils.getHoursAndMinutes(start, end);
     setDifference(`${hours} h ${minutes} m`);
+  };
+
+  const getAddressPoints = () => {
+    API.getLocation(props.track.start_address)
+      .then((locations) => {
+        setStartLocation(locations[0]);
+        return API.getLocation(props.track.end_address);
+      })
+      .then((locations) => {
+        setEndLocation(locations[0]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getDates();
+    getAddressPoints();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

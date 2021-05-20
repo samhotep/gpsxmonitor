@@ -175,6 +175,18 @@ const API = {
       }
     });
   },
+  getLocation: (address) => {
+    return API.apiCall('geocoder/search_address/', {
+      q: address,
+      lang: 'en',
+    }).then((result) => {
+      if (result.success === true) {
+        return result.locations;
+      } else {
+        return result.status.description;
+      }
+    });
+  },
   getCounters: (tracker_id) => {
     return API.apiCall('tracker/get_counters/', {tracker_id: tracker_id}).then(
       (result) => {

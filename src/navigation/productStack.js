@@ -128,7 +128,7 @@ function CustomDrawerContent(props) {
       now.getFullYear(),
       now.getMonth(),
       now.getDate(),
-      0,
+      offset * -1,
       0,
       0,
     );

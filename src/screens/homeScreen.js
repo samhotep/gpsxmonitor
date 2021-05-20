@@ -8,7 +8,7 @@ import {
   Text,
   Image,
 } from 'react-native';
-import {Animated, AnimatedRegion, Marker} from 'react-native-maps';
+import {Animated, AnimatedRegion, Marker, Polyline} from 'react-native-maps';
 import CheckBox from '@react-native-community/checkbox';
 import styled from 'styled-components';
 import HomeItem from '../components/items/homeItem';
@@ -47,7 +47,7 @@ export default function HomeScreen({navigation}) {
   const trackerSelections = ['All', 'Selected', 'Group'];
   let intervalID = 0;
   const renderDelay = 1500;
-  const [mapPolygon, setMapPolygon] = useState();
+  const [mapRoute, setMapRoute] = useState([]);
 
   const updateRadioButtons = (index, list, radioCallback, itemCallback) => {
     itemCallback(list[index]);
@@ -110,6 +110,7 @@ export default function HomeScreen({navigation}) {
           setTrackersList(trackerData.trackers);
           setTrackersStates(trackerData.states);
           updateTracker(trackerData.data);
+          setMapRoute([]);
           mapRef.current.animateToRegion(
             {
               latitude: trackerData.data.gps.location.lat,
@@ -140,10 +141,10 @@ export default function HomeScreen({navigation}) {
   useEffect(() => {
     // Listener for track update events
     const eventListener = eventEmitter.addListener(
-      'event.trackPolygonEvent',
-      (polygonEvent) => {
+      'event.routeEvent',
+      (routeEvent) => {
         // TODO Default empty polygon
-        setMapPolygon(polygonEvent);
+        setMapRoute(routeEvent.route);
       },
     );
     return () => {
@@ -226,6 +227,11 @@ export default function HomeScreen({navigation}) {
             })}
           </>
         ) : null}
+        <Polyline
+          coordinates={mapRoute}
+          strokeColor="#1e96dc" // fallback for when `strokeColors` is not supported by the map-provider
+          strokeWidth={6}
+        />
       </Animated>
       {currentTracker ? (
         <HomeItem

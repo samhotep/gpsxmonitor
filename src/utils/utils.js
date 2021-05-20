@@ -168,6 +168,18 @@ const Utils = {
     // TODO Return list sorted by date
     return dates;
   },
+  renameLocationKeys: (list) => {
+    let newList = [];
+    list.map((_, i) => {
+      let newObject = {..._};
+      newObject.latitude = _.lat;
+      newObject.longitude = _.lng;
+      delete newObject.lat;
+      delete newObject.lng;
+      newList.push(newObject);
+    });
+    return newList;
+  },
 };
 
 export default Utils;

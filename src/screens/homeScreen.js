@@ -143,7 +143,6 @@ export default function HomeScreen({navigation}) {
     const eventListener = eventEmitter.addListener(
       'event.routeEvent',
       (routeEvent) => {
-        // TODO Default empty polygon
         setMapRoute(routeEvent.route);
       },
     );

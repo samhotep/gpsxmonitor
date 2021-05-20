@@ -57,27 +57,28 @@ export default function HomeScreen({navigation}) {
   };
 
   const updateTracker = (data) => {
-    if (data) {
-      Storage.getMarkerSettings().then((stored) => {
-        let settings = JSON.parse(stored);
-        setCurrentTracker(data);
+    API.getTrackerState(data.id).then((result) => {
+      const newData = Object.assign(data, result);
+      if (newData) {
+        setCurrentTracker(newData);
+
         setCurrentMarker({
-          latitude: data.gps.location.lat,
-          longitude: data.gps.location.lng,
+          latitude: newData.gps.location.lat,
+          longitude: newData.gps.location.lng,
         });
         try {
           mapRef.current.animateToRegion(
             {
-              latitude: data.gps.location.lat,
-              longitude: data.gps.location.lng,
+              latitude: newData.gps.location.lat,
+              longitude: newData.gps.location.lng,
               latitudeDelta: latDelta,
               longitudeDelta: longDelta,
             },
             renderDelay,
           );
         } catch (error) {}
-      });
-    }
+      }
+    });
     // TODO Might be useful somewhere -> Animate Marker
     // markerRef.current.animateMarkerToCoordinate(
     //   {
@@ -111,6 +112,10 @@ export default function HomeScreen({navigation}) {
           setTrackersStates(trackerData.states);
           updateTracker(trackerData.data);
           setMapRoute([]);
+          setCurrentMarker({
+            latitude: trackerData.data.gps.location.lat,
+            longitude: trackerData.data.gps.location.lng,
+          });
           mapRef.current.animateToRegion(
             {
               latitude: trackerData.data.gps.location.lat,
@@ -125,10 +130,7 @@ export default function HomeScreen({navigation}) {
            */
           // eslint-disable-next-line react-hooks/exhaustive-deps
           intervalID = setInterval(() => {
-            API.getTrackerState(trackerData.data.id).then((result) => {
-              const newData = Object.assign(trackerData.data, result);
-              updateTracker(newData);
-            });
+            updateTracker(trackerData.data);
           }, 3000);
         }
       },

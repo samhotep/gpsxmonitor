@@ -136,6 +136,19 @@ export default function HomeScreen({navigation}) {
     };
   }, []);
 
+  useEffect(() => {
+    // Listener for track update events
+    const eventListener = eventEmitter.addListener(
+      'event.trackPolygonEvent',
+      (trackerData) => {
+        console.log('SHOW TRACK POLYGON');
+      },
+    );
+    return () => {
+      eventListener.remove();
+    };
+  }, []);
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#007aa6" />

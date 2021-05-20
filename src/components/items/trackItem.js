@@ -1,7 +1,10 @@
 import React, {useState, useEffect} from 'react';
+import {NativeEventEmitter, NativeModules} from 'react-native';
 import Separator from '../separators/separator';
 import styled from 'styled-components';
 import Utils from '../../utils/utils';
+
+const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
 export default function TrackItem(props) {
   const [startDate, setStartDate] = useState('');
@@ -17,6 +20,11 @@ export default function TrackItem(props) {
     })}`.slice(0, -3);
   };
 
+  const showTrackPolygon = () => {
+    eventEmitter.emit('event.trackPolygonEvent', {});
+    // navigation.toggleDrawer();
+  };
+
   useEffect(() => {
     let start = new Date(props.track.start_date.replace(/-+/g, '/'));
     let end = new Date(props.track.end_date.replace(/-+/g, '/'));
@@ -28,7 +36,7 @@ export default function TrackItem(props) {
   }, []);
   return (
     <>
-      <Container onPress={props.onPress}>
+      <Container onPress={showTrackPolygon}>
         <ImageContainer source={require('../../assets/track.png')} />
         <ColumnContainer>
           <RowContainer>

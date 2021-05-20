@@ -24,8 +24,12 @@ export default function TrackItem(props) {
   };
 
   const showTrackPolygon = () => {
+    eventEmitter.emit('event.trackPolygonEvent', {
+      track: props.track,
+      start: startLocation,
+      end: endLocation,
+    });
     props.navigation.toggleDrawer();
-    eventEmitter.emit('event.trackPolygonEvent', {});
   };
 
   const getDates = () => {

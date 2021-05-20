@@ -511,7 +511,11 @@ function CustomDrawerContent(props) {
       ) : null}
       {detailsLoaded && detail.screen === 'Tracks' ? (
         <>
-          <ClearButton onPress={() => setDetailsLoaded(false)} />
+          <ClearButton
+            onPress={() => {
+              setDetailsLoaded(false);
+            }}
+          />
           {Object.keys(tracks).map((key) => {
             let label = new Date(key);
             return (
@@ -520,7 +524,7 @@ function CustomDrawerContent(props) {
                   label.getMonth() + 1
                 }.${label.getFullYear()}`}</DateLabel>
                 {tracks[key].map((_, i) => {
-                  return <TrackItem track={_} />;
+                  return <TrackItem track={_} navigation={props.navigation} />;
                 })}
               </>
             );

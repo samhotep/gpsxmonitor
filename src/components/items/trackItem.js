@@ -24,7 +24,7 @@ export default function TrackItem(props) {
   };
 
   const showTrackPolygon = () => {
-    eventEmitter.emit('event.trackPolygonEvent', {
+    eventEmitter.emit('event.routeEvent', {
       track: props.track,
       start: startLocation,
       end: endLocation,

@@ -45,10 +45,11 @@ export default function HomeScreen({navigation}) {
   const markerRef = useRef();
   const mapTypes = ['standard', 'satellite', 'hybrid', 'terrain'];
   const trackerSelections = ['All', 'Selected', 'Group'];
-  const [intervalID, setIntervalID] = useState(0);
   let interval = 0;
-  const renderDelay = 1500;
+  const [intervalID, setIntervalID] = useState(0);
+  const renderDelay = 1000;
   const [mapRoute, setMapRoute] = useState([]);
+  const [renderCount, setRenderCount] = useState(0);
 
   const updateRadioButtons = (index, list, radioCallback, itemCallback) => {
     itemCallback(list[index]);
@@ -98,47 +99,68 @@ export default function HomeScreen({navigation}) {
     }
   }, []);
 
-  useEffect(() => {
-    // Update interval when params change
-    if (trackerEventData) {
-      interval = setInterval(() => {
-        API.getTrackerState(trackerEventData.data.id).then((result) => {
-          const newData = Object.assign(trackerEventData.data, result);
-          updateTracker(newData);
-        });
-      }, 3000);
-      setIntervalID(interval);
-    }
-    return () => clearInterval(interval);
-  }, [latDelta, longDelta, followObject]);
+  // useEffect(() => {
+  //   // Update interval when params change
+  //   if (trackerEventData) {
+  //     clearInterval(intervalID);
+  //     interval = setInterval(() => {
+  //       API.getTrackerState(trackerEventData.data.id).then((result) => {
+  //         const newData = Object.assign(trackerEventData.data, result);
+  //         updateTracker(newData);
+  //       });
+  //     }, 3000);
+  //     setIntervalID(interval);
+  //   }
+  //   return () => clearInterval(interval);
+  // }, [latDelta, longDelta, followObject]);
 
   useEffect(() => {
     // Listener for location update events in dashboard
     const eventListener = eventEmitter.addListener(
       'event.trackerEvent',
       (trackerData) => {
-        clearInterval(interval);
-        clearInterval(intervalID);
         if (trackerData) {
+          clearInterval(interval);
           setMapRoute([]);
           setTrackerEventData(trackerData);
           updateTracker(trackerData.data);
           interval = setInterval(() => {
-            console.log('lat', latDelta);
             API.getTrackerState(trackerData.data.id).then((result) => {
               const newData = Object.assign(trackerData.data, result);
               updateTracker(newData);
             });
           }, 3000);
+          console.log(interval);
           setIntervalID(interval);
         }
       },
     );
     return () => {
-      clearInterval(interval);
       eventListener.remove();
     };
   }, []);
+
+  useEffect(() => {
+    if (renderCount > 1) {
+      console.log(intervalID);
+      clearInterval(intervalID);
+      // interval = setInterval(() => {
+      //   API.getTrackerState(trackerEventData.data.id).then((result) => {
+      //     const newData = Object.assign(trackerEventData.data, result);
+      //     updateTracker(newData);
+      //   });
+      // }, 3000);
+      // setIntervalID(interval);
+    } else {
+      setRenderCount(renderCount + 1);
+    }
+  }, [trackerEventData]);
+
+  useEffect(() => {
+    if (trackerEventData) {
+      clearInterval(intervalID);
+    }
+  }, [latDelta, longDelta, followObject]);
 
   useEffect(() => {
     // Listener for track update events
@@ -363,7 +385,6 @@ export default function HomeScreen({navigation}) {
           );
           setLatDelta(newLat);
           setLongDelta(newLong);
-          clearInterval(intervalID);
         }}
       />
       <HomeButton
@@ -383,7 +404,6 @@ export default function HomeScreen({navigation}) {
           );
           setLatDelta(newLat);
           setLongDelta(newLong);
-          clearInterval(intervalID);
         }}
       />
     </View>

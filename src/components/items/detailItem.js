@@ -3,11 +3,13 @@ import {Alert} from 'react-native';
 import CounterItem from '../items/counterItem';
 import styled from 'styled-components';
 import API from '../../api/api';
+import Utils from '../../utils/utils';
 import DetailModal from '../modals/detailModal';
 
 export default function DetailItem(props) {
   const [updateTime, setUpdateTime] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [meter, setMeter] = useState({convert: false, current: 0});
 
   useEffect(() => {
     setShowModal(false);
@@ -16,6 +18,16 @@ export default function DetailItem(props) {
   useEffect(() => {
     let temp = props.time ? `${props.time} ago` : 'Now';
     setUpdateTime(temp);
+    props.details.map((_, i) => {
+      if (_.type === 'counter') {
+        setMeter({
+          ...meter,
+          km: _.value,
+          mi: Utils.kmToMiles(_.value),
+          current: _.value,
+        });
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -71,7 +83,7 @@ export default function DetailItem(props) {
         } else if (_.type === 'counter') {
           return (
             <DetailContainer>
-              <CounterItem value={_.value} />
+              <CounterItem value={meter.current} />
               <Text size={14}> {_.states.unit}</Text>
             </DetailContainer>
           );
@@ -86,14 +98,45 @@ export default function DetailItem(props) {
         </RowContainer>
       ) : null}
       {props.modal ? (
-        <DetailModal
-          clicked={showModal}
-          height={props.modal.height}
-          width={props.modal.width}
-          top={0}
-          right={50}
-          inject={props.modal.item}
-        />
+        props.title === 'Odometer' ? (
+          <DetailModal
+            clicked={showModal}
+            height={props.modal.height}
+            width={props.modal.width}
+            top={0}
+            right={50}
+            inject={
+              <ModalContainer>
+                <ModalButton
+                  onPress={() => {
+                    if (meter.convert) {
+                      setMeter({...meter, convert: false, current: meter.mi});
+                    } else {
+                      setMeter({...meter, convert: true, current: meter.km});
+                    }
+                    setShowModal(false);
+                  }}>
+                  <CounterText width={200} color="#000000">
+                    km{' '}
+                    <CounterImageContainer
+                      source={require('../../assets/convert.png')}
+                    />{' '}
+                    mi
+                  </CounterText>
+                </ModalButton>
+              </ModalContainer>
+            }
+          />
+        ) : (
+          <DetailModal
+            clicked={showModal}
+            height={props.modal.height}
+            width={props.modal.width}
+            top={0}
+            right={50}
+            inject={props.modal.item}
+          />
+        )
       ) : null}
     </Container>
   );
@@ -203,3 +246,26 @@ const Text = styled.Text`
 `;
 
 const ItemSwitch = styled.Switch``;
+
+const ModalButton = styled.TouchableOpacity``;
+
+const CounterImageContainer = styled.Image`
+  height: ${(props) => props.size || 18}px;
+  width: ${(props) => props.size || 18}px;
+`;
+
+const CounterText = styled.Text`
+  font-family: 'Roboto-Regular';
+  font-size: ${(props) => props.size || 16}px;
+  color: ${(props) => props.color || '#626160'};
+  flex-wrap: wrap;
+  ${(props) => (props.width ? `width: ${props.width}px;` : '')}
+  margin: 5px 5px 15px 5px;
+`;
+
+const ModalContainer = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10px;
+`;

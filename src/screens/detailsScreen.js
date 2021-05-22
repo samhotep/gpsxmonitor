@@ -15,7 +15,6 @@ export default function DetailsScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
   const [itemList, setItemList] = useState([]);
   const [tapped, setTapped] = useState(false);
-  const [units, setUnits] = useState(true);
 
   const constructModelObject = (tracker, model, state) => {
     return constructObject(tracker.label, null, [
@@ -325,26 +324,7 @@ export default function DetailsScreen({route, navigation}) {
     let modal = null;
     let type = lists.counterTypes[counter.type];
     if (type.title === 'Odometer') {
-      if (units) {
-        type.unit = 'km';
-      } else {
-        type.unit = 'mi';
-      }
       modal = {
-        item: (
-          <ModalContainer>
-            <ModalButton
-              onPress={() => {
-                setTapped(!tapped);
-                setUnits(!units);
-              }}>
-              <Text width={200} color="#000000">
-                km <ImageContainer source={require('../assets/convert.png')} />{' '}
-                mi
-              </Text>
-            </ModalButton>
-          </ModalContainer>
-        ),
         height: 50,
         width: 200,
       };
@@ -523,9 +503,4 @@ const Text = styled.Text`
   flex-wrap: wrap;
   ${(props) => (props.width ? `width: ${props.width}px;` : '')}
   margin: 5px 5px 15px 5px;
-`;
-
-const ImageContainer = styled.Image`
-  height: ${(props) => props.size || 18}px;
-  width: ${(props) => props.size || 18}px;
 `;

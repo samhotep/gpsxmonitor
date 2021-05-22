@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {StatusBar, ToastAndroid, Linking} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -14,6 +15,7 @@ export default function DetailsScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
   const [itemList, setItemList] = useState([]);
   const [tapped, setTapped] = useState(false);
+  const [units, setUnits] = useState(true);
 
   const constructModelObject = (tracker, model, state) => {
     return constructObject(tracker.label, null, [
@@ -321,13 +323,24 @@ export default function DetailsScreen({route, navigation}) {
 
   const constructCounterObjects = (state, counter) => {
     let modal = null;
-    if (lists.counterTypes[counter.type].title === 'Odometer') {
+    let type = lists.counterTypes[counter.type];
+    if (type.title === 'Odometer') {
+      if (units) {
+        type.unit = 'km';
+      } else {
+        type.unit = 'mi';
+      }
       modal = {
         item: (
           <ModalContainer>
-            <ModalButton>
+            <ModalButton
+              onPress={() => {
+                setTapped(!tapped);
+                setUnits(!units);
+              }}>
               <Text width={200} color="#000000">
-                km to mi
+                km <ImageContainer source={require('../assets/convert.png')} />{' '}
+                mi
               </Text>
             </ModalButton>
           </ModalContainer>
@@ -337,17 +350,17 @@ export default function DetailsScreen({route, navigation}) {
       };
     }
     return constructObject(
-      lists.counterTypes[counter.type].title,
+      type.title,
       counter.update_time,
       [
         {
           type: 'counter',
           value: counter.value,
-          states: lists.counterTypes[counter.type],
+          states: type,
         },
         {
           type: 'text',
-          text: lists.counterTypes[counter.type].text,
+          text: type.text,
         },
       ],
       false,
@@ -510,4 +523,9 @@ const Text = styled.Text`
   flex-wrap: wrap;
   ${(props) => (props.width ? `width: ${props.width}px;` : '')}
   margin: 5px 5px 15px 5px;
+`;
+
+const ImageContainer = styled.Image`
+  height: ${(props) => props.size || 18}px;
+  width: ${(props) => props.size || 18}px;
 `;

@@ -21,7 +21,7 @@ const Container = styled.View`
   border-radius: 3px;
   height: ${(props) => props.height || 150}px;
   width: ${(props) => props.width || 100}px;
-  elevation: 4;
+  elevation: 50;
   top: ${(props) => props.top || 30}px;
   right: ${(props) => props.right || 10}px;
 `;

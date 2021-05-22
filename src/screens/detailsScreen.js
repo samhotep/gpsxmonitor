@@ -12,6 +12,7 @@ import lists from '../components/lists/lists';
 export default function DetailsScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
   const [itemList, setItemList] = useState([]);
+  const [tapped, setTapped] = useState(false);
 
   const constructModelObject = (tracker, model, state) => {
     return constructObject(tracker.label, null, [
@@ -362,7 +363,7 @@ export default function DetailsScreen({route, navigation}) {
   }, []);
 
   return (
-    <Container>
+    <Container onPress={() => setTapped(!tapped)}>
       <StatusBar backgroundColor="#007aa6" />
       {loading ? (
         <Container>
@@ -383,6 +384,7 @@ export default function DetailsScreen({route, navigation}) {
                 title={_.title}
                 time={_.time}
                 details={_.details}
+                clicked={tapped}
               />
             );
           })}
@@ -392,7 +394,7 @@ export default function DetailsScreen({route, navigation}) {
   );
 }
 
-const Container = styled.View`
+const Container = styled.Pressable`
   flex-direction: column;
   height: 100%;
   width: 100%;

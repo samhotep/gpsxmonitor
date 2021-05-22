@@ -26,7 +26,9 @@ export default function TrackItem(props) {
       start: props.track.start_address,
       end: props.track.end_address,
     });
-    props.navigation.toggleDrawer();
+    setTimeout(() => {
+      props.navigation.toggleDrawer();
+    }, 100);
   };
 
   const getDates = () => {

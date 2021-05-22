@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect, useState, useRef, useCallback} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   NativeEventEmitter,
   NativeModules,
@@ -25,7 +25,6 @@ const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 export default function HomeScreen({navigation}) {
   const window = useWindowDimensions();
   const [trackerEventData, setTrackerEventData] = useState();
-  const [currentTracker, setCurrentTracker] = useState();
   const [currentMarker, setCurrentMarker] = useState({
     latitude: 0.347596,
     longitude: 32.58252,
@@ -45,11 +44,9 @@ export default function HomeScreen({navigation}) {
   const markerRef = useRef();
   const mapTypes = ['standard', 'satellite', 'hybrid', 'terrain'];
   const trackerSelections = ['All', 'Selected', 'Group'];
-  let interval = 0;
   const [intervalID, setIntervalID] = useState(0);
   const renderDelay = 1000;
   const [mapRoute, setMapRoute] = useState([]);
-  const [renderCount, setRenderCount] = useState(0);
 
   const updateRadioButtons = (index, list, radioCallback, itemCallback) => {
     itemCallback(list[index]);
@@ -58,18 +55,17 @@ export default function HomeScreen({navigation}) {
     radioCallback(newRadio);
   };
 
-  const updateTracker = (newData) => {
-    if (newData) {
-      setCurrentTracker(newData);
+  const updateTracker = () => {
+    if (trackerEventData) {
       setCurrentMarker({
-        latitude: newData.gps.location.lat,
-        longitude: newData.gps.location.lng,
+        latitude: trackerEventData.data.gps.location.lat,
+        longitude: trackerEventData.data.gps.location.lng,
       });
       try {
         mapRef.current.animateToRegion(
           {
-            latitude: newData.gps.location.lat,
-            longitude: newData.gps.location.lng,
+            latitude: trackerEventData.data.gps.location.lat,
+            longitude: trackerEventData.data.gps.location.lng,
             latitudeDelta: latDelta,
             longitudeDelta: longDelta,
           },
@@ -87,6 +83,19 @@ export default function HomeScreen({navigation}) {
     // );
   };
 
+  const createInterval = () => {
+    clearInterval(intervalID);
+    if (trackerEventData) {
+      let inter = setInterval(() => {
+        API.getTrackerState(trackerEventData.data.id).then((result) => {
+          const newData = Object.assign(trackerEventData.data, result);
+          updateTracker(newData);
+        });
+      }, 3000);
+      setIntervalID(inter);
+    }
+  };
+
   useEffect(() => {
     try {
       Storage.getMarkerSettings().then((stored) => {
@@ -99,39 +108,14 @@ export default function HomeScreen({navigation}) {
     }
   }, []);
 
-  // useEffect(() => {
-  //   // Update interval when params change
-  //   if (trackerEventData) {
-  //     clearInterval(intervalID);
-  //     interval = setInterval(() => {
-  //       API.getTrackerState(trackerEventData.data.id).then((result) => {
-  //         const newData = Object.assign(trackerEventData.data, result);
-  //         updateTracker(newData);
-  //       });
-  //     }, 3000);
-  //     setIntervalID(interval);
-  //   }
-  //   return () => clearInterval(interval);
-  // }, [latDelta, longDelta, followObject]);
-
   useEffect(() => {
     // Listener for location update events in dashboard
     const eventListener = eventEmitter.addListener(
       'event.trackerEvent',
       (trackerData) => {
         if (trackerData) {
-          clearInterval(interval);
           setMapRoute([]);
           setTrackerEventData(trackerData);
-          updateTracker(trackerData.data);
-          interval = setInterval(() => {
-            API.getTrackerState(trackerData.data.id).then((result) => {
-              const newData = Object.assign(trackerData.data, result);
-              updateTracker(newData);
-            });
-          }, 3000);
-          console.log(interval);
-          setIntervalID(interval);
         }
       },
     );
@@ -141,26 +125,9 @@ export default function HomeScreen({navigation}) {
   }, []);
 
   useEffect(() => {
-    if (renderCount > 1) {
-      console.log(intervalID);
-      clearInterval(intervalID);
-      // interval = setInterval(() => {
-      //   API.getTrackerState(trackerEventData.data.id).then((result) => {
-      //     const newData = Object.assign(trackerEventData.data, result);
-      //     updateTracker(newData);
-      //   });
-      // }, 3000);
-      // setIntervalID(interval);
-    } else {
-      setRenderCount(renderCount + 1);
-    }
-  }, [trackerEventData]);
-
-  useEffect(() => {
-    if (trackerEventData) {
-      clearInterval(intervalID);
-    }
-  }, [latDelta, longDelta, followObject]);
+    updateTracker();
+    createInterval();
+  }, [trackerEventData, latDelta, longDelta]);
 
   useEffect(() => {
     // Listener for track update events
@@ -195,7 +162,7 @@ export default function HomeScreen({navigation}) {
           <Marker.Animated ref={markerRef} coordinate={currentMarker}>
             <View style={styles.marker}>
               <Text style={styles.text}>
-                {currentTracker ? currentTracker.label : ''}
+                {trackerEventData ? trackerEventData.data.label : ''}
               </Text>
               <Image
                 style={styles.icon}
@@ -229,7 +196,7 @@ export default function HomeScreen({navigation}) {
         {showTrackers === 'Group' ? (
           <>
             {trackerEventData.trackers.map((_, i) => {
-              if (_.group_id === currentTracker.group_id) {
+              if (_.group_id === trackerEventData.data.group_id) {
                 return (
                   <Marker
                     key={_.id}
@@ -256,14 +223,14 @@ export default function HomeScreen({navigation}) {
           strokeWidth={6}
         />
       </Animated>
-      {currentTracker ? (
+      {trackerEventData ? (
         <HomeItem
-          tracker={currentTracker}
+          tracker={trackerEventData.data}
           onPress={() =>
             mapRef.current.animateToRegion(
               {
-                latitude: currentTracker.gps.location.lat,
-                longitude: currentTracker.gps.location.lng,
+                latitude: trackerEventData.data.gps.location.lat,
+                longitude: trackerEventData.data.gps.location.lng,
                 latitudeDelta: latDelta,
                 longitudeDelta: longDelta,
               },

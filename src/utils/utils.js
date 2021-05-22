@@ -181,6 +181,13 @@ const Utils = {
     });
     return newList;
   },
+  kmToMiles: (number, km = true) => {
+    if (km) {
+      return number / 1.60934;
+    } else {
+      return number * 1.60934;
+    }
+  },
 };
 
 export default Utils;

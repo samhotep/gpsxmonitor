@@ -111,6 +111,15 @@ export default function HomeScreen({navigation}) {
       })
       .then((routelist) => {
         setMapRoute(Utils.renameLocationKeys(routelist));
+        mapRef.current.animateToRegion(
+          {
+            latitude: routelist[routelist.length - 1].lat,
+            longitude: routelist[routelist.length - 1].lng,
+            latitudeDelta: latDelta,
+            longitudeDelta: longDelta,
+          },
+          renderDelay,
+        );
       })
       .catch((error) => {
         console.log(error);

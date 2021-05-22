@@ -11,6 +11,9 @@ export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState();
+  const [loginImage, setLoginImage] = useState(
+    require('../assets/default.png'),
+  );
 
   const validateLogin = () => {
     if (
@@ -72,16 +75,23 @@ export default function LoginScreen({navigation}) {
       });
   };
 
+  useEffect(() => {
+    Storage.getLoginImageURL()
+      .then((result) => {
+        let url = JSON.parse(result);
+        if (url) {
+          setLoginImage(url);
+        }
+      })
+      .catch((error) => {
+        console.log;
+      });
+  }, []);
+
   return (
     <Container>
       <StatusBar backgroundColor="#007aa6" />
-      <ImageContainer
-        source={{
-          uri:
-            'https://hosting.fms-ecsinternational.com/api/static/paas/1/app_logo.png',
-        }}
-        resizeMode="contain"
-      />
+      <ImageContainer source={loginImage} resizeMode="contain" />
       <FormContainer>
         <Input
           placeholder="Email"

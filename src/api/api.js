@@ -2,6 +2,7 @@ import Storage from '../storage/storage';
 
 const API = {
   billingURL: 'http://centatech-001-site3.itempurl.com',
+  defaultURL: 'https://hosting.fms-ecsinternational.com/api/',
   get: async (url = '', token = '', headers = '') => {
     return Storage.getUserToken().then((result) => {
       return fetch(url + `?hash=${JSON.parse(result)}`, {
@@ -38,7 +39,7 @@ const API = {
     return Storage.getURL().then((url) => {
       let tempURL = JSON.parse(url);
       if (!tempURL || tempURL === '') {
-        tempURL = `https://hosting.fms-ecsinternational.com/api/${endpoint}`;
+        tempURL = `${API.defaultURL}${endpoint}`;
       } else {
         tempURL += endpoint;
       }

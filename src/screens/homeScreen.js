@@ -156,8 +156,10 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     updateTracker();
-    createInterval();
-  }, [trackerEventData, latDelta, longDelta]);
+    if (followObject) {
+      createInterval();
+    }
+  }, [trackerEventData, latDelta, longDelta, followObject]);
 
   useEffect(() => {
     // Listener for track drawer events

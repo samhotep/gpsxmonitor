@@ -41,10 +41,20 @@ export default function LoginScreen({navigation}) {
       .then((result) => {
         if (result === true) {
           Storage.setUserEmail(id);
-          return API.getUserInfo();
+          return Storage.getURL();
         } else {
           throw result;
         }
+      })
+      .then((url) => {
+        if (url) {
+          Storage.setLoginImageURL(`${url}static/paas/1/app_logo.png`);
+        } else {
+          Storage.setLoginImageURL(
+            `${API.defaultURL}static/paas/1/app_logo.png`,
+          );
+        }
+        return API.getUserInfo();
       })
       .then(() => {
         return API.createUser();
@@ -77,14 +87,15 @@ export default function LoginScreen({navigation}) {
 
   useEffect(() => {
     Storage.getLoginImageURL()
-      .then((result) => {
-        let url = JSON.parse(result);
+      .then((url) => {
         if (url) {
-          setLoginImage(url);
+          setLoginImage({
+            uri: url,
+          });
         }
       })
       .catch((error) => {
-        console.log;
+        console.log(error);
       });
   }, []);
 

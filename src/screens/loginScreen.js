@@ -37,8 +37,8 @@ export default function LoginScreen({navigation}) {
     API.authenticateUser(id, key)
       .then((result) => {
         if (result === true) {
-          API.getUserInfo();
-          return Storage.setUserEmail(id);
+          Storage.setUserEmail(id);
+          return API.getUserInfo();
         } else {
           throw result;
         }
@@ -115,6 +115,7 @@ export default function LoginScreen({navigation}) {
           onPress={() => {
             validateLogin();
           }}
+          size={18}
           color="#ffffff"
           bgcolor="#4788c7"
           width={300}

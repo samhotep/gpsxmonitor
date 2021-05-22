@@ -39,10 +39,14 @@ export default function DetailsScreen({route, navigation}) {
       item: (
         <ModalContainer>
           <ModalButton>
-            <Text color="#000000">Copy coordinates</Text>
+            <Text width={200} color="#000000">
+              Copy coordinates
+            </Text>
           </ModalButton>
           <ModalButton>
-            <Text color="#000000">Show on map</Text>
+            <Text width={200} color="#000000">
+              Show on map
+            </Text>
           </ModalButton>
         </ModalContainer>
       ),
@@ -216,7 +220,9 @@ export default function DetailsScreen({route, navigation}) {
       item: (
         <ModalContainer>
           <ModalButton>
-            <Text color="#000000">Task list</Text>
+            <Text width={200} color="#000000">
+              Task list
+            </Text>
           </ModalButton>
         </ModalContainer>
       ),

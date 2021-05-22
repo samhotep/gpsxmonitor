@@ -25,16 +25,18 @@ export default function DetailItem(props) {
         <Text size={19} color={'#000000'}>
           {props.title}
         </Text>
-        <Button
-          onPress={() => {
-            setShowModal(!showModal);
-          }}>
-          <ImageContainer
-            source={require('../../assets/more.png')}
-            size={20}
-            noMargin
-          />
-        </Button>
+        {props.modal ? (
+          <Button
+            onPress={() => {
+              setShowModal(!showModal);
+            }}>
+            <ImageContainer
+              source={require('../../assets/more.png')}
+              size={20}
+              noMargin
+            />
+          </Button>
+        ) : null}
       </RowContainer>
       {props.details.map((_, i) => {
         if (_.type === 'image') {
@@ -83,18 +85,16 @@ export default function DetailItem(props) {
           </Text>
         </RowContainer>
       ) : null}
-      <DetailModal
-        clicked={showModal}
-        height={300}
-        width={170}
-        top={0}
-        right={50}
-        inject={
-          <ModalContainer>
-            <Text color="#bebebe">Map Type:</Text>
-          </ModalContainer>
-        }
-      />
+      {props.modal ? (
+        <DetailModal
+          clicked={showModal}
+          height={props.modal.height}
+          width={props.modal.width}
+          top={0}
+          right={50}
+          inject={props.modal.item}
+        />
+      ) : null}
     </Container>
   );
 }
@@ -203,10 +203,3 @@ const Text = styled.Text`
 `;
 
 const ItemSwitch = styled.Switch``;
-
-const ModalContainer = styled.View`
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 10px;
-`;

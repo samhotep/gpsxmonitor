@@ -252,6 +252,26 @@ export default function HomeScreen({navigation}) {
             })}
           </>
         ) : null}
+        {mapRoute && (
+          <Marker.Animated coordinate={mapRoute[0]}>
+            <View style={styles.marker}>
+              <Image
+                style={styles.icon}
+                source={require('../assets/map.png')}
+              />
+            </View>
+          </Marker.Animated>
+        )}
+        {mapRoute && (
+          <Marker.Animated coordinate={mapRoute[mapRoute.length - 1]}>
+            <View style={styles.marker}>
+              <Image
+                style={styles.icon}
+                source={require('../assets/map.png')}
+              />
+            </View>
+          </Marker.Animated>
+        )}
         <Polyline
           coordinates={mapRoute}
           strokeColor="#1e96dc"

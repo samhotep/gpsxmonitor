@@ -35,41 +35,47 @@ export default function DetailsScreen({route, navigation}) {
 
   const constructLocationObject = (state, gpsPoint) => {
     let {icon, text} = Utils.getMovementComponents(state, false);
-    return constructObject('Location', state.gps.updated, [
-      {
-        type: 'image',
-        image: Utils.getSignalIcon(state.gps.signal_level),
-        text: `Signal: ${state.gps.signal_level} %`,
-      },
-      {
-        type: 'image',
-        image: require('../assets/location.png'),
-        text: `Latitude: ${gpsPoint.lat.toFixed(
-          5,
-        )} Longitude: ${gpsPoint.lng.toFixed(5)}`,
-      },
-      gpsPoint.speed > 0
-        ? {
-            type: 'image',
-            image: require('../assets/speed.png'),
-            text: `Speed: ${gpsPoint.speed} km/h`,
-          }
-        : {
-            type: 'image',
-            image: icon,
-            text: text,
-          },
-      {
-        type: 'image',
-        image: require('../assets/compass.png'),
-        text: `Direction: ${Utils.getDirection(gpsPoint.heading)}`,
-      },
-      {
-        type: 'image',
-        image: require('../assets/address.png'),
-        text: `${gpsPoint.address}`,
-      },
-    ]);
+    return constructObject(
+      'Location',
+      state.gps.updated,
+      [
+        {
+          type: 'image',
+          image: Utils.getSignalIcon(state.gps.signal_level),
+          text: `Signal: ${state.gps.signal_level} %`,
+        },
+        {
+          type: 'image',
+          image: require('../assets/location.png'),
+          text: `Latitude: ${gpsPoint.lat.toFixed(
+            5,
+          )} Longitude: ${gpsPoint.lng.toFixed(5)}`,
+        },
+        gpsPoint.speed > 0
+          ? {
+              type: 'image',
+              image: require('../assets/speed.png'),
+              text: `Speed: ${gpsPoint.speed} km/h`,
+            }
+          : {
+              type: 'image',
+              image: icon,
+              text: text,
+            },
+        {
+          type: 'image',
+          image: require('../assets/compass.png'),
+          text: `Direction: ${Utils.getDirection(gpsPoint.heading)}`,
+        },
+        {
+          type: 'image',
+          image: require('../assets/address.png'),
+          text: `${gpsPoint.address}`,
+        },
+      ],
+      false,
+      true,
+    );
   };
 
   const constructGSMObject = (state) => {
@@ -275,10 +281,17 @@ export default function DetailsScreen({route, navigation}) {
     );
   };
 
-  const constructObject = (title, time, details, millis = false) => {
+  const constructObject = (
+    title,
+    time,
+    details,
+    millis = false,
+    modal = false,
+  ) => {
     let trackerObject = {};
     trackerObject.details = [];
     trackerObject.title = title;
+    trackerObject.modal = modal ? <></> : null;
     trackerObject.time = millis
       ? Utils.getTime(time)
       : Utils.getTimeDifference(time);
@@ -376,7 +389,6 @@ export default function DetailsScreen({route, navigation}) {
             justifyContent: 'flex-start',
             alignItems: 'center',
           }}>
-          {/* TODO Show modal when clicked */}
           {itemList.map((_, i) => {
             return (
               <DetailItem
@@ -384,6 +396,7 @@ export default function DetailsScreen({route, navigation}) {
                 title={_.title}
                 time={_.time}
                 details={_.details}
+                modal={_.modal}
                 clicked={tapped}
               />
             );

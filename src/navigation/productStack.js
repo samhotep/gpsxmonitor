@@ -303,12 +303,21 @@ function CustomDrawerContent(props) {
 
   const showNotifications = () => {
     setLoading(true);
+    let today = new Date(Date.now());
+    let current = [];
+    let till = 0;
     API.getNotifications()
       .then((list) => {
-        setNotifications(list);
+        list.map((_, i) => {
+          till = new Date.parse(_.show_till.replace(/-+/g, '/'));
+          if (till > today) {
+            current.push(_);
+          }
+        });
+        setNotifications(current);
         setLoading(false);
         setDetailsLoaded(true);
-        if (list.length == 0) {
+        if (list.length === 0) {
           ToastAndroid.show(
             'No unread notifications',
             ToastAndroid.SHORT,

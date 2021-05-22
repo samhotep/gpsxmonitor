@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StatusBar, ToastAndroid} from 'react-native';
+import {StatusBar, ToastAndroid, Linking} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import styled from 'styled-components';
 import DrawerLoader from '../components/loaders/drawerLoader';
@@ -46,18 +46,23 @@ export default function DetailsScreen({route, navigation}) {
                   4,
                 )}, ${state.gps.location.lng.toFixed(4)}`,
               );
+              setTapped(!tapped);
               ToastAndroid.show(
                 'Coordinates copied to clipboard',
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER,
               );
-              setTapped(!tapped);
             }}>
             <Text width={200} color="#000000">
               Copy coordinates
             </Text>
           </ModalButton>
-          <ModalButton>
+          <ModalButton
+            onPress={() => {
+              Linking.openURL(
+                `https://www.google.com/maps/dir/?api=1&destination=${state.gps.location.lat},${state.gps.location.lng}`,
+              );
+            }}>
             <Text width={200} color="#000000">
               Show on map
             </Text>

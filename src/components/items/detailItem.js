@@ -3,10 +3,15 @@ import {Alert} from 'react-native';
 import CounterItem from '../items/counterItem';
 import styled from 'styled-components';
 import API from '../../api/api';
-import lists from '../lists/lists';
+import DetailModal from '../modals/detailModal';
 
 export default function DetailItem(props) {
   const [updateTime, setUpdateTime] = useState('');
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    setShowModal(false);
+  }, [props.clicked]);
 
   useEffect(() => {
     let temp = props.time ? `${props.time} ago` : 'Now';
@@ -20,7 +25,10 @@ export default function DetailItem(props) {
         <Text size={19} color={'#000000'}>
           {props.title}
         </Text>
-        <Button onPress={props.onPress}>
+        <Button
+          onPress={() => {
+            setShowModal(!showModal);
+          }}>
           <ImageContainer
             source={require('../../assets/more.png')}
             size={20}
@@ -75,6 +83,18 @@ export default function DetailItem(props) {
           </Text>
         </RowContainer>
       ) : null}
+      <DetailModal
+        clicked={showModal}
+        height={300}
+        width={170}
+        top={0}
+        right={50}
+        inject={
+          <ModalContainer>
+            <Text color="#bebebe">Map Type:</Text>
+          </ModalContainer>
+        }
+      />
     </Container>
   );
 }
@@ -183,3 +203,10 @@ const Text = styled.Text`
 `;
 
 const ItemSwitch = styled.Switch``;
+
+const ModalContainer = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10px;
+`;

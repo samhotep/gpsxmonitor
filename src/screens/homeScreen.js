@@ -338,7 +338,16 @@ export default function HomeScreen({navigation}) {
             <RadioLabel color="#bebebe">Show Trackers:</RadioLabel>
             {trackerSelections.map((_, i) => {
               return (
-                <RadioContainer key={i}>
+                <RadioContainer
+                  key={i}
+                  onPress={() =>
+                    updateRadioButtons(
+                      i,
+                      trackerSelections,
+                      setTrackerSelection,
+                      setShowTrackers,
+                    )
+                  }>
                   <RadioLabel>
                     {_.charAt(0).toUpperCase() + _.slice(1)}
                   </RadioLabel>
@@ -389,7 +398,11 @@ export default function HomeScreen({navigation}) {
             <RadioLabel color="#bebebe">Map Type:</RadioLabel>
             {mapTypes.map((_, i) => {
               return (
-                <RadioContainer key={i}>
+                <RadioContainer
+                  key={i}
+                  onPress={() =>
+                    updateRadioButtons(i, mapTypes, setMapType, setType)
+                  }>
                   <RadioLabel>
                     {_.charAt(0).toUpperCase() + _.slice(1)}
                   </RadioLabel>
@@ -482,7 +495,7 @@ const ModalContainer = styled.View`
   padding: 10px;
 `;
 
-const RadioContainer = styled.View`
+const RadioContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;

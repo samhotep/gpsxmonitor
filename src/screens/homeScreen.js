@@ -118,7 +118,7 @@ export default function HomeScreen({navigation}) {
             latitudeDelta: latDelta,
             longitudeDelta: longDelta,
           },
-          renderDelay,
+          500,
         );
       })
       .catch((error) => {
@@ -252,30 +252,30 @@ export default function HomeScreen({navigation}) {
             })}
           </>
         ) : null}
-        {mapRoute && (
+        {mapRoute.length > 0 ? (
           <Marker.Animated coordinate={mapRoute[0]}>
             <View style={styles.marker}>
               <Image
                 style={styles.icon}
-                source={require('../assets/map.png')}
+                source={require('../assets/marker_start.png')}
               />
             </View>
           </Marker.Animated>
-        )}
-        {mapRoute && (
+        ) : null}
+        {mapRoute.length > 0 ? (
           <Marker.Animated coordinate={mapRoute[mapRoute.length - 1]}>
             <View style={styles.marker}>
               <Image
                 style={styles.icon}
-                source={require('../assets/map.png')}
+                source={require('../assets/marker_end.png')}
               />
             </View>
           </Marker.Animated>
-        )}
+        ) : null}
         <Polyline
           coordinates={mapRoute}
           strokeColor="#1e96dc"
-          strokeWidth={3}
+          strokeWidth={2}
         />
       </Animated>
       {trackerEventData ? (

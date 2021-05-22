@@ -35,6 +35,20 @@ export default function DetailsScreen({route, navigation}) {
 
   const constructLocationObject = (state, gpsPoint) => {
     let {icon, text} = Utils.getMovementComponents(state, false);
+    let modal = {
+      item: (
+        <ModalContainer>
+          <ModalButton>
+            <Text color="#000000">Copy coordinates</Text>
+          </ModalButton>
+          <ModalButton>
+            <Text color="#000000">Show on map</Text>
+          </ModalButton>
+        </ModalContainer>
+      ),
+      height: 100,
+      width: 200,
+    };
     return constructObject(
       'Location',
       state.gps.updated,
@@ -74,7 +88,7 @@ export default function DetailsScreen({route, navigation}) {
         },
       ],
       false,
-      true,
+      modal,
     );
   };
 
@@ -286,12 +300,12 @@ export default function DetailsScreen({route, navigation}) {
     time,
     details,
     millis = false,
-    modal = false,
+    modal = null,
   ) => {
     let trackerObject = {};
     trackerObject.details = [];
     trackerObject.title = title;
-    trackerObject.modal = modal ? <></> : null;
+    trackerObject.modal = modal;
     trackerObject.time = millis
       ? Utils.getTime(time)
       : Utils.getTimeDifference(time);
@@ -418,4 +432,21 @@ const StatusContainer = styled.ScrollView`
   flex-direction: column;
   height: 100%;
   width: 100%;
+`;
+
+const ModalContainer = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10px;
+`;
+
+const ModalButton = styled.TouchableOpacity``;
+
+const Text = styled.Text`
+  font-family: 'Roboto-Regular';
+  font-size: ${(props) => props.size || 16}px;
+  color: ${(props) => props.color || '#626160'};
+  flex-wrap: wrap;
+  margin: 5px 5px 15px 5px;
 `;

@@ -246,7 +246,7 @@ export default function HomeScreen({navigation}) {
         <Polyline
           coordinates={mapRoute}
           strokeColor="#1e96dc"
-          strokeWidth={6}
+          strokeWidth={3}
         />
       </Animated>
       {trackerEventData ? (

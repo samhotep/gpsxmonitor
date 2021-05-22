@@ -220,7 +220,11 @@ export default function HomeScreen({navigation}) {
             longitudeDelta: 0.05,
           })
         }
-        mapType={type}>
+        mapType={type}
+        onPress={() => {
+          setGlobeClicked(false);
+          setArrowClicked(false);
+        }}>
         {/* TODO Set default selection type */}
         {showTrackers === 'Selected' ? (
           <Marker.Animated ref={markerRef} coordinate={currentMarker}>

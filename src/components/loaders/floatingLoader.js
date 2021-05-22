@@ -5,7 +5,7 @@ import styled from 'styled-components';
 export default function FloatingLoader() {
   const window = useWindowDimensions();
   const size = 50;
-  const depth = 100;
+  const depth = 200;
 
   return (
     <Container left={window.width / 2 - size / 2} size={size} depth={depth}>

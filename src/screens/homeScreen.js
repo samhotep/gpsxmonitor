@@ -429,15 +429,6 @@ export default function HomeScreen({navigation}) {
         onPress={() => {
           let newLat = latDelta / Math.sqrt(10);
           let newLong = longDelta / Math.sqrt(10);
-          mapRef.current.animateToRegion(
-            {
-              latitude: currentMarker.latitude,
-              longitude: currentMarker.longitude,
-              latitudeDelta: newLat,
-              longitudeDelta: newLong,
-            },
-            500,
-          );
           setLatDelta(newLat);
           setLongDelta(newLong);
         }}
@@ -448,15 +439,6 @@ export default function HomeScreen({navigation}) {
         onPress={() => {
           let newLat = latDelta * Math.sqrt(10);
           let newLong = longDelta * Math.sqrt(10);
-          mapRef.current.animateToRegion(
-            {
-              latitude: currentMarker.latitude,
-              longitude: currentMarker.longitude,
-              latitudeDelta: newLat,
-              longitudeDelta: newLong,
-            },
-            500,
-          );
           setLatDelta(newLat);
           setLongDelta(newLong);
         }}

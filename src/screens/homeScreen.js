@@ -19,6 +19,7 @@ import RadioInput from '../components/inputs/radioInput';
 import useWindowDimensions from 'react-native/Libraries/Utilities/useWindowDimensions';
 import API from '../api/api';
 import Storage from '../storage/storage';
+import Utils from '../utils/utils';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
@@ -96,6 +97,26 @@ export default function HomeScreen({navigation}) {
     }
   };
 
+  const getAddressPoints = (route) => {
+    let start;
+    let end;
+    API.getLocation(route.start)
+      .then((locations) => {
+        start = locations[0];
+        return API.getLocation(route.end);
+      })
+      .then((locations) => {
+        end = locations[0];
+        return API.getRoute(start, end);
+      })
+      .then((routelist) => {
+        setMapRoute(Utils.renameLocationKeys(routelist));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     try {
       Storage.getMarkerSettings().then((stored) => {
@@ -134,13 +155,18 @@ export default function HomeScreen({navigation}) {
     const eventListener = eventEmitter.addListener(
       'event.routeEvent',
       (routeEvent) => {
-        setMapRoute(routeEvent.route);
+        console.log('Route Event  --- ', routeEvent);
+        getAddressPoints(routeEvent);
       },
     );
     return () => {
       eventListener.remove();
     };
   }, []);
+
+  useEffect(() => {
+    clearInterval(intervalID);
+  }, [mapRoute]);
 
   return (
     <View style={styles.container}>

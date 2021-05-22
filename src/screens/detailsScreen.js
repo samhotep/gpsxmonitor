@@ -212,72 +212,105 @@ export default function DetailsScreen({route, navigation}) {
         taskDelay += diff.getTime();
       }
     });
-    return constructObject('Tasks', state.last_update, [
-      {
-        type: 'image',
-        image: require('../assets/user.png'),
-        text: username,
-      },
-      {
-        type: 'component',
-        status: {
-          color: '#2196f3',
-          size: 18,
-          text: `Assigned: ${assignedTasks}`,
-          radius: true,
+    let modal = {
+      item: (
+        <ModalContainer>
+          <ModalButton>
+            <Text color="#000000">Task list</Text>
+          </ModalButton>
+        </ModalContainer>
+      ),
+      height: 50,
+      width: 200,
+    };
+    return constructObject(
+      'Tasks',
+      state.last_update,
+      [
+        {
+          type: 'image',
+          image: require('../assets/user.png'),
+          text: username,
         },
-      },
-      {
-        type: 'component',
-        status: {
-          color: '#4caf50',
-          size: 18,
-          text: `Completed: ${doneTasks}`,
-          radius: true,
+        {
+          type: 'component',
+          status: {
+            color: '#2196f3',
+            size: 18,
+            text: `Assigned: ${assignedTasks}`,
+            radius: true,
+          },
         },
-      },
-      {
-        type: 'component',
-        status: {
-          color: '#f44336',
-          size: 18,
-          text: `Failed: ${failedTasks}`,
-          radius: true,
+        {
+          type: 'component',
+          status: {
+            color: '#4caf50',
+            size: 18,
+            text: `Completed: ${doneTasks}`,
+            radius: true,
+          },
         },
-      },
-      {
-        type: 'component',
-        status: {
-          color: '#ffb300',
-          size: 18,
-          text: `Delayed: ${delayedTasks}`,
-          radius: true,
+        {
+          type: 'component',
+          status: {
+            color: '#f44336',
+            size: 18,
+            text: `Failed: ${failedTasks}`,
+            radius: true,
+          },
         },
-      },
-      {
-        type: 'text',
-        text: `Total tasks: ${numberOfTasks}`,
-      },
-      {
-        type: 'text',
-        text: `Tasks duration time: ${
-          Utils.getTime(taskDuration) === '0'
-            ? '0 h 0 min'
-            : Utils.getTime(taskDuration)
-        }`,
-      },
-      {
-        type: 'text',
-        text: `Delayed time: ${
-          Utils.getTime(taskDelay) === '0'
-            ? '0 h 0 min'
-            : Utils.getTime(taskDelay)
-        }`,
-      },
-    ]);
+        {
+          type: 'component',
+          status: {
+            color: '#ffb300',
+            size: 18,
+            text: `Delayed: ${delayedTasks}`,
+            radius: true,
+          },
+        },
+        {
+          type: 'text',
+          text: `Total tasks: ${numberOfTasks}`,
+        },
+        {
+          type: 'text',
+          text: `Tasks duration time: ${
+            Utils.getTime(taskDuration) === '0'
+              ? '0 h 0 min'
+              : Utils.getTime(taskDuration)
+          }`,
+        },
+        {
+          type: 'text',
+          text: `Delayed time: ${
+            Utils.getTime(taskDelay) === '0'
+              ? '0 h 0 min'
+              : Utils.getTime(taskDelay)
+          }`,
+        },
+      ],
+      false,
+      modal,
+    );
   };
 
   const constructCounterObjects = (state, counter) => {
+    let modal = null;
+    if (lists.counterTypes[counter.type].title === 'Odometer') {
+      modal = {
+        item: (
+          <ModalContainer>
+            <ModalButton>
+              <Text width={200} color="#000000">
+                km to mi
+              </Text>
+            </ModalButton>
+          </ModalContainer>
+        ),
+        height: 50,
+        width: 200,
+      };
+    }
     return constructObject(
       lists.counterTypes[counter.type].title,
       counter.update_time,
@@ -292,6 +325,8 @@ export default function DetailsScreen({route, navigation}) {
           text: lists.counterTypes[counter.type].text,
         },
       ],
+      false,
+      modal,
     );
   };
 
@@ -448,5 +483,6 @@ const Text = styled.Text`
   font-size: ${(props) => props.size || 16}px;
   color: ${(props) => props.color || '#626160'};
   flex-wrap: wrap;
+  ${(props) => (props.width ? `width: ${props.width};` : '')}
   margin: 5px 5px 15px 5px;
 `;

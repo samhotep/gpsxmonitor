@@ -308,6 +308,13 @@ function CustomDrawerContent(props) {
         setNotifications(list);
         setLoading(false);
         setDetailsLoaded(true);
+        if (list.length == 0) {
+          ToastAndroid.show(
+            'No unread notifications',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -346,7 +353,7 @@ function CustomDrawerContent(props) {
         showNotifications();
       }
     }
-  }, []);
+  }, [detail]);
 
   useEffect(() => {
     // Listener for location update events in dashboard

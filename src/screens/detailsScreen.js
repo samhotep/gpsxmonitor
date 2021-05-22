@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import styled from 'styled-components';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import DetailItem from '../components/items/detailItem';
@@ -38,7 +39,20 @@ export default function DetailsScreen({route, navigation}) {
     let modal = {
       item: (
         <ModalContainer>
-          <ModalButton>
+          <ModalButton
+            onPress={() => {
+              Clipboard.setString(
+                `${state.gps.location.lat.toFixed(
+                  4,
+                )}, ${state.gps.location.lng.toFixed(4)}`,
+              );
+              ToastAndroid.show(
+                'Coordinates copied to clipboard',
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER,
+              );
+              setTapped(!tapped);
+            }}>
             <Text width={200} color="#000000">
               Copy coordinates
             </Text>
@@ -489,6 +503,6 @@ const Text = styled.Text`
   font-size: ${(props) => props.size || 16}px;
   color: ${(props) => props.color || '#626160'};
   flex-wrap: wrap;
-  ${(props) => (props.width ? `width: ${props.width};` : '')}
+  ${(props) => (props.width ? `width: ${props.width}px;` : '')}
   margin: 5px 5px 15px 5px;
 `;

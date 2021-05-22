@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {NativeEventEmitter, NativeModules, ToastAndroid} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -17,6 +18,7 @@ import ClearButton from '../components/buttons/clearButton';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import EventItem from '../components/items/eventItem';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import NotificationItem from '../components/items/notificationItem';
 
 const Drawer = createDrawerNavigator();
 
@@ -299,7 +301,18 @@ function CustomDrawerContent(props) {
     }
   };
 
-  const showNotifications = () => {};
+  const showNotifications = () => {
+    setLoading(true);
+    API.getNotifications()
+      .then((list) => {
+        setNotifications(list);
+        setLoading(false);
+        setDetailsLoaded(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
     if (detail.screen === 'Notifications') {
@@ -328,6 +341,14 @@ function CustomDrawerContent(props) {
   };
 
   useEffect(() => {
+    if (detail) {
+      if (detail.screen === 'Notifications') {
+        showNotifications();
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     // Listener for location update events in dashboard
     const eventListener = eventEmitter.addListener(
       'event.homeEvent',
@@ -339,7 +360,6 @@ function CustomDrawerContent(props) {
     return () => {
       eventListener.remove();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -367,10 +387,16 @@ function CustomDrawerContent(props) {
         </>
       ) : null}
       {detail.screen === 'Notifications' ? (
-        <HeaderContainer>
-          <ImageContainer resizeMode="contain" source={detail.icon} />
-          <Title>{detail.screen} for the period:</Title>
-        </HeaderContainer>
+        <>
+          <HeaderContainer>
+            <ClearButton
+              onPress={() => {
+                setDetailsLoaded(false);
+              }}
+            />
+          </HeaderContainer>
+          <Separator />
+        </>
       ) : null}
       {detail.screen !== 'Notifications' && !detailsLoaded ? (
         <>
@@ -506,7 +532,6 @@ function CustomDrawerContent(props) {
 
           <GenericButton title="SHOW" onPress={showItems} />
           <Separator />
-          {loading ? <DrawerLoader /> : null}
         </>
       ) : null}
       {detailsLoaded && detail.screen === 'Tracks' ? (
@@ -563,6 +588,13 @@ function CustomDrawerContent(props) {
           })}
         </>
       ) : null}
+      {/* TODO On clear, set most recent date to show notifications (save to storage) */}
+      {detailsLoaded && detail.screen === 'Notifications'
+        ? notifications.map((_, i) => {
+            return <NotificationItem data={_} />;
+          })
+        : null}
+      {loading ? <DrawerLoader /> : null}
       <DateTimePickerModal
         isVisible={isDatePickerFromVisible}
         mode="datetime"

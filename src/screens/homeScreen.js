@@ -160,12 +160,39 @@ export default function HomeScreen({navigation}) {
   }, [trackerEventData, latDelta, longDelta]);
 
   useEffect(() => {
-    // Listener for track update events
+    // Listener for track drawer events
     const eventListener = eventEmitter.addListener(
       'event.routeEvent',
       (routeEvent) => {
         console.log('Route Event  --- ', routeEvent);
         getAddressPoints(routeEvent);
+      },
+    );
+    return () => {
+      eventListener.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    // Listener for event drawer events
+    const eventListener = eventEmitter.addListener(
+      'event.trackerlistEvent',
+      (tracker) => {
+        console.log('Tracker Event  --- ', tracker);
+        clearInterval(intervalID);
+        API.getTrackerState(tracker.id)
+          .then((state) => {
+            mapRef.current.animateToRegion(
+              {
+                latitude: state.gps.location.lat,
+                longitude: state.gps.location.lng,
+                latitudeDelta: latDelta,
+                longitudeDelta: longDelta,
+              },
+              renderDelay,
+            );
+          })
+          .catch((error) => console.log(error));
       },
     );
     return () => {

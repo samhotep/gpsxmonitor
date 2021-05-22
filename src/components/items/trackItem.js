@@ -11,7 +11,6 @@ export default function TrackItem(props) {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [difference, setDifference] = useState('');
-  const [route, setRoute] = useState([]);
 
   const formatDate = (date) => {
     return `${date.toLocaleTimeString([], {
@@ -23,9 +22,9 @@ export default function TrackItem(props) {
   };
 
   const sendRouteEvent = () => {
-    let serializedRoute = Utils.renameLocationKeys(route);
     eventEmitter.emit('event.routeEvent', {
-      route: serializedRoute,
+      start: props.track.start_address,
+      end: props.track.end_address,
     });
     props.navigation.toggleDrawer();
   };
@@ -39,31 +38,10 @@ export default function TrackItem(props) {
     setDifference(`${hours} h ${minutes} m`);
   };
 
-  const getAddressPoints = () => {
-    let start;
-    let end;
-    API.getLocation(props.track.start_address)
-      .then((locations) => {
-        start = locations[0];
-        return API.getLocation(props.track.end_address);
-      })
-      .then((locations) => {
-        end = locations[0];
-        return API.getRoute(start, end);
-      })
-      .then((route) => {
-        setRoute(route);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   useEffect(() => {
     getDates();
-    getAddressPoints();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <>
       <Container onPress={sendRouteEvent}>

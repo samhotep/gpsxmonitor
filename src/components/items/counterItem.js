@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
@@ -5,13 +6,15 @@ export default function CounterItem(props) {
   const [numbers, setNumbers] = useState([]);
 
   useEffect(() => {
+    console.log(props.value);
     let numberString = String(props.value.toFixed(1));
     let newNumberList = Array(8 - numberString.length).fill(0);
     setNumbers([
       ...newNumberList,
       ...Array.from(numberString.replace('.', ''), Number),
     ]);
-  }, []);
+  }, [props.value]);
+
   return numbers.map((_, i) => {
     if (i === numbers.length - 1) {
       return (

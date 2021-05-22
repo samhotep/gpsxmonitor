@@ -46,13 +46,14 @@ export default function LoginScreen({navigation}) {
           throw result;
         }
       })
-      .then((url) => {
-        if (url) {
-          Storage.setLoginImageURL(`${url}static/paas/1/app_logo.png`);
-        } else {
+      .then((res) => {
+        let url = JSON.parse(res);
+        if (url === '') {
           Storage.setLoginImageURL(
             `${API.defaultURL}static/paas/1/app_logo.png`,
           );
+        } else {
+          Storage.setLoginImageURL(`${url}static/paas/1/app_logo.png`);
         }
         return API.getUserInfo();
       })
@@ -87,7 +88,9 @@ export default function LoginScreen({navigation}) {
 
   useEffect(() => {
     Storage.getLoginImageURL()
-      .then((url) => {
+      .then((res) => {
+        let url = JSON.parse(res);
+        console.log('url', url);
         if (url) {
           setLoginImage({
             uri: url,

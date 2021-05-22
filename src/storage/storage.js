@@ -29,6 +29,19 @@ const Storage = {
       console.log(e);
     }
   },
+  getLoginImageURL: () => {
+    return AsyncStorage.getItem('loginimageurl');
+  },
+  setLoginImageURL: (data) => {
+    AsyncStorage.setItem('loginimageurl', JSON.stringify(data));
+  },
+  removeLoginImageURL: async () => {
+    try {
+      await AsyncStorage.removeItem('loginimageurl');
+    } catch (e) {
+      console.log(e);
+    }
+  },
   getUserInfo: () => {
     return AsyncStorage.getItem('userinfo');
   },

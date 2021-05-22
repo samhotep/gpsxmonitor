@@ -3,7 +3,6 @@ import {NativeEventEmitter, NativeModules} from 'react-native';
 import Separator from '../separators/separator';
 import styled from 'styled-components';
 import Utils from '../../utils/utils';
-import API from '../../api/api';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 

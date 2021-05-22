@@ -1,11 +1,21 @@
 import React, {useState, useEffect} from 'react';
+import {NativeEventEmitter, NativeModules} from 'react-native';
 import Separator from '../separators/separator';
 import styled from 'styled-components';
 import Storage from '../../storage/storage';
 
+const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
+
 export default function EventItem(props) {
   const [statusDate, setStatusDate] = useState('');
-  const [trackerLabel, setTrackerLabel] = useState('');
+  const [tracker, setTracker] = useState('');
+
+  const sendTrackEvent = () => {
+    eventEmitter.emit('event.trackerlistEvent', tracker);
+    setTimeout(() => {
+      props.navigation.toggleDrawer();
+    }, 100);
+  };
 
   useEffect(() => {
     let date = new Date(props.event.status_change_date.replace(/-+/g, '/'));
@@ -26,7 +36,7 @@ export default function EventItem(props) {
       .then((trackers) => {
         JSON.parse(trackers).map((_, i) => {
           if (_.id === props.event.tracker_id) {
-            setTrackerLabel(_.label);
+            setTracker(_);
           }
         });
       })
@@ -39,11 +49,11 @@ export default function EventItem(props) {
 
   return (
     <>
-      <Container onPress={props.onPress}>
+      <Container onPress={sendTrackEvent}>
         <ImageContainer source={require('../../assets/bell_blue.png')} />
         <ColumnContainer>
           <Text color="#737373">
-            {trackerLabel}: task: "{props.event.label}"{' '}
+            {tracker.label}: task: "{props.event.label}"{' '}
             {props.event.status.toUpperCase()}
           </Text>
           <Text align="right" size={12}>

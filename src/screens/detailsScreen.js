@@ -239,7 +239,10 @@ export default function DetailsScreen({route, navigation}) {
     let modal = {
       item: (
         <ModalContainer>
-          <ModalButton>
+          <ModalButton
+            onPress={() =>
+              navigation.navigate('Tasks', {screen: 'TaskScreen'})
+            }>
             <Text width={200} color="#000000">
               Task list
             </Text>

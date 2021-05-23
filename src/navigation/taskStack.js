@@ -42,6 +42,13 @@ function LogoTitle(props) {
   const [searchString, setSearchString] = useState('');
   const searchRef = useRef();
 
+  const focusWorkaround = () => {
+    searchRef.current.blur();
+    setTimeout(() => {
+      searchRef.current.focus();
+    }, 100);
+  };
+
   return (
     <Container>
       <SearchInput
@@ -68,7 +75,7 @@ function LogoTitle(props) {
               setSearchString('');
             } else {
               setShowSearch(true);
-              console.log(searchRef.current);
+              focusWorkaround();
             }
           }}
         />

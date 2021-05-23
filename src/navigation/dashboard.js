@@ -242,6 +242,7 @@ function CustomDrawerContent({navigation}) {
                 noBorder={true}
                 placeholder="Search..."
                 placeholderTextColor="#8bc9ed"
+                returnKeyType="search"
               />
               <HeaderIcon
                 source={require('../assets/close.png')}

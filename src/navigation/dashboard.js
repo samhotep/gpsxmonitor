@@ -54,7 +54,7 @@ function CustomDrawerContent({navigation}) {
 
   const drawerItems = [
     {
-      name: 'Chat',
+      name: 'Chat messages',
       source: require('../assets/chat.png'),
       onPress: () => {
         // navigation.navigate('Tasks', {screen: 'TaskScreen'});

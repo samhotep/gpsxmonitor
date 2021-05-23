@@ -9,7 +9,7 @@ import DetailModal from '../modals/detailModal';
 export default function DetailItem(props) {
   const [updateTime, setUpdateTime] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [meter, setMeter] = useState({convert: false, current: 0});
+  const [meter, setMeter] = useState({converted: false, current: 0});
 
   useEffect(() => {
     setShowModal(false);
@@ -109,10 +109,10 @@ export default function DetailItem(props) {
               <ModalContainer>
                 <ModalButton
                   onPress={() => {
-                    if (meter.convert) {
-                      setMeter({...meter, convert: false, current: meter.mi});
+                    if (meter.converted) {
+                      setMeter({...meter, converted: false, current: meter.km});
                     } else {
-                      setMeter({...meter, convert: true, current: meter.km});
+                      setMeter({...meter, converted: true, current: meter.mi});
                     }
                     setShowModal(false);
                   }}>

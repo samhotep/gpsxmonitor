@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import TaskScreen from '../screens/taskScreen';
 import HeaderTitle from '../components/headers/headerTitle';
@@ -40,23 +40,36 @@ export default function TaskStack({route, navigation}) {
 function LogoTitle(props) {
   const [showSearch, setShowSearch] = useState(false);
   const [searchString, setSearchString] = useState('');
+  const searchRef = useRef();
 
   return (
     <Container>
-      {/* <Title search={showSearch}>Tasks</Title> */}
       <SearchInput
-        value={searchString}
+        ref={searchRef}
+        value={showSearch ? searchString : 'Tasks'}
         onChangeText={(text) => setSearchString(text)}
+        editable={showSearch}
         placeholder="Search..."
         placeholderTextColor="#8bc9ed"
       />
+
       <IconsContainer>
         <HeaderIcon
           size={18}
           margin={8}
-          source={require('../assets/search.png')}
+          source={
+            showSearch
+              ? require('../assets/close.png')
+              : require('../assets/search.png')
+          }
           onPress={(event) => {
-            setShowSearch(true);
+            if (showSearch) {
+              setShowSearch(false);
+              setSearchString('');
+            } else {
+              setShowSearch(true);
+              console.log(searchRef.current);
+            }
           }}
         />
       </IconsContainer>
@@ -90,4 +103,5 @@ const SearchInput = styled.TextInput`
   font-size: 20px;
   text-align: left;
   color: #ffffff;
+  font-weight: ${(props) => (props.editable ? 'normal' : 'bold')};
 `;

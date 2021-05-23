@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {createDrawerNavigator, useIsDrawerOpen} from '@react-navigation/drawer';
 import {
   Alert,
+  Linking,
   NativeEventEmitter,
   NativeModules,
   ToastAndroid,
@@ -309,6 +310,12 @@ function CustomDrawerContent({navigation}) {
             </DrawerItemContainer>
           );
         })}
+        <Button
+          onPress={() => {
+            Linking.openURL('https://fms-ecsafrica.com/privacy-policy-2/');
+          }}>
+          <PolicyText>Privacy policy</PolicyText>
+        </Button>
       </DrawerContentContainer>
     </DrawerContainer>
   );
@@ -364,3 +371,14 @@ const DrawerItemContainer = styled.TouchableHighlight`
   justify-content: flex-start;
   padding: 5px;
 `;
+
+const PolicyText = styled.Text`
+  font-family: 'Roboto-Regular';
+  font-size: ${(props) => props.size || 14}px;
+  color: ${(props) => props.color || '#1e96dc'};
+  text-decoration: underline;
+  width: 100%;
+  text-align: center;
+`;
+
+const Button = styled.TouchableOpacity``;

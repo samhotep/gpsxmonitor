@@ -13,6 +13,7 @@ export default function TaskStack({route, navigation}) {
         name="TaskScreen"
         component={TaskScreen}
         options={{
+          title: 'Tasks',
           headerShown: true,
           headerStyle: {
             backgroundColor: '#1e96dc',

@@ -54,6 +54,13 @@ function CustomDrawerContent({navigation}) {
 
   const drawerItems = [
     {
+      name: 'Chat',
+      source: require('../assets/chat.png'),
+      onPress: () => {
+        // navigation.navigate('Tasks', {screen: 'TaskScreen'});
+      },
+    },
+    {
       name: 'Tasks',
       source: require('../assets/tasks.png'),
       onPress: () => {
@@ -65,6 +72,13 @@ function CustomDrawerContent({navigation}) {
       source: require('../assets/subs.png'),
       onPress: () => {
         navigation.navigate('Billing', {screen: 'Transactions'});
+      },
+    },
+    {
+      name: 'Support',
+      source: require('../assets/help.png'),
+      onPress: () => {
+        // navigation.navigate('Billing', {screen: 'Transactions'});
       },
     },
     {

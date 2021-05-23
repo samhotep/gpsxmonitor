@@ -1,47 +1,89 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
 import Separator from '../components/separators/separator';
 import styled from 'styled-components';
-import FloatingLoader from '../components/loaders/floatingLoader';
+import DrawerLoader from '../components/loaders/drawerLoader';
+import VerticalSeparator from '../components/separators/verticalSeparator';
 import API from '../api/api';
 
 export default function SuccessScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
+  let timeItems = ['Yesterday', 'Today', 'Tomorrow', 'Week', 'Month'];
+  const [selectedTime, setSelectedTime] = useState('Today');
 
   useEffect(() => {
-    // setLoading(true);
+    //TODO Mimic API Call
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
   }, []);
+
+  if (loading) {
+    return (
+      <Container>
+        <StatusBar backgroundColor="#007aa6" />
+        <DrawerLoader />
+      </Container>
+    );
+  }
 
   return (
     <Container>
-      <StatusBar backgroundColor="#007aa6" />
-      <StatusContainer>
-        <ImageContainer source={require('../assets/timer.png')} size={36} />
-      </StatusContainer>
-      <Separator />
-      <Text size={16}>TASKS!</Text>
+      <FilterContainer>
+        <TimeContainer>
+          <Text size={16}>Week</Text>
+          <ImageContainer source={require('../assets/down.png')} />
+        </TimeContainer>
+        <VerticalSeparator />
+        <TimeContainer>
+          <Text size={16} />
+          <ImageContainer source={require('../assets/filter_grey.png')} />
+        </TimeContainer>
+      </FilterContainer>
+      <ContentContainer
+        contentContainerStyle={{
+          // flex: 1,
+          justifyContent: 'space-between',
+        }}>
+        <StatusBar backgroundColor="#007aa6" />
+        <Separator />
+        <Text size={20}>TASKS!</Text>
+      </ContentContainer>
     </Container>
   );
 }
 
 const Container = styled.View`
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
+  background-color: #ffffff;
   height: 100%;
+`;
+
+const ContentContainer = styled.ScrollView`
+  flex-direction: column;
   width: 100%;
   padding: 10px;
-  background-color: #ffffff;
 `;
 
-const StatusContainer = styled.View`
-  flex-direction: column;
+const FilterContainer = styled.View`
+  flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   background-color: #ffffff;
+  width: 100%;
+  height: 50px;
+  padding: 4px;
+  elevation: 3;
 `;
 
-const TransactionsContainer = styled.ScrollView``;
+const TimeContainer = styled.TouchableOpacity`
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px 5px 10px;
+`;
 
 const Text = styled.Text`
   font-size: ${(props) => props.size || 18}px;
@@ -53,7 +95,6 @@ const Text = styled.Text`
 `;
 
 const ImageContainer = styled.Image`
-  height: ${(props) => props.size || 150}px;
-  width: ${(props) => props.size || 150}px;
-  margin: ${(props) => props.margin || 10}px;
+  height: ${(props) => props.size || 24}px;
+  width: ${(props) => props.size || 24}px;
 `;

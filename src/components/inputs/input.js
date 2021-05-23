@@ -25,6 +25,7 @@ export default function Input(props) {
         value={props.value}
         font={props.font}
         color={props.color}
+        returnKeyType={props.returnKeyType}
       />
     </Container>
   );

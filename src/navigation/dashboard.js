@@ -10,6 +10,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import styled from 'styled-components/native';
 import ProductStack from './productStack';
 import BillingStack from './billingStack';
+import TaskStack from './taskStack';
 import CategoryItem from '../components/items/categoryItem';
 import HeaderTitle from '../components/headers/headerTitle';
 import HeaderIcon from '../components/headers/headerIcon';
@@ -35,6 +36,7 @@ export default function Dashboard({route, navigation}) {
       drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={ProductStack} />
       <Drawer.Screen name="Billing" component={BillingStack} />
+      <Drawer.Screen name="Tasks" component={TaskStack} />
     </Drawer.Navigator>
   );
 }
@@ -50,6 +52,13 @@ function CustomDrawerContent({navigation}) {
   const isDrawerOpen = useIsDrawerOpen();
 
   const drawerItems = [
+    {
+      name: 'Tasks',
+      source: require('../assets/tasks.png'),
+      onPress: () => {
+        navigation.navigate('Tasks', {screen: 'TaskScreen'});
+      },
+    },
     {
       name: 'Subscriptions',
       source: require('../assets/subs.png'),

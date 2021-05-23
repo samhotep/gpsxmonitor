@@ -43,7 +43,6 @@ function LogoTitle(props) {
   const searchRef = useRef();
 
   const focusWorkaround = () => {
-    searchRef.current.blur();
     setTimeout(() => {
       searchRef.current.focus();
     }, 100);

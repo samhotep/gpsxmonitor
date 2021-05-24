@@ -94,6 +94,19 @@ const Storage = {
       console.log(e);
     }
   },
+  getAllTasks: () => {
+    return AsyncStorage.getItem('taskset');
+  },
+  setAllTasks: (data) => {
+    AsyncStorage.setItem('taskset', JSON.stringify(data));
+  },
+  removeAllTasks: async () => {
+    try {
+      await AsyncStorage.removeItem('taskset');
+    } catch (e) {
+      console.log(e);
+    }
+  },
   getMarkerSettings: () => {
     return AsyncStorage.getItem('markersettings');
   },

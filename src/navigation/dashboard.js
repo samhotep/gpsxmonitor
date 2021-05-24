@@ -151,6 +151,7 @@ function CustomDrawerContent({navigation}) {
   };
 
   const createObjects = () => {
+    // TODO Load tasks and save to storage
     setLoading(true);
     let groups = [];
     let _trackers = [];
@@ -169,6 +170,10 @@ function CustomDrawerContent({navigation}) {
       .then((result) => {
         setTrackerStates(result.states);
         setData(Utils.createCategories(groups, _trackers));
+        return API.getTasks();
+      })
+      .then((taskList) => {
+        Storage.setAllTasks(taskList);
         setLoading(false);
       })
       .catch((error) => {

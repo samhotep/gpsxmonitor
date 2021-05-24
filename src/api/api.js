@@ -222,8 +222,8 @@ const API = {
       },
     );
   },
-  getTasks: (tracker_id) => {
-    return API.apiCall('task/list/', [tracker_id]).then((result) => {
+  getTasks: () => {
+    return API.apiCall('task/list/').then((result) => {
       if (result.success === true) {
         return result.list;
       } else {

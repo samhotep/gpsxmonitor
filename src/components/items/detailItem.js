@@ -161,7 +161,6 @@ function OutputSwitch(props) {
             API.setOutput(props.status.tracker_id, props.status.number, value)
               .then((result) => {
                 setSwitchValue(value);
-                console.log(result);
               })
               .catch((error) => {
                 console.log(console.log(error));

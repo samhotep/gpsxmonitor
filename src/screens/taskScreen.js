@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
@@ -19,6 +20,8 @@ export default function SuccessScreen({route, navigation}) {
   );
   const [showTimeModal, setShowTimeModal] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
+  const [allTasks, setAllTasks] = useState([]);
+  const [tasks, setTasks] = useState([]);
 
   const updateRadioButtons = (i) => {
     let status = Array(radioItems.length).fill(false);
@@ -30,10 +33,11 @@ export default function SuccessScreen({route, navigation}) {
     let defaultStatus = selectedButton;
     defaultStatus[0] = true;
     setSelectedButton(defaultStatus);
-    //TODO Mimic API Call
-    setTimeout(() => {
+    API.getTasks().then((taskList) => {
+      setAllTasks(taskList);
+      setTasks(taskList);
       setLoading(false);
-    }, 3000);
+    });
   }, []);
 
   if (loading) {
@@ -72,7 +76,6 @@ export default function SuccessScreen({route, navigation}) {
       </FilterContainer>
       <ContentContainer
         contentContainerStyle={{
-          // flex: 1,
           justifyContent: 'space-between',
         }}>
         <StatusBar backgroundColor="#007aa6" />

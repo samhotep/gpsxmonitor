@@ -7,15 +7,29 @@ import DrawerLoader from '../components/loaders/drawerLoader';
 import VerticalSeparator from '../components/separators/verticalSeparator';
 import API from '../api/api';
 import DetailModal from '../components/modals/detailModal';
+import RadioInput from '../components/inputs/radioInput';
 
 export default function SuccessScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
   let timeItems = ['Yesterday', 'Today', 'Tomorrow', 'Week', 'Month'];
-  const [selectedTime, setSelectedTime] = useState('Today');
+  let radioItems = ['With any status', 'Finished', 'Unfinished'];
+  const [selectedTime, setSelectedTime] = useState(1);
+  const [selectedButton, setSelectedButton] = useState(
+    Array(radioItems.length).fill(false),
+  );
   const [showTimeModal, setShowTimeModal] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
 
+  const updateRadioButtons = (i) => {
+    let status = Array(radioItems.length).fill(false);
+    status[i] = true;
+    setSelectedButton(status);
+  };
+
   useEffect(() => {
+    let defaultStatus = selectedButton;
+    defaultStatus[0] = true;
+    setSelectedButton(defaultStatus);
     //TODO Mimic API Call
     setTimeout(() => {
       setLoading(false);
@@ -32,14 +46,26 @@ export default function SuccessScreen({route, navigation}) {
   }
 
   return (
-    <Container>
+    <Container
+      onPress={() => {
+        setShowTimeModal(false);
+        setShowStatusModal(false);
+      }}>
       <FilterContainer>
-        <TimeContainer onPress={() => setShowTimeModal(true)}>
-          <Text size={16}>{selectedTime}</Text>
+        <TimeContainer
+          onPress={() => {
+            setShowTimeModal(true);
+            setShowStatusModal(false);
+          }}>
+          <Text size={16}>{timeItems[selectedTime]}</Text>
           <ImageContainer source={require('../assets/down.png')} />
         </TimeContainer>
         <VerticalSeparator />
-        <TimeContainer>
+        <TimeContainer
+          onPress={() => {
+            setShowStatusModal(true);
+            setShowTimeModal(false);
+          }}>
           <Text size={16} />
           <ImageContainer source={require('../assets/filter_grey.png')} />
         </TimeContainer>
@@ -65,10 +91,47 @@ export default function SuccessScreen({route, navigation}) {
               return (
                 <OptionContainer
                   onPress={() => {
-                    setSelectedTime(_);
+                    setSelectedTime(i);
                     setShowTimeModal(false);
                   }}>
                   <Text size={16}>{_}</Text>
+                </OptionContainer>
+              );
+            })}
+          </ModalContainer>
+        }
+      />
+      <DetailModal
+        clicked={showStatusModal}
+        height={220}
+        width={200}
+        top={0}
+        right={0}
+        inject={
+          <ModalContainer>
+            <Text size={16} color="#808080" margin={10}>
+              Show:
+            </Text>
+            {radioItems.map((_, i) => {
+              return (
+                <OptionContainer
+                  onPress={() => {
+                    updateRadioButtons(i);
+                    setShowStatusModal(false);
+                  }}>
+                  <Text size={16} color="#808080" margin={10}>
+                    {_}
+                  </Text>
+                  <RadioContainer>
+                    <RadioInput
+                      color="#1e96dc"
+                      selected={selectedButton[i]}
+                      onPress={() => {
+                        updateRadioButtons(i);
+                        setShowStatusModal(false);
+                      }}
+                    />
+                  </RadioContainer>
                 </OptionContainer>
               );
             })}
@@ -79,7 +142,7 @@ export default function SuccessScreen({route, navigation}) {
   );
 }
 
-const Container = styled.View`
+const Container = styled.Pressable`
   flex-direction: column;
   background-color: #ffffff;
   height: 100%;
@@ -113,7 +176,7 @@ const TimeContainer = styled.TouchableOpacity`
 const OptionContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   width: 100%;
   margin: 5px;
 `;
@@ -124,7 +187,7 @@ const Text = styled.Text`
   font-family: 'Roboto-Regular';
   font-weight: ${(props) => props.weight || 'normal'};
   text-align: ${(props) => props.align || 'left'};
-  margin: 5px;
+  margin: ${(props) => props.margin || 5}px;
 `;
 
 const ImageContainer = styled.Image`
@@ -134,7 +197,15 @@ const ImageContainer = styled.Image`
 
 const ModalContainer = styled.View`
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: 5px;
+`;
+
+const RadioContainer = styled.View`
+  align-items: center;
+  justify-content: center;
+  width: ${(props) => props.size || 28}px;
+  height: ${(props) => props.size || 28}px;
+  margin: ${(props) => props.margin || 10}px;
 `;

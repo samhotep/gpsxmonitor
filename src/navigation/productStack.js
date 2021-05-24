@@ -272,7 +272,7 @@ function CustomDrawerContent(props) {
             setDetailsLoaded(true);
           } else {
             ToastAndroid.show(
-              'No tracks in the specified period',
+              'No tracks in the specified period.',
               ToastAndroid.SHORT,
               ToastAndroid.CENTER,
             );
@@ -290,8 +290,16 @@ function CustomDrawerContent(props) {
         timeRange[timeSelection].to.replace('T', ' ').substr(0, 19),
       )
         .then((eventList) => {
-          setEvents(Utils.sortIntoDateGroups(eventList, 'Events'));
-          setDetailsLoaded(true);
+          if (eventList.length > 0) {
+            setEvents(Utils.sortIntoDateGroups(eventList, 'Events'));
+            setDetailsLoaded(true);
+          } else {
+            ToastAndroid.show(
+              'No events in the specified period.',
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER,
+            );
+          }
           setLoading(false);
         })
         .catch((error) => {

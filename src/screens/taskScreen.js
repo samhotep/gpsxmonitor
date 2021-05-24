@@ -6,11 +6,14 @@ import styled from 'styled-components';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import VerticalSeparator from '../components/separators/verticalSeparator';
 import API from '../api/api';
+import DetailModal from '../components/modals/detailModal';
 
 export default function SuccessScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
   let timeItems = ['Yesterday', 'Today', 'Tomorrow', 'Week', 'Month'];
   const [selectedTime, setSelectedTime] = useState('Today');
+  const [showTimeModal, setShowTimeModal] = useState(false);
+  const [showStatusModal, setShowStatusModal] = useState(false);
 
   useEffect(() => {
     //TODO Mimic API Call
@@ -31,8 +34,8 @@ export default function SuccessScreen({route, navigation}) {
   return (
     <Container>
       <FilterContainer>
-        <TimeContainer>
-          <Text size={16}>Week</Text>
+        <TimeContainer onPress={() => setShowTimeModal(true)}>
+          <Text size={16}>{selectedTime}</Text>
           <ImageContainer source={require('../assets/down.png')} />
         </TimeContainer>
         <VerticalSeparator />
@@ -50,6 +53,28 @@ export default function SuccessScreen({route, navigation}) {
         <Separator />
         <Text size={20}>TASKS!</Text>
       </ContentContainer>
+      <DetailModal
+        clicked={showTimeModal}
+        height={220}
+        width={150}
+        top={0}
+        right={200}
+        inject={
+          <ModalContainer>
+            {timeItems.map((_, i) => {
+              return (
+                <OptionContainer
+                  onPress={() => {
+                    setSelectedTime(_);
+                    setShowTimeModal(false);
+                  }}>
+                  <Text size={16}>{_}</Text>
+                </OptionContainer>
+              );
+            })}
+          </ModalContainer>
+        }
+      />
     </Container>
   );
 }
@@ -85,6 +110,14 @@ const TimeContainer = styled.TouchableOpacity`
   padding: 5px 10px 5px 10px;
 `;
 
+const OptionContainer = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  margin: 5px;
+`;
+
 const Text = styled.Text`
   font-size: ${(props) => props.size || 18}px;
   color: ${(props) => props.color || '#000000'};
@@ -97,4 +130,11 @@ const Text = styled.Text`
 const ImageContainer = styled.Image`
   height: ${(props) => props.size || 24}px;
   width: ${(props) => props.size || 24}px;
+`;
+
+const ModalContainer = styled.View`
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
 `;

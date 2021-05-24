@@ -6,9 +6,9 @@ import Separator from '../components/separators/separator';
 import styled from 'styled-components';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import VerticalSeparator from '../components/separators/verticalSeparator';
-import API from '../api/api';
 import DetailModal from '../components/modals/detailModal';
 import RadioInput from '../components/inputs/radioInput';
+import Storage from '../storage/storage';
 
 export default function SuccessScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
@@ -33,9 +33,9 @@ export default function SuccessScreen({route, navigation}) {
     let defaultStatus = selectedButton;
     defaultStatus[0] = true;
     setSelectedButton(defaultStatus);
-    API.getTasks().then((taskList) => {
-      setAllTasks(taskList);
-      setTasks(taskList);
+    Storage.getAllTasks().then((tasklist) => {
+      setAllTasks(JSON.parse(tasklist));
+      setTasks(JSON.parse(tasklist));
       setLoading(false);
     });
   }, []);

@@ -412,7 +412,7 @@ export default function DetailsScreen({route, navigation}) {
       })
       .then((inputs) => {
         trackerInputs = inputs;
-        return API.getTasks(tracker.id);
+        return API.getTasks();
       })
       .then((tasks) => {
         trackerTasks = tasks;

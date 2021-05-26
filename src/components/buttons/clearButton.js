@@ -19,6 +19,7 @@ const Container = styled.TouchableOpacity`
   align-items: center;
   padding: 5px;
   width: 100%;
+  height: 56px;
   background-color: ${(props) => props.bgcolor || '#ffffff'};
 `;
 

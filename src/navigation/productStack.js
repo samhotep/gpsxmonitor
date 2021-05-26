@@ -391,7 +391,7 @@ function CustomDrawerContent(props) {
       // eslint-disable-next-line react-native/no-inline-styles
       contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}}>
       {detail.screen === 'Events' && !detailsLoaded ? (
-        <HeaderContainer>
+        <HeaderContainer margin={1}>
           <ImageContainer
             resizeMode="contain"
             source={require('../assets/map_alert_grey.png')}
@@ -401,7 +401,7 @@ function CustomDrawerContent(props) {
       ) : null}
       {detail.screen === 'Tracks' && !detailsLoaded ? (
         <>
-          <HeaderContainer>
+          <HeaderContainer margin={1}>
             <ImageContainer
               resizeMode="contain"
               source={require('../assets/route_grey.png')}
@@ -419,7 +419,7 @@ function CustomDrawerContent(props) {
               }}
             />
           </HeaderContainer>
-          <Separator />
+          <Separator nomargin={true} />
         </>
       ) : null}
       {detail.screen !== 'Notifications' && !detailsLoaded ? (
@@ -645,6 +645,7 @@ const HeaderContainer = styled.View`
   align-items: center;
   justify-content: center;
   background-color: transparent;
+  margin: ${(props) => props.margin || 0}px;
 `;
 
 const ImageContainer = styled.Image`

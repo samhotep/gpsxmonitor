@@ -1,6 +1,7 @@
 /**
  * Reusable utility functional objects
  */
+import Storage from '../storage/storage';
 
 const Utils = {
   /**
@@ -32,6 +33,26 @@ const Utils = {
       }
     });
     return categories;
+  },
+  groupByTracker: (tasks) => {
+    let groupedTasks = [];
+    let tasksCopy = [...tasks];
+    Storage.getAllTrackers().then((result) => {
+      let trackers = JSON.parse(result);
+      trackers.map((tracker, i) => {
+        let userTasks = [];
+        for (var i = tasksCopy.length - 1; i >= 0; i--) {
+          if (tasksCopy[i].tracker_id === tracker.id) {
+            userTasks.push(tasksCopy[i]);
+            tasksCopy.splice(i, 1);
+          }
+        }
+        if (userTasks.length > 0) {
+          groupedTasks.push({id: tracker.id, tasks: userTasks});
+        }
+      });
+    });
+    return groupedTasks;
   },
   getTimeDifference: (dateString, showSeconds = true) => {
     if (dateString) {

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {createDrawerNavigator, useIsDrawerOpen} from '@react-navigation/drawer';
 import {
   Alert,
@@ -13,10 +13,8 @@ import ProductStack from './productStack';
 import BillingStack from './billingStack';
 import TaskStack from './taskStack';
 import CategoryItem from '../components/items/categoryItem';
-import HeaderTitle from '../components/headers/headerTitle';
-import HeaderIcon from '../components/headers/headerIcon';
+import DrawerTitle from '../components/headers/drawerTitle';
 import ListItem from '../components/items/listItem';
-import Input from '../components/inputs/input';
 import Utils from '../utils/utils';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import API from '../api/api';
@@ -43,7 +41,8 @@ export default function Dashboard({route, navigation}) {
 }
 // Emitter for navigating to login on hash expiry
 function CustomDrawerContent({navigation}) {
-  const [clicked, setClicked] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchString, setSearchString] = useState('');
   const [username, setUsername] = useState('');
   const [userID, setUserID] = useState(0);
   const [trackerStates, setTrackerStates] = useState([]);
@@ -51,6 +50,7 @@ function CustomDrawerContent({navigation}) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const isDrawerOpen = useIsDrawerOpen();
+  const searchRef = useRef();
 
   const drawerItems = [
     {
@@ -226,57 +226,22 @@ function CustomDrawerContent({navigation}) {
         flex: 1,
         justifyContent: 'space-between',
       }}>
-      <HeaderTitle
-        source={require('../assets/back.png')}
-        onPress={() => {
-          if (clicked) {
-            setClicked(false);
+      <DrawerTitle
+        navigation={navigation}
+        showSearch={showSearch}
+        searchString={searchString}
+        resetSearch={() => {
+          if (showSearch) {
+            setSearchString('');
+            setShowSearch(false);
           } else {
-            navigation.goBack();
+            setShowSearch(true);
           }
         }}
-        header={
-          clicked ? (
-            <ExtrasContainer>
-              <Input
-                autoFocus={true}
-                width={120}
-                margin={5}
-                color="#ffffff"
-                selectionColor={'#ffffff'}
-                noBorder={true}
-                placeholder="Search..."
-                placeholderTextColor="#8bc9ed"
-                returnKeyType="search"
-              />
-              <HeaderIcon
-                source={require('../assets/close.png')}
-                size={18}
-                margin={5}
-                onPress={() => {
-                  setClicked(false);
-                }}
-              />
-            </ExtrasContainer>
-          ) : null
-        }
-        extras={
-          // TODO Use fuse.js to search objects
-          // import Fuse from 'fuse.js';
-          <ExtrasContainer>
-            {clicked === false ? (
-              <HeaderIcon
-                source={require('../assets/search.png')}
-                size={20}
-                onPress={() => {
-                  setClicked(true);
-                }}
-              />
-            ) : null}
-            <HeaderIcon source={require('../assets/filter.png')} size={20} />
-          </ExtrasContainer>
-        }
-        label="Objects"
+        onChangeText={(text) => {
+          //  TODO Search and filter trackers
+          setSearchString(text);
+        }}
       />
       <DrawerHeaderContainer>
         <DrawerIcon source={require('../assets/account.png')} />

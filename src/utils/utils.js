@@ -34,24 +34,18 @@ const Utils = {
     });
     return categories;
   },
-  groupByTracker: (tasks) => {
-    let groupedTasks = [];
-    let tasksCopy = [...tasks];
+  addTrackerData: (tasks) => {
+    let newTasks = [];
     return Storage.getAllTrackers().then((result) => {
       let trackers = JSON.parse(result);
-      trackers.map((tracker, i) => {
-        let userTasks = [];
-        for (var i = tasksCopy.length - 1; i >= 0; i--) {
-          if (tasksCopy[i].tracker_id === tracker.id) {
-            userTasks.push(tasksCopy[i]);
-            tasksCopy.splice(i, 1);
+      tasks.map((task, i) => {
+        trackers.map((tracker, j) => {
+          if (task.tracker_id === tracker.id) {
+            newTasks.push({tracker: tracker, task: task});
           }
-        }
-        if (userTasks.length > 0) {
-          groupedTasks.push({tracker: tracker, tasks: userTasks});
-        }
+        });
       });
-      return groupedTasks;
+      return newTasks;
     });
   },
   getTimeDifference: (dateString, showSeconds = true) => {

@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import TaskScreen from '../screens/taskScreen';
+import AssigneeScreen from '../screens/assigneeScreen';
 import HeaderTitle from '../components/headers/headerTitle';
 import HeaderIcon from '../components/headers/headerIcon';
 import styled from 'styled-components';
@@ -31,6 +32,28 @@ export default function TaskStack({route, navigation}) {
             />
           ),
           headerTitle: (props) => <LogoTitle {...props} />,
+        }}
+      />
+      <Stack.Screen
+        name="AssigneeScreen"
+        component={AssigneeScreen}
+        options={{
+          title: 'Select assignee',
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#1e96dc',
+          },
+          headerTitleStyle: {
+            color: '#ffffff',
+          },
+          headerLeft: () => (
+            <HeaderTitle
+              source={require('../assets/back.png')}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            />
+          ),
         }}
       />
     </Stack.Navigator>

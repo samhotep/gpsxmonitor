@@ -4,7 +4,13 @@ import styled from 'styled-components';
 
 export default function TaskItem(props) {
   return (
-    <Container>
+    <Container
+      onPress={() =>
+        props.navigation.navigate('AssigneeScreen', {
+          task: props.group.task,
+          tracker: props.group.tracker,
+        })
+      }>
       <RowContainer color={'#f4f6f4'}>
         <ImageContainer source={require('../../assets/board.png')} />
         <Text>{props.group.tracker.label}</Text>

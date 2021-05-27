@@ -9,7 +9,7 @@ export default function TaskItem(props) {
         <ImageContainer source={require('../../assets/board.png')} />
         <Text>{props.group.tracker.label}</Text>
       </RowContainer>
-      <Separator />
+      <Separator nomargin={true} />
       <RowContainer>
         <ImageContainer source={require('../../assets/circle.png')} size={24} />
         <Text size={22}>{props.group.task.label}</Text>
@@ -27,7 +27,7 @@ export default function TaskItem(props) {
         <ImageContainer source={require('../../assets/pin.png')} size={24} />
         <Text color="#737373">{props.group.task.location.address}</Text>
       </RowContainer>
-      <Separator />
+      <Separator nomargin={true} />
     </Container>
   );
 }
@@ -45,6 +45,7 @@ const RowContainer = styled.View`
   align-items: center;
   justify-content: flex-start;
   padding: 0px 20px 0px 20px;
+  background-color: #f4f6f4;
 `;
 
 const ImageContainer = styled.Image`

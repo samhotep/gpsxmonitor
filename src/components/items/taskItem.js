@@ -5,7 +5,7 @@ import styled from 'styled-components';
 export default function TaskItem(props) {
   return (
     <Container>
-      <RowContainer>
+      <RowContainer color={'#f4f6f4'}>
         <ImageContainer source={require('../../assets/board.png')} />
         <Text>{props.group.tracker.label}</Text>
       </RowContainer>
@@ -45,7 +45,7 @@ const RowContainer = styled.View`
   align-items: center;
   justify-content: flex-start;
   padding: 0px 20px 0px 20px;
-  background-color: #f4f6f4;
+  background-color: ${(props) => props.color || '#ffffff'};
 `;
 
 const ImageContainer = styled.Image`

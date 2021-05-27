@@ -37,7 +37,7 @@ const Utils = {
   groupByTracker: (tasks) => {
     let groupedTasks = [];
     let tasksCopy = [...tasks];
-    Storage.getAllTrackers().then((result) => {
+    return Storage.getAllTrackers().then((result) => {
       let trackers = JSON.parse(result);
       trackers.map((tracker, i) => {
         let userTasks = [];
@@ -48,11 +48,11 @@ const Utils = {
           }
         }
         if (userTasks.length > 0) {
-          groupedTasks.push({id: tracker.id, tasks: userTasks});
+          groupedTasks.push({tracker: tracker, tasks: userTasks});
         }
       });
+      return groupedTasks;
     });
-    return groupedTasks;
   },
   getTimeDifference: (dateString, showSeconds = true) => {
     if (dateString) {

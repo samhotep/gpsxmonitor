@@ -46,13 +46,8 @@ export default function TaskStack({route, navigation}) {
           headerTitleStyle: {
             color: '#ffffff',
           },
-          headerLeft: () => (
-            <HeaderTitle
-              source={require('../assets/back.png')}
-              onPress={() => {
-                navigation.goBack();
-              }}
-            />
+          headerBackImage: () => (
+            <ImageContainer source={require('../assets/back.png')} />
           ),
         }}
       />
@@ -120,11 +115,9 @@ const IconsContainer = styled.View`
   justify-content: flex-end;
 `;
 
-const Title = styled.Text`
-  font-family: 'Roboto-Regular';
-  font-size: 20px;
-  color: #ffffff;
-  font-weight: bold;
+const ImageContainer = styled.Image`
+  height: ${(props) => props.size || 24}px;
+  width: ${(props) => props.size || 24}px;
 `;
 
 const SearchInput = styled.TextInput`

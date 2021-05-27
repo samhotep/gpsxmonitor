@@ -6,6 +6,13 @@ import HeaderIcon from '../headers/headerIcon';
 export default function HeaderTitle(props) {
   let headerHeight = useHeaderHeight();
   let searchRef = useRef();
+
+  const focusWorkaround = () => {
+    setTimeout(() => {
+      searchRef.current.focus();
+    }, 100);
+  };
+
   return (
     <HeaderContainer height={headerHeight}>
       <ItemsContainer>
@@ -16,7 +23,7 @@ export default function HeaderTitle(props) {
         />
         <SearchInput
           ref={searchRef}
-          value={props.searchString || 'Objects'}
+          value={props.showSearch ? props.searchString : 'Objects'}
           onChangeText={props.onChangeText}
           editable={props.showSearch}
           placeholder="Search..."
@@ -31,7 +38,17 @@ export default function HeaderTitle(props) {
               ? require('../../assets/close.png')
               : require('../../assets/search.png')
           }
-          onPress={props.resetSearch}
+          onPress={() => {
+            if (!props.showSearch) {
+              focusWorkaround();
+            }
+            props.resetSearch();
+          }}
+        />
+        <HeaderIcon
+          size={20}
+          source={require('../../assets/filter.png')}
+          onPress={() => {}}
         />
       </ItemsContainer>
     </HeaderContainer>

@@ -2,7 +2,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
-import Separator from '../components/separators/separator';
+import AssigneeItem from '../components/items/assigneeItem';
 import styled from 'styled-components';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import Storage from '../storage/storage';
@@ -14,6 +14,7 @@ export default function AssigneeScreen({route, navigation}) {
   useEffect(() => {
     console.log(task);
     console.log(tracker);
+    setLoading(false);
   }, []);
 
   if (loading) {
@@ -27,7 +28,9 @@ export default function AssigneeScreen({route, navigation}) {
   return (
     <Container>
       <StatusBar backgroundColor="#007aa6" />
-      <ContentContainer></ContentContainer>
+      <ContentContainer>
+        <AssigneeItem tracker={tracker} />
+      </ContentContainer>
     </Container>
   );
 }

@@ -3,24 +3,18 @@ import Separator from '../separators/separator';
 import styled from 'styled-components';
 
 export default function AssigneeItem(props) {
-  const [selected, setSelected] = useState(false);
-
-  useState(() => {
-    //   SET ACCORDING TO PROP
-    setSelected(true);
-  }, []);
   return (
     <Highlight
       activeOpacity={0.6}
       underlayColor="#b5dbf1"
       onPress={() => {
-        console.log('pressed');
+        props.onPress(props.tracker);
       }}>
       <Container>
         <RowContainer>
           <ImageContainer source={require('../../assets/chip.png')} size={30} />
           <Text>{props.tracker.label}</Text>
-          {selected && (
+          {props.selected && (
             <ImageContainer
               source={require('../../assets//tick_assignee.png')}
               size={30}

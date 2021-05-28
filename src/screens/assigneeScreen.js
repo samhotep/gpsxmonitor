@@ -4,6 +4,7 @@ import AssigneeItem from '../components/items/assigneeItem';
 import styled from 'styled-components';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import Storage from '../storage/storage';
+import API from '../api/api';
 
 export default function AssigneeScreen({route, navigation}) {
   let {task, tracker} = route.params;
@@ -11,16 +12,27 @@ export default function AssigneeScreen({route, navigation}) {
   const [trackers, setTrackers] = useState([]);
 
   const handleAssigneeSelection = (selectedTracker) => {
+    let allTasks = [];
     Storage.getAllTasks()
       .then((res) => {
-        let tasks = JSON.parse(res);
-        tasks.map((_, i) => {
+        allTasks = JSON.parse(res);
+        allTasks.map((_, i) => {
           if (_.id === task.id) {
-            console.log('Called');
             _.tracker_id = selectedTracker.id;
           }
         });
-        Storage.setAllTasks(tasks);
+        return API.assignTask(task.id, selectedTracker.id);
+      })
+      .then((result) => {
+        if (result.success === true) {
+          Storage.setAllTasks(allTasks);
+        } else {
+          ToastAndroid.show(
+            result.status.description,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
+        }
       })
       .catch((error) => {
         console.log(error);

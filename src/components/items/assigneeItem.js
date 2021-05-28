@@ -20,6 +20,12 @@ export default function AssigneeItem(props) {
         <RowContainer>
           <ImageContainer source={require('../../assets/chip.png')} size={30} />
           <Text>{props.tracker.label}</Text>
+          {selected && (
+            <ImageContainer
+              source={require('../../assets//tick_assignee.png')}
+              size={30}
+            />
+          )}
         </RowContainer>
         <Separator nomargin={true} />
       </Container>

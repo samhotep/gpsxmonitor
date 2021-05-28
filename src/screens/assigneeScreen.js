@@ -42,6 +42,7 @@ export default function AssigneeScreen({route, navigation}) {
               tracker={_}
               onPress={handleAssigneeSelection}
               selected={tracker.id === _.id}
+              navigation={navigation}
             />
           );
         })}

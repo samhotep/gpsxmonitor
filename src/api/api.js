@@ -231,6 +231,14 @@ const API = {
       }
     });
   },
+  assignTask: (task_id, tracker_id) => {
+    return API.apiCall('task/assign/', {
+      task_id: task_id,
+      tracker_id: tracker_id,
+    }).then((result) => {
+      return result;
+    });
+  },
   setOutput: (tracker_id, output, enable) => {
     return API.apiCall('tracker/output/set/', {
       tracker_id: tracker_id,

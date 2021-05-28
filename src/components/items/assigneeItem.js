@@ -10,19 +10,35 @@ export default function AssigneeItem(props) {
     setSelected(true);
   }, []);
   return (
-    <Highlight onPress={props.onPress}>
+    <Highlight
+      activeOpacity={0.6}
+      underlayColor="#b5dbf1"
+      onPress={() => {
+        console.log('pressed');
+      }}>
       <Container>
-        <ImageContainer source={require('../../assets/chip.png')} />
-        <Text>{props.text}</Text>
+        <RowContainer>
+          <ImageContainer source={require('../../assets/chip.png')} size={30} />
+          <Text>{props.tracker.label}</Text>
+        </RowContainer>
         <Separator nomargin={true} />
       </Container>
     </Highlight>
   );
 }
 
-const Highlight = styled.TouchableHighlight``;
+const Highlight = styled.TouchableHighlight`
+  border-radius: 3px;
+`;
 
 const Container = styled.View`
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
+
+const RowContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -34,12 +50,13 @@ const Container = styled.View`
 const ImageContainer = styled.Image`
   height: ${(props) => props.size || 24}px;
   width: ${(props) => props.size || 24}px;
+  margin: 10px;
 `;
 
 const Text = styled.Text`
   flex: 1;
   text-align: left;
   flex-wrap: wrap;
-  font-size: 14px;
+  font-size: 22px;
   color: ${(props) => (props.selected ? '#ffffff' : '#202020')};
 `;

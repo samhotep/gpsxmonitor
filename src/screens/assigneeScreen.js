@@ -8,24 +8,34 @@ import DrawerLoader from '../components/loaders/drawerLoader';
 import Storage from '../storage/storage';
 
 export default function AssigneeScreen({route, navigation}) {
+  let {task, tracker} = route.params;
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log(task);
+    console.log(tracker);
+  }, []);
 
   if (loading) {
     return (
       <Container>
-        <StatusBar backgroundColor="#007aa6" />
         <DrawerLoader />
       </Container>
     );
   }
 
-  return <Container></Container>;
+  return (
+    <Container>
+      <StatusBar backgroundColor="#007aa6" />
+      <ContentContainer></ContentContainer>
+    </Container>
+  );
 }
 
-const Container = styled.Pressable`
+const Container = styled.View`
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: #ffffff;
   height: 100%;
 `;

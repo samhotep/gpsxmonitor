@@ -18,7 +18,13 @@ export default function TaskItem(props) {
         </RowContainer>
       </Container>
       <Separator nomargin={true} />
-      <Container>
+      <Container
+        onPress={() =>
+          props.navigation.navigate('TaskDetailScreen', {
+            task: props.group.task,
+            tracker: props.group.tracker,
+          })
+        }>
         <RowContainer>
           <ImageContainer
             source={require('../../assets/circle.png')}

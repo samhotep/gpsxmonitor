@@ -4,35 +4,43 @@ import styled from 'styled-components';
 
 export default function TaskItem(props) {
   return (
-    <Container
-      onPress={() =>
-        props.navigation.navigate('AssigneeScreen', {
-          task: props.group.task,
-          tracker: props.group.tracker,
-        })
-      }>
-      <RowContainer color={'#f4f6f4'}>
-        <ImageContainer source={require('../../assets/board.png')} />
-        <Text>{props.group.tracker.label}</Text>
-      </RowContainer>
+    <Container>
+      <Container
+        onPress={() =>
+          props.navigation.navigate('AssigneeScreen', {
+            task: props.group.task,
+            tracker: props.group.tracker,
+          })
+        }>
+        <RowContainer color={'#f4f6f4'}>
+          <ImageContainer source={require('../../assets/board.png')} />
+          <Text>{props.group.tracker.label}</Text>
+        </RowContainer>
+      </Container>
       <Separator nomargin={true} />
-      <RowContainer>
-        <ImageContainer source={require('../../assets/circle.png')} size={24} />
-        <Text size={22}>{props.group.task.label}</Text>
-      </RowContainer>
-      <RowContainer>
-        <ImageContainer
-          source={require('../../assets/calendar.png')}
-          size={24}
-        />
-        <Text color="#737373">
-          {props.group.task.from} {props.group.task.to}
-        </Text>
-      </RowContainer>
-      <RowContainer>
-        <ImageContainer source={require('../../assets/pin.png')} size={24} />
-        <Text color="#737373">{props.group.task.location.address}</Text>
-      </RowContainer>
+      <Container>
+        <RowContainer>
+          <ImageContainer
+            source={require('../../assets/circle.png')}
+            size={24}
+          />
+          <Text size={22}>{props.group.task.label}</Text>
+        </RowContainer>
+        <RowContainer>
+          <ImageContainer
+            source={require('../../assets/calendar.png')}
+            size={24}
+          />
+          <Text color="#737373">
+            {props.group.task.from} {props.group.task.to}
+          </Text>
+        </RowContainer>
+        <RowContainer>
+          <ImageContainer source={require('../../assets/pin.png')} size={24} />
+          <Text color="#737373">{props.group.task.location.address}</Text>
+        </RowContainer>
+      </Container>
+
       <Separator nomargin={true} />
     </Container>
   );

@@ -19,25 +19,24 @@ export default function TaskDetailScreen({route, navigation}) {
     return (
       <Container>
         <StatusBar backgroundColor="#007aa6" />
-        <Text>TASK DETAILS!</Text>
         <DrawerLoader />
       </Container>
     );
   }
 
-  return <Container></Container>;
+  return (
+    <Container>
+      <Text>TASK DETAILS!</Text>
+    </Container>
+  );
 }
 
-const Container = styled.Pressable`
+const Container = styled.View`
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: #ffffff;
   height: 100%;
-`;
-
-const ContentContainer = styled.ScrollView`
-  flex-direction: column;
-  width: 100%;
-  padding: 10px;
 `;
 
 const FilterContainer = styled.View`

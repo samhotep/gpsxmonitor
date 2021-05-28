@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import Separator from '../separators/separator';
 import styled from 'styled-components';
 
 export default function AssigneeItem(props) {
@@ -10,9 +11,10 @@ export default function AssigneeItem(props) {
   }, []);
   return (
     <Highlight onPress={props.onPress}>
-      <ImageContainer source={require('../../assets/chip.png')} />
       <Container>
+        <ImageContainer source={require('../../assets/chip.png')} />
         <Text>{props.text}</Text>
+        <Separator nomargin={true} />
       </Container>
     </Highlight>
   );

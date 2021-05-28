@@ -9,6 +9,7 @@ export default function AssigneeItem(props) {
       underlayColor="#b5dbf1"
       onPress={() => {
         props.onPress(props.tracker);
+        props.navigation.goBack();
       }}>
       <Container>
         <RowContainer>

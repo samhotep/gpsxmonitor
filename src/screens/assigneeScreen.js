@@ -10,10 +10,17 @@ import Storage from '../storage/storage';
 export default function AssigneeScreen({route, navigation}) {
   let {task, tracker} = route.params;
   const [loading, setLoading] = useState(true);
+  const [trackers, setTrackers] = useState([]);
+
+  const handleAssigneeSelection = (selectedTracker) => {
+    console.log(selectedTracker.id);
+  };
 
   useEffect(() => {
-    console.log(task);
-    console.log(tracker);
+    Storage.getAllTrackers().then((res) => {
+      let allTrackers = JSON.parse(res);
+      setTrackers(allTrackers);
+    });
     setLoading(false);
   }, []);
 
@@ -29,7 +36,15 @@ export default function AssigneeScreen({route, navigation}) {
     <Container>
       <StatusBar backgroundColor="#007aa6" />
       <ContentContainer>
-        <AssigneeItem tracker={tracker} />
+        {trackers.map((_, i) => {
+          return (
+            <AssigneeItem
+              tracker={_}
+              onPress={handleAssigneeSelection}
+              selected={tracker.id === _.id}
+            />
+          );
+        })}
       </ContentContainer>
     </Container>
   );

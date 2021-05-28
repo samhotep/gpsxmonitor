@@ -35,20 +35,22 @@ export default function TaskScreen({route, navigation}) {
 
   const loadTasks = () => {
     setLoading(true);
-    Storage.getAllTasks()
-      .then((storedTasks) => {
-        return Utils.addTrackerData(JSON.parse(storedTasks));
-      })
-      .then((taskList) => {
-        // TODO Filter by assigned status
-        setAllTasks(taskList);
-        setTasks(taskList);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
+    setTimeout(() => {
+      Storage.getAllTasks()
+        .then((storedTasks) => {
+          return Utils.addTrackerData(JSON.parse(storedTasks));
+        })
+        .then((taskList) => {
+          // TODO Filter by assigned status
+          setAllTasks(taskList);
+          setTasks(taskList);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
+        });
+    }, 1000);
   };
 
   useEffect(() => {

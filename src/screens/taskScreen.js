@@ -2,6 +2,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 import Separator from '../components/separators/separator';
 import styled from 'styled-components';
 import DrawerLoader from '../components/loaders/drawerLoader';
@@ -24,113 +25,7 @@ export default function TaskScreen({route, navigation}) {
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [allTasks, setAllTasks] = useState([]);
   const [tasks, setTasks] = useState([]);
-
-  let tests = [
-    {
-      arrival_date: null,
-      creation_date: '2020-04-07 13:19:01',
-      description: 'Visiting URA',
-      external_id: null,
-      from: '2020-04-07 00:00:00',
-      id: 1,
-      label: 'Visiting URA',
-      location: {
-        address: 'Kampala, Central Region, Uganda, P.O. BOX 4365',
-        lat: 0.33036264,
-        lng: 32.63800979,
-        radius: 50,
-      },
-      max_delay: 0,
-      min_arrival_duration: 0,
-      min_stay_duration: 0,
-      origin: 'manual',
-      status: 'unassigned',
-      status_change_date: null,
-      stay_duration: 0,
-      to: '2020-04-07 23:59:59',
-      tracker_id: 6079,
-      type: 'task',
-      user_id: 1,
-    },
-    {
-      arrival_date: null,
-      creation_date: '2020-04-17 08:40:00',
-      description: 'Delivery Parcels in Kampala',
-      external_id: '45156',
-      form: {
-        created: '2020-04-17 08:40:00',
-        description: '',
-        fields: [Array],
-        id: 7,
-        label: 'Delivery Note',
-        submit_in_zone: false,
-        submit_location: [Object],
-        submitted: null,
-        task_id: 10,
-        template_id: 5,
-        values: null,
-      },
-      from: '2020-04-17 00:00:00',
-      id: 10,
-      label: 'Delivering parcels',
-      location: {
-        address: 'Kampala Road, Kampala, Uganda',
-        lat: 0.3133012,
-        lng: 32.5809105,
-        radius: 150,
-      },
-      max_delay: 0,
-      min_arrival_duration: 0,
-      min_stay_duration: 0,
-      origin: 'manual',
-      status: 'unassigned',
-      status_change_date: null,
-      stay_duration: 0,
-      to: '2020-04-18 23:59:59',
-      tracker_id: 6080,
-      type: 'task',
-      user_id: 1,
-    },
-    {
-      arrival_date: null,
-      creation_date: '2020-04-17 08:53:33',
-      description: '',
-      external_id: null,
-      form: {
-        created: '2020-04-17 08:53:33',
-        description: '',
-        fields: [Array],
-        id: 8,
-        label: 'New form',
-        submit_in_zone: false,
-        submit_location: [Object],
-        submitted: null,
-        task_id: 11,
-        template_id: null,
-        values: null,
-      },
-      from: '2020-04-17 00:00:00',
-      id: 11,
-      label: 'Power Reconnection',
-      location: {
-        address: 'Kampala, Uganda',
-        lat: 0.3475964,
-        lng: 32.5825197,
-        radius: 150,
-      },
-      max_delay: 0,
-      min_arrival_duration: 0,
-      min_stay_duration: 0,
-      origin: 'manual',
-      status: 'unassigned',
-      status_change_date: null,
-      stay_duration: 0,
-      to: '2020-04-17 23:59:59',
-      tracker_id: 6079,
-      type: 'task',
-      user_id: 1,
-    },
-  ];
+  const isFocused = useIsFocused();
 
   const updateRadioButtons = (i) => {
     let status = Array(radioItems.length).fill(false);
@@ -138,16 +33,14 @@ export default function TaskScreen({route, navigation}) {
     setSelectedButton(status);
   };
 
-  useEffect(() => {
-    let defaultStatus = selectedButton;
-    defaultStatus[0] = true;
-    setSelectedButton(defaultStatus);
+  const loadTasks = () => {
+    setLoading(true);
     Storage.getAllTasks()
       .then((storedTasks) => {
-        // return Utils.addTrackerData(JSON.parse(storedTasks));
-        return Utils.addTrackerData(tests);
+        return Utils.addTrackerData(JSON.parse(storedTasks));
       })
       .then((taskList) => {
+        // TODO Filter by assigned status
         setAllTasks(taskList);
         setTasks(taskList);
         setLoading(false);
@@ -156,7 +49,14 @@ export default function TaskScreen({route, navigation}) {
         console.log(error);
         setLoading(false);
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    let defaultStatus = selectedButton;
+    defaultStatus[0] = true;
+    setSelectedButton(defaultStatus);
+    loadTasks();
+  }, [isFocused]);
 
   if (loading) {
     return (

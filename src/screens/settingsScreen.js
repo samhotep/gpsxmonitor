@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {Linking} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import styled from 'styled-components';
 import CheckBox from '@react-native-community/checkbox';
@@ -16,7 +17,7 @@ export default function SettingsScreen(props) {
     {
       label: 'Notification settings',
       item: (
-        <Button>
+        <Button onPress={() => Linking.openSettings('notifications')}>
           <ItemLabel color="#202020" size={18} margin={5}>
             Notifications
           </ItemLabel>

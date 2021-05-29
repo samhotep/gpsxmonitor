@@ -56,6 +56,67 @@ export default function TaskScreen({route, navigation}) {
     }, 10);
   };
 
+  const filterByDate = () => {
+    // Filter by from (starting date)
+    let now = new Date(Date.now());
+    let offset = now.getTimezoneOffset() / 60;
+    let dateValue;
+    let filteredTasks = [];
+    if (timeItems[selectedTime] === 'Today') {
+      dateValue = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        offset * -1,
+        0,
+        0,
+      );
+    } else if (timeItems[selectedTime] === 'Yesterday') {
+      dateValue = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() - 1,
+        offset * -1,
+        0,
+        0,
+      );
+    } else if (timeItems[selectedTime] === 'Tomorrow') {
+      dateValue = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() + 1,
+        offset * -1,
+        0,
+        0,
+      );
+    } else if (timeItems[selectedTime] === 'Week') {
+      dateValue = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() - 7,
+        offset * -1,
+        0,
+        0,
+      );
+    } else if (timeItems[selectedTime] === 'Month') {
+      dateValue = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        1,
+        offset * -1,
+        0,
+        0,
+      );
+    }
+    allTasks.map((group, i) => {
+      let taskDate = new Date(group.task.from.replace(/-+/g, '/'));
+      if (taskDate.getDate() >= dateValue.getDate()) {
+        filteredTasks.push(group);
+      }
+    });
+    setTasks(filteredTasks);
+  };
+
   const filterByStatus = (value) => {
     // STATUSES "assigned", "done", "failed", "delayed", "arrived". "faulty"
     let statuses;
@@ -84,6 +145,10 @@ export default function TaskScreen({route, navigation}) {
       ],
     );
   }, [selectedButton]);
+
+  useEffect(() => {
+    filterByDate();
+  }, [selectedTime]);
 
   useEffect(() => {
     let defaultStatus = selectedButton;

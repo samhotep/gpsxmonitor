@@ -479,14 +479,13 @@ export default function DetailsScreen({route, navigation}) {
 
 const Container = styled.Pressable`
   flex-direction: column;
-  height: 100%;
   width: 100%;
+  flex: 1;
   background-color: #e7f1f7;
 `;
 
 const StatusContainer = styled.ScrollView`
   flex-direction: column;
-  height: 100%;
   width: 100%;
 `;
 

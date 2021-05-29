@@ -97,7 +97,7 @@ const Container = styled.View`
   align-items: center;
   justify-content: center;
   background-color: #ffffff;
-  height: 100%;
+  flex: 1;
 `;
 
 const ContentContainer = styled.ScrollView`

@@ -304,7 +304,7 @@ export default function TaskScreen({route, navigation}) {
 const Container = styled.Pressable`
   flex-direction: column;
   background-color: #ffffff;
-  height: 100%;
+  flex: 1;
 `;
 
 const ContentContainer = styled.ScrollView`

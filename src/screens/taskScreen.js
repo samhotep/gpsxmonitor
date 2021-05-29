@@ -12,6 +12,7 @@ import TaskItem from '../components/items/taskItem';
 import LogoTitle from '../components/headers/logoTitle';
 import Storage from '../storage/storage';
 import Utils from '../utils/utils';
+import Fuse from 'fuse.js';
 
 export default function TaskScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
@@ -28,6 +29,14 @@ export default function TaskScreen({route, navigation}) {
   const [allTasks, setAllTasks] = useState([]);
   const [tasks, setTasks] = useState([]);
   const isFocused = useIsFocused();
+
+  const options = {
+    includeScore: true,
+    // Search in `author` and in `tags` array
+    keys: ['task.description', 'task.label'],
+  };
+
+  const fuse = new Fuse(allTasks, options);
 
   const updateRadioButtons = (i) => {
     let status = Array(radioItems.length).fill(false);
@@ -59,7 +68,14 @@ export default function TaskScreen({route, navigation}) {
     }, 10);
   };
 
-  const filterBySearch = () => {};
+  const filterBySearch = () => {
+    let searchResults = [];
+    const result = fuse.search(searchString);
+    result.map((res, i) => {
+      searchResults.push(res.item);
+    });
+    setTasks(searchResults);
+  };
 
   const filterByDate = () => {
     // Filter by from (starting date)
@@ -142,7 +158,7 @@ export default function TaskScreen({route, navigation}) {
   };
 
   useEffect(() => {
-    console.log(searchString);
+    filterBySearch();
   }, [searchString]);
 
   useEffect(() => {

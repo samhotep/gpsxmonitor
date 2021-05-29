@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
@@ -192,34 +190,4 @@ const Container = styled.View`
   justify-content: flex-start;
   background-color: #ffffff;
   height: 100%;
-`;
-
-const RowContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
-  width: 100%;
-`;
-
-const DetailContainer = styled.TouchableOpacity`
-  flex: 1;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 10px;
-`;
-
-const Text = styled.Text`
-  font-size: ${(props) => props.size || 22}px;
-  color: ${(props) => props.color || '#000000'};
-  font-family: 'Roboto-Regular';
-  font-weight: ${(props) => props.weight || 'normal'};
-  text-align: ${(props) => props.align || 'left'};
-  margin: ${(props) => props.margin || 5}px;
-`;
-
-const ImageContainer = styled.Image`
-  height: ${(props) => props.size || 24}px;
-  width: ${(props) => props.size || 24}px;
-  margin: 10px;
 `;

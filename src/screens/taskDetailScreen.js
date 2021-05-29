@@ -29,7 +29,7 @@ export default function TaskDetailScreen({route, navigation}) {
     {
       label: task.location.address,
       color: '#000000',
-      size: 16,
+      size: 14,
       front_icon: require('../assets/pin.png'),
       back_icon: require('../assets/directions.png'),
     },
@@ -46,13 +46,13 @@ export default function TaskDetailScreen({route, navigation}) {
         })
         .slice(0, -3)}`,
       color: '#000000',
-      size: 16,
+      size: 14,
       front_icon: require('../assets/calendar.png'),
     },
     {
       label: task.description,
       color: '#000000',
-      size: 16,
+      size: 14,
       front_icon: require('../assets/clipboard.png'),
     },
   ];

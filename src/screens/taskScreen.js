@@ -50,7 +50,7 @@ export default function TaskScreen({route, navigation}) {
           console.log(error);
           setLoading(false);
         });
-    }, 1000);
+    }, 10);
   };
 
   useEffect(() => {

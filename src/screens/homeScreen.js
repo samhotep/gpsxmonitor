@@ -171,7 +171,6 @@ export default function HomeScreen({navigation}) {
     const eventListener = eventEmitter.addListener(
       'event.routeEvent',
       (routeEvent) => {
-        console.log('Route Event  --- ', routeEvent);
         getAddressPoints(routeEvent);
       },
     );
@@ -185,20 +184,26 @@ export default function HomeScreen({navigation}) {
     const eventListener = eventEmitter.addListener(
       'event.taskEvent',
       (taskEvent) => {
-        console.log('Task Event  --- ', taskEvent);
-        API.getRoute(taskEvent.start, taskEvent.end).then((routelist) => {
-          console.log(routelist);
-          setMapRoute(Utils.renameLocationKeys(routelist));
-          mapRef.current.animateToRegion(
-            {
-              latitude: routelist[routelist.length - 1].lat,
-              longitude: routelist[routelist.length - 1].lng,
-              latitudeDelta: latDelta,
-              longitudeDelta: longDelta,
-            },
-            500,
-          );
-        });
+        API.getRoute(taskEvent.start, taskEvent.end)
+          .then((routelist) => {
+            setMapRoute(Utils.renameLocationKeys(routelist));
+            mapRef.current.animateToRegion(
+              {
+                latitude: routelist[routelist.length - 1].lat,
+                longitude: routelist[routelist.length - 1].lng,
+                latitudeDelta: latDelta,
+                longitudeDelta: longDelta,
+              },
+              500,
+            );
+          })
+          .catch((error) => {
+            ToastAndroid.show(
+              error.message,
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER,
+            );
+          });
       },
     );
     return () => {
@@ -211,7 +216,6 @@ export default function HomeScreen({navigation}) {
     const eventListener = eventEmitter.addListener(
       'event.trackerlistEvent',
       (tracker) => {
-        console.log('Tracker Event  --- ', tracker);
         clearInterval(intervalID);
         API.getTrackerState(tracker.id)
           .then((state) => {
@@ -225,7 +229,13 @@ export default function HomeScreen({navigation}) {
               renderDelay,
             );
           })
-          .catch((error) => console.log(error));
+          .catch((error) =>
+            ToastAndroid.show(
+              error.message,
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER,
+            ),
+          );
       },
     );
     return () => {

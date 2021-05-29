@@ -56,13 +56,40 @@ export default function TaskScreen({route, navigation}) {
     }, 10);
   };
 
+  const filterByStatus = (value) => {
+    let status;
+    let filteredTasks = [];
+    if (value === 'Finished') {
+      status = 'done';
+    }
+    allTasks.map((group, i) => {
+      if (status === group.task.status) {
+        filteredTasks.push(group);
+      }
+    });
+    setTasks(filteredTasks);
+  };
+
+  useEffect(() => {
+    filterByStatus(
+      radioItems[
+        selectedButton.findIndex((value) => {
+          return value === true;
+        })
+      ],
+    );
+  }, [selectedButton]);
+
   useEffect(() => {
     let defaultStatus = selectedButton;
     defaultStatus[0] = true;
     setSelectedButton(defaultStatus);
+    loadTasks();
+  }, []);
+
+  useEffect(() => {
     setShowTimeModal(false);
     setShowStatusModal(false);
-    loadTasks();
   }, [isFocused]);
 
   if (loading) {

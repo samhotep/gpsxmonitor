@@ -4,7 +4,7 @@ import TaskScreen from '../screens/taskScreen';
 import AssigneeScreen from '../screens/assigneeScreen';
 import TaskDetailScreen from '../screens/taskDetailScreen';
 import HeaderTitle from '../components/headers/headerTitle';
-import HeaderIcon from '../components/headers/headerIcon';
+import LogoTitle from '../components/headers/logoTitle';
 import styled from 'styled-components';
 
 const Stack = createStackNavigator();
@@ -17,7 +17,7 @@ export default function TaskStack({route, navigation}) {
         name="TaskScreen"
         component={TaskScreen}
         options={{
-          headerShown: true,
+          headerShown: false,
           headerStyle: {
             backgroundColor: '#1e96dc',
           },
@@ -73,75 +73,7 @@ export default function TaskStack({route, navigation}) {
   );
 }
 
-function LogoTitle(props) {
-  const [showSearch, setShowSearch] = useState(false);
-  const [searchString, setSearchString] = useState('');
-  const searchRef = useRef();
-
-  const focusWorkaround = () => {
-    setTimeout(() => {
-      searchRef.current.focus();
-    }, 100);
-  };
-
-  return (
-    <Container>
-      <SearchInput
-        ref={searchRef}
-        value={showSearch ? searchString : 'Tasks'}
-        onChangeText={(text) => setSearchString(text)}
-        editable={showSearch}
-        placeholder="Search..."
-        placeholderTextColor="#8bc9ed"
-      />
-
-      <IconsContainer>
-        <HeaderIcon
-          size={18}
-          margin={8}
-          source={
-            showSearch
-              ? require('../assets/close.png')
-              : require('../assets/search.png')
-          }
-          onPress={(event) => {
-            if (showSearch) {
-              setShowSearch(false);
-              setSearchString('');
-            } else {
-              setShowSearch(true);
-              focusWorkaround();
-            }
-          }}
-        />
-      </IconsContainer>
-    </Container>
-  );
-}
-
-const Container = styled.View`
-  flex-direction: row;
-  background-color: transparent;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const IconsContainer = styled.View`
-  flex-direction: row;
-  background-color: transparent;
-  align-items: center;
-  justify-content: flex-end;
-`;
-
 const ImageContainer = styled.Image`
   height: ${(props) => props.size || 24}px;
   width: ${(props) => props.size || 24}px;
-`;
-
-const SearchInput = styled.TextInput`
-  font-family: 'Roboto-Regular';
-  font-size: 20px;
-  text-align: left;
-  color: #ffffff;
-  font-weight: ${(props) => (props.editable ? 'normal' : 'bold')};
 `;

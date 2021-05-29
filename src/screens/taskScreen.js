@@ -57,13 +57,18 @@ export default function TaskScreen({route, navigation}) {
   };
 
   const filterByStatus = (value) => {
-    let status;
+    // STATUSES "assigned", "done", "failed", "delayed", "arrived". "faulty"
+    let statuses;
     let filteredTasks = [];
     if (value === 'Finished') {
-      status = 'done';
+      statuses = ['done'];
+    } else if (value === 'With any status') {
+      statuses = ['assigned', 'done', 'failed', 'delayed', 'arrived', 'faulty'];
+    } else if (value === 'Unfinished') {
+      statuses = ['assigned', 'delayed', 'arrived', 'faulty'];
     }
     allTasks.map((group, i) => {
-      if (status === group.task.status) {
+      if (statuses.find((status) => status === group.task.status)) {
         filteredTasks.push(group);
       }
     });

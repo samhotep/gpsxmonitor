@@ -17,6 +17,7 @@ function SettingsDrawer({route, navigation}) {
   return (
     <Drawer.Navigator
       initialRouteName="Auth"
+      edgeWidth={0}
       drawerPosition="right"
       // eslint-disable-next-line react-native/no-inline-styles
       drawerStyle={{

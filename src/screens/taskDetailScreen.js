@@ -2,14 +2,60 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
-import Separator from '../components/separators/separator';
 import styled from 'styled-components';
 import DrawerLoader from '../components/loaders/drawerLoader';
-import Storage from '../storage/storage';
+import DetailItem from '../components/items/detailItem';
 
 export default function TaskDetailScreen({route, navigation}) {
   let {task, tracker} = route.params;
   const [loading, setLoading] = useState(true);
+  let fromDate = new Date(task.from.replace(/-+/g, '/'));
+  let toDate = new Date(task.to.replace(/-+/g, '/'));
+
+  const details = [
+    {
+      label: task.label,
+      detail: task.status,
+      color: '#4788c7',
+      size: 22,
+      front_icon: require('../assets/circle.png'),
+    },
+    {
+      detail: tracker.label,
+      color: '#000000',
+      size: 22,
+      front_icon: require('../assets/user_assignee.png'),
+    },
+    {
+      label: task.location.address,
+      color: '#000000',
+      size: 16,
+      front_icon: require('../assets/pin.png'),
+      back_icon: require('../assets/directions.png'),
+    },
+    {
+      label: `${fromDate.toLocaleDateString()} ${fromDate
+        .toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+        .slice(0, -3)} - ${toDate.toLocaleDateString()} ${toDate
+        .toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+        .slice(0, -3)}`,
+      color: '#000000',
+      size: 16,
+      front_icon: require('../assets/calendar.png'),
+    },
+    {
+      label: task.description,
+      color: '#000000',
+      size: 16,
+      front_icon: require('../assets/clipboard.png'),
+    },
+  ];
 
   useEffect(() => {
     setLoading(false);
@@ -26,7 +72,18 @@ export default function TaskDetailScreen({route, navigation}) {
 
   return (
     <Container>
-      <Text>TASK DETAILS!</Text>
+      {details.map((detail, i) => {
+        return (
+          <DetailItem
+            header={detail.label}
+            detail={detail.detail}
+            color={detail.color}
+            size={detail.size}
+            front_icon={detail.front_icon}
+            back_icon={detail.back_icon}
+          />
+        );
+      })}
     </Container>
   );
 }
@@ -34,40 +91,28 @@ export default function TaskDetailScreen({route, navigation}) {
 const Container = styled.View`
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   background-color: #ffffff;
   height: 100%;
 `;
 
-const FilterContainer = styled.View`
+const RowContainer = styled.View`
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  background-color: #ffffff;
+  justify-content: space-evenly;
   width: 100%;
-  height: 50px;
-  padding: 4px;
-  elevation: 3;
 `;
 
-const TimeContainer = styled.TouchableOpacity`
+const DetailContainer = styled.TouchableOpacity`
   flex: 1;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 5px 10px 5px 10px;
-`;
-
-const OptionContainer = styled.TouchableOpacity`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin: 5px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10px;
 `;
 
 const Text = styled.Text`
-  font-size: ${(props) => props.size || 18}px;
+  font-size: ${(props) => props.size || 22}px;
   color: ${(props) => props.color || '#000000'};
   font-family: 'Roboto-Regular';
   font-weight: ${(props) => props.weight || 'normal'};
@@ -78,19 +123,5 @@ const Text = styled.Text`
 const ImageContainer = styled.Image`
   height: ${(props) => props.size || 24}px;
   width: ${(props) => props.size || 24}px;
-`;
-
-const ModalContainer = styled.View`
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 5px;
-`;
-
-const RadioContainer = styled.View`
-  align-items: center;
-  justify-content: center;
-  width: ${(props) => props.size || 28}px;
-  height: ${(props) => props.size || 28}px;
-  margin: ${(props) => props.margin || 10}px;
+  margin: 10px;
 `;

@@ -3,6 +3,8 @@ import Separator from '../separators/separator';
 import styled from 'styled-components';
 
 export default function TaskItem(props) {
+  let fromDate = new Date(props.group.task.from.replace(/-+/g, '/'));
+  let toDate = new Date(props.group.task.to.replace(/-+/g, '/'));
   return (
     <Container>
       <Container
@@ -38,7 +40,17 @@ export default function TaskItem(props) {
             size={24}
           />
           <Text color="#737373">
-            {props.group.task.from} {props.group.task.to}
+            {`${fromDate.toLocaleDateString()} ${fromDate
+              .toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })
+              .slice(0, -3)} - ${toDate.toLocaleDateString()} ${toDate
+              .toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })
+              .slice(0, -3)}`}
           </Text>
         </RowContainer>
         <RowContainer>

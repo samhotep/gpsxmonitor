@@ -9,6 +9,7 @@ import VerticalSeparator from '../components/separators/verticalSeparator';
 import DetailModal from '../components/modals/detailModal';
 import RadioInput from '../components/inputs/radioInput';
 import TaskItem from '../components/items/taskItem';
+import LogoTitle from '../components/headers/logoTitle';
 import Storage from '../storage/storage';
 import Utils from '../utils/utils';
 
@@ -16,6 +17,8 @@ export default function TaskScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
   let timeItems = ['Yesterday', 'Today', 'Tomorrow', 'Week', 'Month'];
   let radioItems = ['With any status', 'Finished', 'Unfinished'];
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchString, setSearchString] = useState('');
   const [selectedTime, setSelectedTime] = useState(1);
   const [selectedButton, setSelectedButton] = useState(
     Array(radioItems.length).fill(false),
@@ -55,6 +58,8 @@ export default function TaskScreen({route, navigation}) {
         });
     }, 10);
   };
+
+  const filterBySearch = () => {};
 
   const filterByDate = () => {
     // Filter by from (starting date)
@@ -137,6 +142,10 @@ export default function TaskScreen({route, navigation}) {
   };
 
   useEffect(() => {
+    console.log(searchString);
+  }, [searchString]);
+
+  useEffect(() => {
     filterByStatus(
       radioItems[
         selectedButton.findIndex((value) => {
@@ -166,6 +175,7 @@ export default function TaskScreen({route, navigation}) {
     return (
       <Container>
         <StatusBar backgroundColor="#007aa6" />
+        <LogoTitle />
         <DrawerLoader />
       </Container>
     );
@@ -177,6 +187,13 @@ export default function TaskScreen({route, navigation}) {
         setShowTimeModal(false);
         setShowStatusModal(false);
       }}>
+      <LogoTitle
+        navigation={navigation}
+        searchString={searchString}
+        setSearchString={setSearchString}
+        showSearch={showSearch}
+        setShowSearch={setShowSearch}
+      />
       <FilterContainer>
         <TimeContainer
           onPress={() => {

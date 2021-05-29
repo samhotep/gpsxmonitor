@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Separator from '../separators/separator';
 
@@ -13,7 +13,7 @@ export default function DetailItem(props) {
       </DetailContainer>
       {props.back_icon && (
         <Button>
-          <ImageContainer source={props.back_icon} />
+          <ImageContainer source={props.back_icon} onPress={props.onPress} />
         </Button>
       )}
     </RowContainer>

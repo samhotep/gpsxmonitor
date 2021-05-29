@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import Separator from '../separators/separator';
 import styled from 'styled-components';
 

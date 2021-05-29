@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState, useRef} from 'react';
 import {
+  Image,
   NativeEventEmitter,
   NativeModules,
   StyleSheet,
   StatusBar,
-  View,
   Text,
-  Image,
+  ToastAndroid,
+  View,
 } from 'react-native';
 import {Animated, AnimatedRegion, Marker, Polyline} from 'react-native-maps';
 import CheckBox from '@react-native-community/checkbox';
@@ -122,7 +123,11 @@ export default function HomeScreen({navigation}) {
         );
       })
       .catch((error) => {
-        console.log(error);
+        ToastAndroid.show(
+          error.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
       });
   };
 
@@ -168,6 +173,32 @@ export default function HomeScreen({navigation}) {
       (routeEvent) => {
         console.log('Route Event  --- ', routeEvent);
         getAddressPoints(routeEvent);
+      },
+    );
+    return () => {
+      eventListener.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    // Listener for task drawer events
+    const eventListener = eventEmitter.addListener(
+      'event.taskEvent',
+      (taskEvent) => {
+        console.log('Task Event  --- ', taskEvent);
+        API.getRoute(taskEvent.start, taskEvent.end).then((routelist) => {
+          console.log(routelist);
+          setMapRoute(Utils.renameLocationKeys(routelist));
+          mapRef.current.animateToRegion(
+            {
+              latitude: routelist[routelist.length - 1].lat,
+              longitude: routelist[routelist.length - 1].lng,
+              latitudeDelta: latDelta,
+              longitudeDelta: longDelta,
+            },
+            500,
+          );
+        });
       },
     );
     return () => {

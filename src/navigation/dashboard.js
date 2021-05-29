@@ -52,6 +52,152 @@ function CustomDrawerContent({navigation}) {
   const isDrawerOpen = useIsDrawerOpen();
   const searchRef = useRef();
 
+  let tests = [
+    {
+      arrival_date: null,
+      creation_date: '2020-04-07 13:19:01',
+      description: 'Visiting URA',
+      external_id: null,
+      from: '2021-05-28 00:00:00',
+      id: 1,
+      label: 'Visiting URA',
+      location: {
+        address: 'Kampala, Central Region, Uganda, P.O. BOX 4365',
+        lat: 0.33036264,
+        lng: 32.63800979,
+        radius: 50,
+      },
+      max_delay: 0,
+      min_arrival_duration: 0,
+      min_stay_duration: 0,
+      origin: 'manual',
+      status: 'assigned',
+      status_change_date: null,
+      stay_duration: 0,
+      to: '2020-04-07 23:59:59',
+      tracker_id: 6079,
+      type: 'task',
+      user_id: 1,
+    },
+    {
+      arrival_date: null,
+      creation_date: '2020-04-17 08:40:00',
+      description: 'Delivery Parcels in Kampala',
+      external_id: '45156',
+      form: {
+        created: '2020-04-17 08:40:00',
+        description: '',
+        fields: [Array],
+        id: 7,
+        label: 'Delivery Note',
+        submit_in_zone: false,
+        submit_location: [Object],
+        submitted: null,
+        task_id: 10,
+        template_id: 5,
+        values: null,
+      },
+      from: '2020-04-17 00:00:00',
+      id: 10,
+      label: 'Delivering parcels',
+      location: {
+        address: 'Kampala Road, Kampala, Uganda',
+        lat: 0.3133012,
+        lng: 32.5809105,
+        radius: 150,
+      },
+      max_delay: 0,
+      min_arrival_duration: 0,
+      min_stay_duration: 0,
+      origin: 'manual',
+      status: 'assigned',
+      status_change_date: null,
+      stay_duration: 0,
+      to: '2020-04-18 23:59:59',
+      tracker_id: 6080,
+      type: 'task',
+      user_id: 1,
+    },
+    {
+      arrival_date: null,
+      creation_date: '2020-04-17 08:53:33',
+      description: '',
+      external_id: null,
+      form: {
+        created: '2020-04-17 08:53:33',
+        description: '',
+        fields: [Array],
+        id: 8,
+        label: 'New form',
+        submit_in_zone: false,
+        submit_location: [Object],
+        submitted: null,
+        task_id: 11,
+        template_id: null,
+        values: null,
+      },
+      from: '2020-04-17 00:00:00',
+      id: 11,
+      label: 'Power Reconnection',
+      location: {
+        address: 'Kampala, Uganda',
+        lat: 0.3475964,
+        lng: 32.5825197,
+        radius: 150,
+      },
+      max_delay: 0,
+      min_arrival_duration: 0,
+      min_stay_duration: 0,
+      origin: 'manual',
+      status: 'unassigned',
+      status_change_date: null,
+      stay_duration: 0,
+      to: '2020-04-17 23:59:59',
+      tracker_id: null,
+      type: 'task',
+      user_id: 1,
+    },
+    {
+      arrival_date: null,
+      creation_date: '2021-05-29 08:53:33',
+      description: '',
+      external_id: null,
+      form: {
+        created: '2020-04-17 08:53:33',
+        description: '',
+        fields: [Array],
+        id: 8,
+        label: 'New form',
+        submit_in_zone: false,
+        submit_location: [Object],
+        submitted: null,
+        task_id: 11,
+        template_id: null,
+        values: null,
+      },
+      from: '2021-05-29 00:00:00',
+      id: 11,
+      label: 'Power Reconnection',
+      location: {
+        address: 'Kampala, Uganda',
+        lat: 0.3475964,
+        lng: 32.5825197,
+        radius: 150,
+      },
+      max_delay: 0,
+      min_arrival_duration: 0,
+      min_stay_duration: 0,
+      origin: 'manual',
+      status: 'done',
+      status_change_date: null,
+      stay_duration: 0,
+      to: '2021-05-30 23:59:59',
+      tracker_id: 6080,
+      type: 'task',
+      user_id: 1,
+    },
+  ];
+
   const drawerItems = [
     {
       name: 'Chat messages',
@@ -151,7 +297,7 @@ function CustomDrawerContent({navigation}) {
   };
 
   const createObjects = () => {
-    // TODO Load tasks and save to storage
+    // TODO Load tasks from endpoint
     setLoading(true);
     let groups = [];
     let _trackers = [];
@@ -173,7 +319,8 @@ function CustomDrawerContent({navigation}) {
         return API.getTasks();
       })
       .then((taskList) => {
-        Storage.setAllTasks(taskList);
+        // Storage.setAllTasks(taskList);
+        Storage.setAllTasks(tests);
         setLoading(false);
       })
       .catch((error) => {

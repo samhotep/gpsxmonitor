@@ -3,7 +3,6 @@
 import React, {useEffect, useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
-import Separator from '../components/separators/separator';
 import styled from 'styled-components';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import VerticalSeparator from '../components/separators/verticalSeparator';

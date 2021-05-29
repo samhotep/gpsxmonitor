@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useRef} from 'react';
 import {useHeaderHeight} from '@react-navigation/stack';
 import HeaderIcon from '../headers/headerIcon';
 import styled from 'styled-components';
@@ -25,6 +25,7 @@ export default function LogoTitle(props) {
       />
       <SearchInput
         ref={searchRef}
+        returnKeyType="search"
         value={props.showSearch ? props.searchString : 'Tasks'}
         onChangeText={(text) => props.setSearchString(text)}
         editable={props.showSearch}

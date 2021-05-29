@@ -12,15 +12,17 @@ import styled from 'styled-components/native';
 import ProductStack from './productStack';
 import BillingStack from './billingStack';
 import TaskStack from './taskStack';
+import MessageScreen from '../screens/messageScreen';
 import CategoryItem from '../components/items/categoryItem';
 import DrawerTitle from '../components/headers/drawerTitle';
+import HeaderTitle from '../components/headers/headerTitle';
 import ListItem from '../components/items/listItem';
 import Utils from '../utils/utils';
 import DrawerLoader from '../components/loaders/drawerLoader';
-import API from '../api/api';
 import lists from '../components/lists/lists';
 import Storage from '../storage/storage';
 import Separator from '../components/separators/separator';
+import API from '../api/api';
 
 const Drawer = createDrawerNavigator();
 
@@ -36,6 +38,27 @@ export default function Dashboard({route, navigation}) {
       <Drawer.Screen name="Home" component={ProductStack} />
       <Drawer.Screen name="Billing" component={BillingStack} />
       <Drawer.Screen name="Tasks" component={TaskStack} />
+      <Drawer.Screen
+        name="Messages"
+        component={MessageScreen}
+        options={{
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#1e96dc',
+          },
+          headerTitleStyle: {
+            color: '#ffffff',
+          },
+          headerLeft: () => (
+            <HeaderTitle
+              source={require('../assets/back.png')}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            />
+          ),
+        }}
+      />
     </Drawer.Navigator>
   );
 }
@@ -203,7 +226,7 @@ function CustomDrawerContent({navigation}) {
       name: 'Chat messages',
       source: require('../assets/chat.png'),
       onPress: () => {
-        // navigation.navigate('Tasks', {screen: 'TaskScreen'});
+        navigation.navigate('Messages');
       },
     },
     {

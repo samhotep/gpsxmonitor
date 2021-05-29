@@ -47,8 +47,12 @@ export default function TaskScreen({route, navigation}) {
           setLoading(false);
         })
         .catch((error) => {
-          console.log(error);
           setLoading(false);
+          ToastAndroid.show(
+            error.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
         });
     }, 10);
   };

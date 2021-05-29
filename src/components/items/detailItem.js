@@ -7,8 +7,8 @@ export default function DetailItem(props) {
     <RowContainer>
       <ImageContainer source={props.front_icon} />
       <DetailContainer>
-        {props.header && <Text size={props.size}>{props.header}</Text>}
-        {props.detail && <Text color={props.color}>{props.detail}</Text>}
+        <Text size={props.size}>{props.header}</Text>
+        <Text color={props.color}>{props.detail}</Text>
         <Separator />
       </DetailContainer>
       {props.back_icon && (

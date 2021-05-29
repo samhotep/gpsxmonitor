@@ -57,6 +57,8 @@ export default function TaskScreen({route, navigation}) {
     let defaultStatus = selectedButton;
     defaultStatus[0] = true;
     setSelectedButton(defaultStatus);
+    setShowTimeModal(false);
+    setShowStatusModal(false);
     loadTasks();
   }, [isFocused]);
 
@@ -78,7 +80,7 @@ export default function TaskScreen({route, navigation}) {
       <FilterContainer>
         <TimeContainer
           onPress={() => {
-            setShowTimeModal(true);
+            setShowTimeModal(!showTimeModal);
             setShowStatusModal(false);
           }}>
           <Text size={16}>{timeItems[selectedTime]}</Text>
@@ -87,7 +89,7 @@ export default function TaskScreen({route, navigation}) {
         <VerticalSeparator />
         <TimeContainer
           onPress={() => {
-            setShowStatusModal(true);
+            setShowStatusModal(!showStatusModal);
             setShowTimeModal(false);
           }}>
           <Text size={16} />

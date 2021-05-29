@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {createDrawerNavigator, useIsDrawerOpen} from '@react-navigation/drawer';
 import {
   Alert,
@@ -25,8 +25,6 @@ import Separator from '../components/separators/separator';
 import API from '../api/api';
 
 const Drawer = createDrawerNavigator();
-
-const StackNavigator = createStackNavigator();
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
@@ -73,7 +71,6 @@ function CustomDrawerContent({navigation}) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const isDrawerOpen = useIsDrawerOpen();
-  const searchRef = useRef();
 
   let tests = [
     {
@@ -508,11 +505,6 @@ const HeaderContent = styled.View`
 const DrawerContentContainer = styled.ScrollView`
   flex-grow: 1;
   background-color: #ffffff;
-`;
-
-const ExtrasContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
 `;
 
 const CategoryContainer = styled.View`

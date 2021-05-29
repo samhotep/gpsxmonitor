@@ -12,8 +12,8 @@ export default function DetailItem(props) {
         <Separator />
       </DetailContainer>
       {props.back_icon && (
-        <Button>
-          <ImageContainer source={props.back_icon} onPress={props.onPress} />
+        <Button onPress={props.onPress}>
+          <ImageContainer source={props.back_icon} />
         </Button>
       )}
     </RowContainer>

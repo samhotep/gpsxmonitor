@@ -26,7 +26,7 @@ export default function LogoTitle(props) {
       <SearchInput
         ref={searchRef}
         returnKeyType="search"
-        value={props.showSearch ? props.searchString : 'Tasks'}
+        value={props.showSearch ? props.searchString : props.title}
         onChangeText={(text) => props.setSearchString(text)}
         editable={props.showSearch}
         placeholder="Search..."

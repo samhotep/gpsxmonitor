@@ -1,6 +1,5 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import TrackerChatScreen from '../screens/trackerChatScreen';
 import EmployeeScreen from '../screens/employeeScreen';
 import MessageScreen from '../screens/messageScreen';
 import styled from 'styled-components';

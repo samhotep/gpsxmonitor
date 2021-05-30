@@ -3,7 +3,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import TrackerChatScreen from '../screens/trackerChatScreen';
 import EmployeeScreen from '../screens/employeeScreen';
 import MessageScreen from '../screens/messageScreen';
-import HeaderTitle from '../components/headers/headerTitle';
 import styled from 'styled-components';
 
 const Stack = createStackNavigator();
@@ -11,29 +10,12 @@ const Stack = createStackNavigator();
 export default function TaskStack({route, navigation}) {
   //   const navigation = useNavigation();
   return (
-    <Stack.Navigator initialRouteName="TrackerChatScreen" headerMode="screen">
-      <Stack.Screen
-        name="TrackerChatScreen"
-        component={TrackerChatScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
+    <Stack.Navigator initialRouteName="EmployeeScreen" headerMode="screen">
       <Stack.Screen
         name="EmployeeScreen"
         component={EmployeeScreen}
         options={{
-          headerTitle: 'Employees',
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: '#1e96dc',
-          },
-          headerTitleStyle: {
-            color: '#ffffff',
-          },
-          headerBackImage: () => (
-            <ImageContainer source={require('../assets/back.png')} />
-          ),
+          headerShown: false,
         }}
       />
       <Stack.Screen

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {StatusBar, ToastAndroid} from 'react-native';
 import styled from 'styled-components';
 import DrawerLoader from '../components/loaders/drawerLoader';
-import MessageItem from '../components/items/employeeItem';
+import EmployeeItem from '../components/items/employeeItem';
 import API from '../api/api';
 
 export default function EmployeeScreen({route, navigation}) {
@@ -43,7 +43,7 @@ export default function EmployeeScreen({route, navigation}) {
       <ContentContainer>
         {employees.map((employee, i) => {
           return (
-            <MessageItem
+            <EmployeeItem
               employee={employee}
               onPress={() =>
                 navigation.navigate('MessageScreen', {employee: employee})

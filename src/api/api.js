@@ -210,12 +210,12 @@ const API = {
     });
   },
   getChats: (tracker_id) => {
-    return API.apiCall('employee/list/', {tracker_id: tracker_id}).then(
+    return API.apiCall('tracker/chat/list/', {tracker_id: tracker_id}).then(
       (result) => {
         if (result.success === true) {
           return result.list;
         } else {
-          return result.status.description;
+          return 400;
         }
       },
     );

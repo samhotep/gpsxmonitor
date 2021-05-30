@@ -10,15 +10,13 @@ export default function TrackerItem(props) {
         android_ripple={{
           color: '#b5dbf1',
         }}>
-        <Container>
-          <ImageContainer source={require('../../assets/chip.png')} />
-          <TextContainer>
-            <Text size={18}>{props.tracker.label}</Text>
-            {props.tracker.phone ? (
-              <Text size={16}>{props.tracker.phone}</Text>
-            ) : null}
-          </TextContainer>
-        </Container>
+        <ImageContainer source={require('../../assets/chip.png')} />
+        <TextContainer>
+          <Text size={18}>{props.tracker.label}</Text>
+          {props.tracker.phone ? (
+            <Text size={16}>{props.tracker.phone}</Text>
+          ) : null}
+        </TextContainer>
         <UnreadContainer source={require('../../assets/round.png')}>
           <Text size={12} color="#ffffff">
             {props.unread}
@@ -31,14 +29,14 @@ export default function TrackerItem(props) {
 }
 
 const Container = styled.Pressable`
-  flex: 1;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   background-color: ${(props) => props.color || '#ffffff'};
 `;
 
 const TextContainer = styled.View`
+  flex-grow: 1;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;

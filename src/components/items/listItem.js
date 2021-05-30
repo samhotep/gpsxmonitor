@@ -4,18 +4,19 @@ import styled from 'styled-components';
 // TODO Animate the list
 export default function ListItem(props) {
   return (
-    <Highlight onPress={props.onPress}>
-      <Container selected={props.selected}>
-        <Text selected={props.selected}>{props.text}</Text>
-        <IdentityColor color={props.color} />
-      </Container>
-    </Highlight>
+    <Container
+      selected={props.selected}
+      onPress={props.onPress}
+      android_ripple={{
+        color: '#b5dbf1',
+      }}>
+      <Text selected={props.selected}>{props.text}</Text>
+      <IdentityColor color={props.color} />
+    </Container>
   );
 }
 
-const Highlight = styled.TouchableHighlight``;
-
-const Container = styled.View`
+const Container = styled.Pressable`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;

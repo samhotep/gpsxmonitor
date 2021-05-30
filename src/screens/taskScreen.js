@@ -204,6 +204,7 @@ export default function TaskScreen({route, navigation}) {
         setShowStatusModal(false);
       }}>
       <LogoTitle
+        title="Tasks"
         navigation={navigation}
         searchString={searchString}
         setSearchString={setSearchString}

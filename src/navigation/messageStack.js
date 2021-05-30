@@ -1,11 +1,8 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import EmployeeScreen from '../screens/employeeScreen';
-import AssigneeScreen from '../screens/assigneeScreen';
-import TaskDetailScreen from '../screens/taskDetailScreen';
+import MessageScreen from '../screens/messageScreen';
 import HeaderTitle from '../components/headers/headerTitle';
-import LogoTitle from '../components/headers/logoTitle';
-import styled from 'styled-components';
 
 const Stack = createStackNavigator();
 
@@ -36,44 +33,18 @@ export default function TaskStack({route, navigation}) {
         }}
       />
       <Stack.Screen
-        name="AssigneeScreen"
-        component={AssigneeScreen}
+        name="MessageScreen"
+        component={MessageScreen}
         options={{
-          title: 'Select assignee',
-          headerShown: true,
+          headerShown: false,
           headerStyle: {
             backgroundColor: '#1e96dc',
           },
           headerTitleStyle: {
             color: '#ffffff',
           },
-          headerBackImage: () => (
-            <ImageContainer source={require('../assets/back.png')} />
-          ),
-        }}
-      />
-      <Stack.Screen
-        name="TaskDetailScreen"
-        component={TaskDetailScreen}
-        options={{
-          title: 'Task Details',
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: '#1e96dc',
-          },
-          headerTitleStyle: {
-            color: '#ffffff',
-          },
-          headerBackImage: () => (
-            <ImageContainer source={require('../assets/back.png')} />
-          ),
         }}
       />
     </Stack.Navigator>
   );
 }
-
-const ImageContainer = styled.Image`
-  height: ${(props) => props.size || 24}px;
-  width: ${(props) => props.size || 24}px;
-`;

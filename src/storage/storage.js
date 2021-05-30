@@ -160,6 +160,32 @@ const Storage = {
       console.log(e);
     }
   },
+  getAllEmployees: () => {
+    return AsyncStorage.getItem('employees');
+  },
+  setAllEmployees: (data) => {
+    AsyncStorage.setItem('employees', JSON.stringify(data));
+  },
+  removeAllEmployees: async () => {
+    try {
+      await AsyncStorage.removeItem('employees');
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  getTrackerMessages: () => {
+    return AsyncStorage.getItem('messages');
+  },
+  setTrackerMessages: (data) => {
+    AsyncStorage.setItem('messages', JSON.stringify(data));
+  },
+  removeTrackerMessages: async () => {
+    try {
+      await AsyncStorage.removeItem('messages');
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };
 
 export default Storage;

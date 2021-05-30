@@ -7,15 +7,13 @@ import {
   NativeModules,
   ToastAndroid,
 } from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
 import styled from 'styled-components/native';
 import ProductStack from './productStack';
 import BillingStack from './billingStack';
 import TaskStack from './taskStack';
-import MessageScreen from '../screens/messageScreen';
+import MessageStack from './messageStack';
 import CategoryItem from '../components/items/categoryItem';
 import DrawerTitle from '../components/headers/drawerTitle';
-import HeaderTitle from '../components/headers/headerTitle';
 import ListItem from '../components/items/listItem';
 import Utils from '../utils/utils';
 import DrawerLoader from '../components/loaders/drawerLoader';
@@ -36,27 +34,7 @@ export default function Dashboard({route, navigation}) {
       <Drawer.Screen name="Home" component={ProductStack} />
       <Drawer.Screen name="Billing" component={BillingStack} />
       <Drawer.Screen name="Tasks" component={TaskStack} />
-      <Drawer.Screen
-        name="Messages"
-        component={MessageScreen}
-        options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: '#1e96dc',
-          },
-          headerTitleStyle: {
-            color: '#ffffff',
-          },
-          headerLeft: () => (
-            <HeaderTitle
-              source={require('../assets/back.png')}
-              onPress={() => {
-                navigation.goBack();
-              }}
-            />
-          ),
-        }}
-      />
+      <Drawer.Screen name="Messages" component={MessageStack} />
     </Drawer.Navigator>
   );
 }

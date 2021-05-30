@@ -430,8 +430,9 @@ function CustomDrawerContent({navigation}) {
         {drawerItems.map((_, i) => {
           return (
             <DrawerItemContainer
-              activeOpacity={0.6}
-              underlayColor="#b5dbf1"
+              android_ripple={{
+                color: '#b5dbf1',
+              }}
               onPress={_.onPress}>
               <>
                 <DrawerIcon source={_.source} size={24} margin={10} />
@@ -490,7 +491,7 @@ const CategoryContainer = styled.View`
   width: 100%;
 `;
 
-const DrawerItemContainer = styled.TouchableHighlight`
+const DrawerItemContainer = styled.Pressable`
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;

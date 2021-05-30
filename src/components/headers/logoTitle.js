@@ -32,26 +32,28 @@ export default function LogoTitle(props) {
         placeholder="Search..."
         placeholderTextColor="#8bc9ed"
       />
-      <IconsContainer>
-        <HeaderIcon
-          size={18}
-          margin={8}
-          source={
-            props.showSearch
-              ? require('../../assets/close.png')
-              : require('../../assets/search.png')
-          }
-          onPress={(event) => {
-            if (props.showSearch) {
-              props.setShowSearch(false);
-              props.setSearchString('');
-            } else {
-              props.setShowSearch(true);
-              focusWorkaround();
+      {props.setSearchString ? (
+        <IconsContainer>
+          <HeaderIcon
+            size={18}
+            margin={8}
+            source={
+              props.showSearch
+                ? require('../../assets/close.png')
+                : require('../../assets/search.png')
             }
-          }}
-        />
-      </IconsContainer>
+            onPress={(event) => {
+              if (props.showSearch) {
+                props.setShowSearch(false);
+                props.setSearchString('');
+              } else {
+                props.setShowSearch(true);
+                focusWorkaround();
+              }
+            }}
+          />
+        </IconsContainer>
+      ) : null}
     </Container>
   );
 }

@@ -2,9 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 export default function ChatBubble(props) {
-  let outgoing = false;
   return (
-    <Container>
+    <Container outgoing={props.outgoing}>
       <BubbleContainer outgoing={props.outgoing}>
         {props.outgoing ? (
           <>
@@ -26,7 +25,7 @@ export default function ChatBubble(props) {
 
 const Container = styled.View`
   flex-direction: column;
-  align-items: flex-start;
+  align-items: ${(props) => (props.outgoing ? 'flex-end' : 'flex-start')};
   justify-content: center;
   width: 100%;
   padding: 5px;

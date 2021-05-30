@@ -196,6 +196,174 @@ function CustomDrawerContent({navigation}) {
     },
   ];
 
+  let testemployees = [
+    {
+      department_id: null,
+      driver_license_cats: '',
+      driver_license_number: '',
+      driver_license_valid_till: null,
+      email: '',
+      first_name: 'UNKNOWN DRIVER',
+      hardware_key: '00001ACB4A9',
+      id: 3471,
+      last_name: '',
+      middle_name: '',
+      personnel_number: '',
+      phone: '',
+      tracker_id: null,
+    },
+    {
+      department_id: null,
+      driver_license_cats: '',
+      driver_license_number: '',
+      driver_license_valid_till: null,
+      email: '',
+      first_name: 'UNKNOWN DRIVER 2  ',
+      hardware_key: '00001B77482A',
+      id: 3474,
+      last_name: '',
+      middle_name: '',
+      personnel_number: '',
+      phone: '',
+      tracker_id: null,
+    },
+    {
+      department_id: null,
+      driver_license_cats: '',
+      driver_license_number: '',
+      driver_license_valid_till: null,
+      email: '',
+      first_name: 'BARONGO OSCAR',
+      hardware_key: '000018712582',
+      id: 3475,
+      last_name: '',
+      middle_name: '',
+      personnel_number: '',
+      phone: '',
+      tracker_id: null,
+    },
+    {
+      department_id: null,
+      driver_license_cats: '',
+      driver_license_number: '',
+      driver_license_valid_till: null,
+      email: '',
+      first_name: 'UNKNOWN DRIVER 3  ',
+      hardware_key: '000017299E8',
+      id: 3476,
+      last_name: '',
+      middle_name: '',
+      personnel_number: '',
+      phone: '',
+      tracker_id: null,
+    },
+    {
+      department_id: null,
+      driver_license_cats: '',
+      driver_license_number: '',
+      driver_license_valid_till: null,
+      email: '',
+      first_name: 'Munabi Robert    ',
+      hardware_key: '7FF0000FFC00',
+      id: 3477,
+      last_name: '',
+      middle_name: '',
+      personnel_number: '',
+      phone: '',
+      tracker_id: null,
+    },
+    {
+      department_id: null,
+      driver_license_cats: '',
+      driver_license_number: '',
+      driver_license_valid_till: null,
+      email: '',
+      first_name: 'Nagimesi Andrew   ',
+      hardware_key: '000001B09A53',
+      id: 3478,
+      last_name: '',
+      middle_name: '',
+      personnel_number: '',
+      phone: '',
+      tracker_id: null,
+    },
+    {
+      department_id: null,
+      driver_license_cats: '',
+      driver_license_number: '',
+      driver_license_valid_till: null,
+      email: '',
+      first_name: 'KENNETH NIMWESIGE',
+      hardware_key: '000017C005C',
+      id: 3479,
+      last_name: '',
+      middle_name: '',
+      personnel_number: '',
+      phone: '',
+      tracker_id: null,
+    },
+    {
+      department_id: null,
+      driver_license_cats: '',
+      driver_license_number: '',
+      driver_license_valid_till: null,
+      email: '',
+      first_name: 'MUGENYI ERIA',
+      hardware_key: '0000114CC5C',
+      id: 3483,
+      last_name: '',
+      middle_name: '',
+      personnel_number: '',
+      phone: '',
+      tracker_id: null,
+    },
+    {
+      department_id: null,
+      driver_license_cats: '',
+      driver_license_number: '',
+      driver_license_valid_till: null,
+      email: '',
+      first_name: 'KAWEESA JAMES  ',
+      hardware_key: '00001B774D32',
+      id: 3484,
+      last_name: '',
+      middle_name: '',
+      personnel_number: '',
+      phone: '',
+      tracker_id: null,
+    },
+    {
+      department_id: null,
+      driver_license_cats: '',
+      driver_license_number: '',
+      driver_license_valid_till: null,
+      email: '',
+      first_name: 'KASIM KASANA',
+      hardware_key: '0000193D1410',
+      id: 3485,
+      last_name: '',
+      middle_name: '',
+      personnel_number: '',
+      phone: '',
+      tracker_id: null,
+    },
+    {
+      department_id: null,
+      driver_license_cats: '',
+      driver_license_number: '',
+      driver_license_valid_till: null,
+      email: '',
+      first_name: 'KAWEESI DERRICK',
+      hardware_key: '00001B77BB2C',
+      id: 3486,
+      last_name: '',
+      middle_name: '',
+      personnel_number: '',
+      phone: '',
+      tracker_id: null,
+    },
+  ];
+
   const drawerItems = [
     {
       name: 'Chat messages',
@@ -308,7 +476,6 @@ function CustomDrawerContent({navigation}) {
         Storage.setAllTrackers(trackers);
         setTrackersList(trackers);
         _trackers = trackers;
-        // Get detailed state info for each tracker
         return API.getStates(Utils.getIDList(trackers));
       })
       .then((result) => {
@@ -319,6 +486,11 @@ function CustomDrawerContent({navigation}) {
       .then((taskList) => {
         // Storage.setAllTasks(taskList);
         Storage.setAllTasks(tests);
+        return API.getEmployees();
+      })
+      .then((employeeList) => {
+        // Storage.setAllEmployees(employeeList);
+        Storage.setAllEmployees(testemployees);
         setLoading(false);
       })
       .catch((error) => {

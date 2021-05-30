@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-// TODO Animate the list
 export default function ListItem(props) {
   return (
     <Container

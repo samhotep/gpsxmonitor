@@ -3,7 +3,12 @@ import styled from 'styled-components';
 
 export default function HeaderIcon(props) {
   return (
-    <Button onPress={props.onPress}>
+    <Button
+      onPress={props.onPress}
+      android_ripple={{
+        color: '#b5dbf1',
+        radius: 18,
+      }}>
       <ImageContainer
         source={props.source}
         size={props.size}
@@ -19,4 +24,4 @@ const ImageContainer = styled.Image`
   margin: ${(props) => props.margin || 15}px;
 `;
 
-const Button = styled.TouchableOpacity``;
+const Button = styled.Pressable``;

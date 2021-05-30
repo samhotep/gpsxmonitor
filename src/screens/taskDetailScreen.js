@@ -143,13 +143,11 @@ export default function TaskDetailScreen({route, navigation}) {
   };
 
   const sendRouteEvent = (start, end) => {
+    navigation.navigate('HomeScreen');
     eventEmitter.emit('event.taskEvent', {
       start: start,
       end: end,
     });
-    setTimeout(() => {
-      navigation.navigate('HomeScreen');
-    }, 100);
   };
 
   useEffect(() => {

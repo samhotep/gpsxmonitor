@@ -35,7 +35,7 @@ export default function LogoTitle(props) {
       {props.setSearchString ? (
         <IconsContainer>
           <HeaderIcon
-            size={18}
+            size={22}
             margin={8}
             source={
               props.showSearch

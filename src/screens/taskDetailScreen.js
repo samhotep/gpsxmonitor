@@ -11,7 +11,7 @@ import {
 import Geolocation from 'react-native-geolocation-service';
 import styled from 'styled-components';
 import DrawerLoader from '../components/loaders/drawerLoader';
-import DetailItem from '../components/items/detailItem';
+import TaskDetailItem from '../components/items/taskDetailItem';
 
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
@@ -169,7 +169,7 @@ export default function TaskDetailScreen({route, navigation}) {
     <Container>
       {details.map((detail, i) => {
         return (
-          <DetailItem
+          <TaskDetailItem
             header={detail.label}
             detail={detail.detail}
             color={detail.color}

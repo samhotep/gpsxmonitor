@@ -42,7 +42,14 @@ export default function EmployeeScreen({route, navigation}) {
     <Container>
       <ContentContainer>
         {employees.map((employee, i) => {
-          return <MessageItem employee={employee} i={i} />;
+          return (
+            <MessageItem
+              employee={employee}
+              onPress={() =>
+                navigation.navigate('MessageScreen', {employee: employee})
+              }
+            />
+          );
         })}
       </ContentContainer>
     </Container>

@@ -32,7 +32,6 @@ export default function TaskScreen({route, navigation}) {
 
   const options = {
     includeScore: true,
-    // Search in `author` and in `tags` array
     keys: ['task.description', 'task.label'],
   };
 
@@ -74,7 +73,11 @@ export default function TaskScreen({route, navigation}) {
     result.map((res, i) => {
       searchResults.push(res.item);
     });
-    setTasks(searchResults);
+    if (searchString === '') {
+      setTasks(allTasks);
+    } else {
+      setTasks(searchResults);
+    }
   };
 
   const filterByDate = () => {

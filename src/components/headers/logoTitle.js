@@ -64,6 +64,7 @@ const Container = styled.View`
   background-color: #1e96dc;
   height: ${(props) => props.height || 56}px;
   padding: 5px;
+  elevation: 5;
 `;
 
 const IconsContainer = styled.View`

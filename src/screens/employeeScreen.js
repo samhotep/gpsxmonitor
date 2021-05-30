@@ -79,13 +79,16 @@ export default function EmployeeScreen({route, navigation}) {
         return API.getChats(tracker.id);
       })
       .then((chatlist) => {
+        // TODO Enable chats from endpoint
         // chats = chatlist;
         // setChats(chatlist);
+        // Storage.setTrackerMessages(chatlist);
         // if (chatlist === 400) {
         //   throw {message: 'No objects available for chat'};
         // }
         chats = test;
         setChats(test);
+        Storage.setTrackerMessages(chats);
         return Storage.getAllEmployees();
       })
       .then((employeeList) => {

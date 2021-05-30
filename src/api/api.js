@@ -220,6 +220,15 @@ const API = {
       },
     );
   },
+  getUnreadChatCount: () => {
+    return API.apiCall('employee/list/').then((result) => {
+      if (result.success === true) {
+        return result.value;
+      } else {
+        return result.status.description;
+      }
+    });
+  },
   getCounters: (tracker_id) => {
     return API.apiCall('tracker/get_counters/', {tracker_id: tracker_id}).then(
       (result) => {

@@ -5,7 +5,7 @@ import DrawerLoader from '../components/loaders/drawerLoader';
 import MessageItem from '../components/items/employeeItem';
 import API from '../api/api';
 
-export default function MessageScreen({route, navigation}) {
+export default function EmployeeScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
   const [employees, setEmployees] = useState([]);
 

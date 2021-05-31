@@ -2,11 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 
 export default function ChatBubble(props) {
+  let messageDate = new Date(props.time.replace(/-+/g, '/'));
+  let hours = messageDate.getHours();
+  let minutes = messageDate.getMinutes();
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  let time = hours >= 12 ? `${hours}:${minutes} PM` : `${hours}:${minutes} AM`;
+  let dateString = `${messageDate.toDateString().slice(4, 10)}, ${time}`;
   return (
     <Container>
       {props.outgoing ? (
         <BubbleContainer outgoing={props.outgoing}>
-          <TimeText>{props.time}</TimeText>
+          <TimeText>{dateString}</TimeText>
           <MessageContainer outgoing={props.outgoing}>
             <Text outgoing={true}>{props.text}</Text>
             <BubbleCorner source={require('../../assets/sent_triangle.png')} />
@@ -20,7 +26,7 @@ export default function ChatBubble(props) {
             />
             <Text>{props.text}</Text>
           </MessageContainer>
-          <TimeText>{props.time}</TimeText>
+          <TimeText>{dateString}</TimeText>
         </BubbleContainer>
       )}
     </Container>

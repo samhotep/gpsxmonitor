@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useState, useEffect} from 'react';
 import {Linking} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import styled from 'styled-components';
@@ -12,6 +13,27 @@ export default function SettingsScreen(props) {
   const [sortValue, setSortValue] = useState('disabled');
   const [labelsEnabled, setLabelsEnabled] = useState(false);
   const [inputURL, setInputURL] = useState('');
+  let sortItems = ['disabled', 'by status', 'alphabetically'];
+  const [radioButtons, setRadioButtons] = useState(
+    Array(sortItems.length).fill(false),
+  );
+
+  const updateSettings = () => {
+    let selected = radioButtons.findIndex((button) => button === true);
+    Storage.setSettings({
+      labels: labelsEnabled,
+      sort: sortItems[selected],
+    });
+  };
+
+  const toggleSortObjects = () => {
+    if (sortObjects) {
+      setSortValue('disabled');
+    } else {
+      setSortValue('enabled');
+    }
+    setSortObjects(!sortObjects);
+  };
 
   const headerItems = [
     {
@@ -39,9 +61,9 @@ export default function SettingsScreen(props) {
           <CheckBox
             disabled={false}
             value={labelsEnabled}
-            onValueChange={() =>
-              labelsEnabled ? setLabelsEnabled(false) : setLabelsEnabled(true)
-            }
+            onValueChange={(value) => {
+              setLabelsEnabled(value);
+            }}
             tintColors={{true: '#1e96dc', false: '#1e96dc'}}
           />
         </InputRowContainer>
@@ -83,14 +105,27 @@ export default function SettingsScreen(props) {
     },
   ];
 
-  const toggleSortObjects = () => {
-    if (sortObjects) {
-      setSortValue('disabled');
-    } else {
-      setSortValue('enabled');
-    }
-    setSortObjects(!sortObjects);
-  };
+  useEffect(() => {
+    updateSettings();
+  }, [radioButtons, labelsEnabled]);
+
+  useEffect(() => {
+    let options = [...radioButtons];
+    Storage.getSettings().then((res) => {
+      let settings = JSON.parse(res);
+      if (settings === null) {
+        options[0] = true;
+        Storage.setSettings({
+          labels: true,
+          sort: 'disabled',
+        });
+      } else {
+        setLabelsEnabled(settings.labels);
+        options[sortItems.findIndex((item) => item === settings.sort)] = true;
+      }
+      setRadioButtons(options);
+    });
+  }, []);
 
   return (
     <DrawerContainer>

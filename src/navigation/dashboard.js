@@ -440,6 +440,9 @@ function CustomDrawerContent({navigation}) {
       newfilter[id] = value;
     }
     setFilterOptions(newfilter);
+    setTimeout(() => {
+      setFilterModalVisible(false);
+    }, 200);
   };
 
   const filterBySearch = () => {

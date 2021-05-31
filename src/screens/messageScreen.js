@@ -7,27 +7,62 @@ import DrawerLoader from '../components/loaders/drawerLoader';
 import GenericButton from '../components/buttons/genericButton';
 import LogoTitle from '../components/headers/logoTitle';
 import ChatBubble from '../components/items/chatBubble';
-import API from '../api/api';
 import Storage from '../storage/storage';
+import API from '../api/api';
 
 export default function MessageScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState([]);
+  const [tracker, setTracker] = useState([]);
   const [label, setLabel] = useState('');
   const [sendString, setSendString] = useState('');
   const viewRef = useRef();
   let {employee} = route.params;
 
-  useEffect(() => {
-    let newLabel = '';
-    employee.first_name.split(' ').map((_, i) => {
-      if (i !== 0) {
-        newLabel += ' ';
-      }
-      newLabel += _.charAt(0).toUpperCase() + _.slice(1).toLowerCase();
-    });
-    setLabel(newLabel);
-    Storage.getTrackerMessages()
+  const createTrackerMessage = () => {
+    let now = new Date(Date.now());
+    let oldMessages = messages;
+    let newMessages = [
+      ...messages,
+      {
+        submit_time: now
+          .toISOString()
+          .replace('T', ' ')
+          .replace('Z', '')
+          .slice(0, -4),
+        update_time: null,
+        text: sendString,
+        type: 'OUTGOING',
+        status: 'PENDING',
+        employee_id: employee.id,
+      },
+    ];
+    setMessages(newMessages);
+    API.sendChats(tracker.id, sendString)
+      .then((result) => {
+        if (result === 400) {
+          setTimeout(() => {
+            setMessages(oldMessages);
+          }, 1000);
+          throw {message: 'Operation not supported.'};
+        }
+        Storage.setTrackerMessages(newMessages);
+      })
+      .catch((error) => {
+        ToastAndroid.show(
+          error.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+      });
+  };
+
+  const loadMessages = () => {
+    Storage.getCurrentTracker()
+      .then((res) => {
+        setTracker(JSON.parse(res));
+        return Storage.getTrackerMessages();
+      })
       .then((res) => {
         let employeeMessages = [];
         JSON.parse(res).map((_, i) => {
@@ -46,6 +81,18 @@ export default function MessageScreen({route, navigation}) {
           ToastAndroid.CENTER,
         );
       });
+  };
+
+  useEffect(() => {
+    let newLabel = '';
+    employee.first_name.split(' ').map((_, i) => {
+      if (i !== 0) {
+        newLabel += ' ';
+      }
+      newLabel += _.charAt(0).toUpperCase() + _.slice(1).toLowerCase();
+    });
+    setLabel(newLabel);
+    loadMessages();
   }, []);
 
   if (loading) {
@@ -74,6 +121,7 @@ export default function MessageScreen({route, navigation}) {
             <ChatBubble
               text={message.text}
               outgoing={message.type === 'OUTGOING'}
+              delivered={message.status === 'DELIVERED'}
               time={message.submit_time}
             />
           );
@@ -85,7 +133,11 @@ export default function MessageScreen({route, navigation}) {
           multiline={true}
           onChangeText={(text) => setSendString(text)}
         />
-        <GenericButton width={100} title="SEND" />
+        <GenericButton
+          width={100}
+          title="SEND"
+          onPress={createTrackerMessage}
+        />
       </SendContainer>
     </Container>
   );

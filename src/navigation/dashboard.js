@@ -435,8 +435,10 @@ function CustomDrawerContent({navigation}) {
       } else {
         newfilter = Array(filterOptions.length).fill(false);
       }
+    } else {
+      newfilter[0] = false;
+      newfilter[id] = value;
     }
-    newfilter[id] = value;
     setFilterOptions(newfilter);
   };
 

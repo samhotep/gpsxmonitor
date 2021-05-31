@@ -16,9 +16,10 @@ import MessageStack from './messageStack';
 import CategoryItem from '../components/items/categoryItem';
 import DrawerTitle from '../components/headers/drawerTitle';
 import ListItem from '../components/items/listItem';
+import FilterItem from '../components/items/filterItem';
 import DetailModal from '../components/modals/detailModal';
-import Utils from '../utils/utils';
 import DrawerLoader from '../components/loaders/drawerLoader';
+import Utils from '../utils/utils';
 import lists from '../components/lists/lists';
 import Storage from '../storage/storage';
 import Separator from '../components/separators/separator';
@@ -49,7 +50,8 @@ function CustomDrawerContent({navigation}) {
   const [userID, setUserID] = useState(0);
   const [trackerStates, setTrackerStates] = useState([]);
   const [trackersList, setTrackersList] = useState([]);
-  const [loadedData, setLoadedData] = useState([]);
+  const [originalTrackersList, setOriginalTrackersList] = useState([]);
+  const [trackerGroups, setTrackerGroups] = useState([]);
   const [data, setData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [supportString, setSupportString] = useState('');
@@ -63,17 +65,17 @@ function CustomDrawerContent({navigation}) {
     'Awaiting connection',
   ];
   const [filterOptions, setFilterOptions] = useState(
-    Array(filterItems.length).fill(true),
+    Array(Object.keys(lists.statusColors).length + 1).fill(true),
   );
   const isDrawerOpen = useIsDrawerOpen();
 
   const options = {
     includeScore: true,
     threshold: 0.3,
-    keys: ['trackers.label'],
+    keys: ['label'],
   };
 
-  const fuse = new Fuse(loadedData, options);
+  const fuse = new Fuse(originalTrackersList, options);
 
   let tests = [
     {
@@ -432,6 +434,25 @@ function CustomDrawerContent({navigation}) {
     },
   ];
 
+  const filterByCheckBox = (id, value) => {
+    let newfilter = [...filterOptions];
+    newfilter[id] = value;
+    setFilterOptions(newfilter);
+  };
+
+  const filterBySearch = () => {
+    let searchResults = [];
+    const result = fuse.search(searchString);
+    result.map((res, i) => {
+      searchResults.push(res.item);
+    });
+    if (searchString === '') {
+      setTrackersList(originalTrackersList);
+    } else {
+      setTrackersList(searchResults);
+    }
+  };
+
   const sendSupportEmail = () => {
     API.sendEmail(supportString)
       .then(() => {
@@ -502,27 +523,27 @@ function CustomDrawerContent({navigation}) {
     createObjects();
   };
 
-  const createObjects = () => {
-    // TODO Load tasks from endpoint
+  const loadEssential = () => {
+    // TODO Load tasks & employees from endpoint
     setLoading(true);
-    let groups = [];
-    let _trackers = [];
-    API.getGroups()
+    API.getUserInfo()
       .then((result) => {
-        groups = result;
+        setUsername(result.user_info.title);
+        setUserID(result.user_info.id);
+        return API.getGroups();
+      })
+      .then((groups) => {
+        setTrackerGroups(groups);
         return API.getTrackers();
       })
       .then((trackers) => {
         Storage.setAllTrackers(trackers);
         setTrackersList(trackers);
-        _trackers = trackers;
+        setOriginalTrackersList(trackers);
         return API.getStates(Utils.getIDList(trackers));
       })
       .then((result) => {
         setTrackerStates(result.states);
-        let composite = Utils.createCategories(groups, _trackers);
-        setData(composite);
-        setLoadedData(composite);
         return API.getTasks();
       })
       .then((taskList) => {
@@ -537,7 +558,6 @@ function CustomDrawerContent({navigation}) {
       })
       .catch((error) => {
         setLoading(false);
-        console.log(error);
         ToastAndroid.show(
           error.message,
           ToastAndroid.SHORT,
@@ -546,17 +566,9 @@ function CustomDrawerContent({navigation}) {
       });
   };
 
-  const filterBySearch = () => {
-    let searchResults = [];
-    const result = fuse.search(searchString);
-    result.map((res, i) => {
-      searchResults.push(res.item);
-    });
-    if (searchString === '') {
-      setData(loadedData);
-    } else {
-      setData(searchResults);
-    }
+  const createObjects = () => {
+    let composite = Utils.createCategories(trackerGroups, trackersList);
+    setData(composite);
   };
 
   useEffect(() => {
@@ -564,19 +576,19 @@ function CustomDrawerContent({navigation}) {
   }, [searchString]);
 
   useEffect(() => {
-    // Load objects on first render
-    API.getUserInfo().then((result) => {
-      setUsername(result.user_info.title);
-      setUserID(result.user_info.id);
-    });
     createObjects();
+  }, [trackersList]);
+
+  useEffect(() => {
+    // Load objects on first render
+    loadEssential();
   }, []);
 
   useEffect(() => {
     // Update only after 3 min delay
     Storage.getLastDate().then((date) => {
       if ((Date.now() - date > 120000 && isDrawerOpen) || date === null) {
-        createObjects();
+        loadEssential();
         Storage.setLastDate(Date.now());
       }
     });
@@ -711,16 +723,28 @@ function CustomDrawerContent({navigation}) {
       </SupportModal>
       <DetailModal
         clicked={filterModalVisible}
-        height={220}
-        width={200}
-        top={0}
+        height={250}
+        width={260}
+        top={56}
         right={0}
         inject={
           <ModalContainer>
-            <Text size={16} color="#808080" margin={10}>
-              Show:
-            </Text>
-            {filterItems.map((_, i) => {})}
+            <FilterItem
+              text="All"
+              value={filterOptions[0]}
+              onValueChange={(value) => filterByCheckBox(0, value)}
+            />
+            <Separator />
+            {Object.keys(lists.statusColors).map((_, i) => {
+              return (
+                <FilterItem
+                  text={lists.statusColors[_].text}
+                  color={lists.statusColors[_].color}
+                  value={filterOptions[i + 1]}
+                  onValueChange={(value) => filterByCheckBox(i + 1, value)}
+                />
+              );
+            })}
           </ModalContainer>
         }
       />

@@ -7,7 +7,6 @@ import styled from 'styled-components';
 const Stack = createStackNavigator();
 
 export default function TaskStack({route, navigation}) {
-  //   const navigation = useNavigation();
   return (
     <Stack.Navigator initialRouteName="EmployeeScreen" headerMode="screen">
       <Stack.Screen

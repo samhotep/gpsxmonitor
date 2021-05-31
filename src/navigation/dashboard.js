@@ -57,13 +57,6 @@ function CustomDrawerContent({navigation}) {
   const [supportString, setSupportString] = useState('');
   const [loading, setLoading] = useState(false);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
-  const filterItems = [
-    'Online',
-    'Offline',
-    'GPS not updated',
-    'Connection lost',
-    'Awaiting connection',
-  ];
   const [filterOptions, setFilterOptions] = useState(
     Array(Object.keys(lists.statusColors).length + 1).fill(true),
   );
@@ -436,6 +429,13 @@ function CustomDrawerContent({navigation}) {
 
   const filterByCheckBox = (id, value) => {
     let newfilter = [...filterOptions];
+    if (id === 0) {
+      if (value) {
+        newfilter = Array(filterOptions.length).fill(true);
+      } else {
+        newfilter = Array(filterOptions.length).fill(false);
+      }
+    }
     newfilter[id] = value;
     setFilterOptions(newfilter);
   };
@@ -621,7 +621,11 @@ function CustomDrawerContent({navigation}) {
           //  TODO Search and filter trackers
           setSearchString(text);
         }}
-        onFilter={() => setFilterModalVisible(!filterModalVisible)}
+        onFilter={() => {
+          setFilterModalVisible(!filterModalVisible);
+          setSearchString('');
+          setShowSearch(false);
+        }}
       />
       <DrawerHeaderContainer>
         <DrawerIcon source={require('../assets/account.png')} />
@@ -723,7 +727,7 @@ function CustomDrawerContent({navigation}) {
       </SupportModal>
       <DetailModal
         clicked={filterModalVisible}
-        height={250}
+        height={280}
         width={260}
         top={56}
         right={0}

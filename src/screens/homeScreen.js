@@ -133,6 +133,9 @@ export default function HomeScreen({navigation}) {
   };
 
   useEffect(() => {
+    let maps = [...mapType];
+    maps[0] = true;
+    setMapType(maps);
     try {
       Storage.getMarkerSettings()
         .then((stored) => {

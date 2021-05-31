@@ -41,7 +41,7 @@ export default function HomeScreen({navigation}) {
     Array(3).fill(false),
   );
   const [showTrackers, setShowTrackers] = useState('Selected');
-  const [followObject, setFollowObject] = useState(false);
+  const [followObject, setFollowObject] = useState(true);
   const mapRef = useRef();
   const markerRef = useRef();
   const mapTypes = ['standard', 'satellite', 'hybrid', 'terrain'];
@@ -143,8 +143,10 @@ export default function HomeScreen({navigation}) {
       Storage.getMarkerSettings()
         .then((stored) => {
           let settings = JSON.parse(stored);
-          setFollowObject(settings.followObject);
-          setTrackerSelection(settings.selections);
+          if (settings) {
+            setFollowObject(settings.followObject);
+            setTrackerSelection(settings.selections);
+          }
           return Storage.getSettings();
         })
         .then((res) => {

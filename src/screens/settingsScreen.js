@@ -9,11 +9,11 @@ import Storage from '../storage/storage';
 
 export default function SettingsScreen(props) {
   const navigation = useNavigation();
-  const [sortObjects, setSortObjects] = useState(false);
-  const [sortValue, setSortValue] = useState('disabled');
+  const [modalVisible, setModalVisible] = useState(false);
   const [labelsEnabled, setLabelsEnabled] = useState(false);
-  const [inputURL, setInputURL] = useState('');
+  const [sortValue, setSortValue] = useState('disabled');
   let sortItems = ['disabled', 'by status', 'alphabetically'];
+  const [inputURL, setInputURL] = useState('');
   const [radioButtons, setRadioButtons] = useState(
     Array(sortItems.length).fill(false),
   );
@@ -24,15 +24,6 @@ export default function SettingsScreen(props) {
       labels: labelsEnabled,
       sort: sortItems[selected],
     });
-  };
-
-  const toggleSortObjects = () => {
-    if (sortObjects) {
-      setSortValue('disabled');
-    } else {
-      setSortValue('enabled');
-    }
-    setSortObjects(!sortObjects);
   };
 
   const headerItems = [
@@ -72,7 +63,10 @@ export default function SettingsScreen(props) {
     {
       label: 'Sorting settings',
       item: (
-        <Button onPress={toggleSortObjects}>
+        <Button
+          onPress={() => {
+            setModalVisible(!modalVisible);
+          }}>
           <InputContainer>
             <ItemLabel color="#202020" size={18}>
               Sort objects
@@ -139,6 +133,33 @@ export default function SettingsScreen(props) {
       {headerItems.map((_, i) => {
         return <HeaderItem key={_.label} label={_.label} item={_.item} />;
       })}
+      <SupportModal
+        animationType="fade"
+        transparent={true}
+        statusBarTranslucent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <CenteredContainer>
+          <ModalBody>
+            <Text size={20} color="#000000" weight="bold">
+              Support
+            </Text>
+            <Text size={16}>
+              You can send message to tech support and receive the answer on
+              email
+            </Text>
+            <ButtonContainer>
+              <ModalButton onPress={() => setModalVisible(false)}>
+                <Text color="#1e96dc" weight="bold">
+                  CANCEL
+                </Text>
+              </ModalButton>
+            </ButtonContainer>
+          </ModalBody>
+        </CenteredContainer>
+      </SupportModal>
     </DrawerContainer>
   );
 }
@@ -198,4 +219,43 @@ const InputRowContainer = styled.View`
   flex-direction: row;
   justify-content: center;
   padding: 0 20px 0 20px;
+`;
+
+const SupportModal = styled.Modal``;
+
+const CenteredContainer = styled.View`
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+`;
+
+const ModalBody = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  height: 290px;
+  width: 300px;
+  padding: 10px;
+  background-color: #ffffff;
+  elevation: 20;
+`;
+
+const Text = styled.Text`
+  text-align: left;
+  line-height: ${(props) => props.size || 14}px;
+  flex-wrap: wrap;
+  font-weight: ${(props) => props.weight || 'normal'};
+  font-size: ${(props) => props.size || 14}px;
+  color: ${(props) => (props.color ? props.color : '#808080')};
+  margin: ${(props) => props.margin || 15}px;
+`;
+
+const ModalButton = styled.TouchableOpacity``;
+
+const ButtonContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
 `;

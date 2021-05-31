@@ -220,6 +220,18 @@ const API = {
       },
     );
   },
+  sendChats: (tracker_id, message) => {
+    return API.apiCall('tracker/chat/send/', {
+      tracker_id: tracker_id,
+      message: message,
+    }).then((result) => {
+      if (result.success === true) {
+        return result.list;
+      } else {
+        return 400;
+      }
+    });
+  },
   getUnreadChatCount: () => {
     return API.apiCall('employee/list/').then((result) => {
       if (result.success === true) {

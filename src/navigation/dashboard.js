@@ -16,6 +16,7 @@ import MessageStack from './messageStack';
 import CategoryItem from '../components/items/categoryItem';
 import DrawerTitle from '../components/headers/drawerTitle';
 import ListItem from '../components/items/listItem';
+import DetailModal from '../components/modals/detailModal';
 import Utils from '../utils/utils';
 import DrawerLoader from '../components/loaders/drawerLoader';
 import lists from '../components/lists/lists';
@@ -53,6 +54,17 @@ function CustomDrawerContent({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [supportString, setSupportString] = useState('');
   const [loading, setLoading] = useState(false);
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
+  const filterItems = [
+    'Online',
+    'Offline',
+    'GPS not updated',
+    'Connection lost',
+    'Awaiting connection',
+  ];
+  const [filterOptions, setFilterOptions] = useState(
+    Array(filterItems.length).fill(true),
+  );
   const isDrawerOpen = useIsDrawerOpen();
 
   const options = {
@@ -421,9 +433,18 @@ function CustomDrawerContent({navigation}) {
   ];
 
   const sendSupportEmail = () => {
-    API.sendEmail(supportString).catch((error) => {
-      ToastAndroid.show(error.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
-    });
+    API.sendEmail(supportString)
+      .then(() => {
+        setModalVisible(false);
+      })
+      .catch((error) => {
+        setModalVisible(false);
+        ToastAndroid.show(
+          error.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+      });
   };
 
   const confirmLogout = () =>
@@ -525,11 +546,9 @@ function CustomDrawerContent({navigation}) {
       });
   };
 
-  // TODO Create search function
   const filterBySearch = () => {
     let searchResults = [];
     const result = fuse.search(searchString);
-    console.log(data[0].trackers);
     result.map((res, i) => {
       searchResults.push(res.item);
     });
@@ -590,6 +609,7 @@ function CustomDrawerContent({navigation}) {
           //  TODO Search and filter trackers
           setSearchString(text);
         }}
+        onFilter={() => setFilterModalVisible(!filterModalVisible)}
       />
       <DrawerHeaderContainer>
         <DrawerIcon source={require('../assets/account.png')} />
@@ -689,6 +709,21 @@ function CustomDrawerContent({navigation}) {
           </ModalBody>
         </CenteredContainer>
       </SupportModal>
+      <DetailModal
+        clicked={filterModalVisible}
+        height={220}
+        width={200}
+        top={0}
+        right={0}
+        inject={
+          <ModalContainer>
+            <Text size={16} color="#808080" margin={10}>
+              Show:
+            </Text>
+            {filterItems.map((_, i) => {})}
+          </ModalContainer>
+        }
+      />
     </DrawerContainer>
   );
 }
@@ -800,4 +835,11 @@ const ButtonContainer = styled.View`
   align-items: center;
   justify-content: flex-end;
   width: 100%;
+`;
+
+const ModalContainer = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 5px;
 `;

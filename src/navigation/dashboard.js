@@ -47,6 +47,8 @@ function CustomDrawerContent({navigation}) {
   const [trackerStates, setTrackerStates] = useState([]);
   const [trackersList, setTrackersList] = useState([]);
   const [data, setData] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [supportString, setSupportString] = useState('');
   const [loading, setLoading] = useState(false);
   const isDrawerOpen = useIsDrawerOpen();
 
@@ -390,7 +392,7 @@ function CustomDrawerContent({navigation}) {
       name: 'Support',
       source: require('../assets/help.png'),
       onPress: () => {
-        // navigation.navigate('Billing', {screen: 'Transactions'});
+        setModalVisible(true);
       },
     },
     {
@@ -406,6 +408,12 @@ function CustomDrawerContent({navigation}) {
       onPress: () => confirmLogout(),
     },
   ];
+
+  const sendSupportEmail = () => {
+    API.sendEmail(supportString).catch((error) => {
+      ToastAndroid.show(error.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
+    });
+  };
 
   const confirmLogout = () =>
     Alert.alert(
@@ -620,6 +628,44 @@ function CustomDrawerContent({navigation}) {
           <PolicyText>Privacy policy</PolicyText>
         </Button>
       </DrawerContentContainer>
+      <SupportModal
+        animationType="fade"
+        transparent={true}
+        statusBarTranslucent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <CenteredContainer>
+          <ModalBody>
+            <Text size={20} color="#000000" weight="bold">
+              Support
+            </Text>
+            <Text size={16}>
+              You can send message to tech support and receive the answer on
+              email
+            </Text>
+            <SupportInput
+              multiline
+              size={16}
+              placeholder="Type your question here"
+              onChangeText={(text) => setSupportString(text)}
+            />
+            <ButtonContainer>
+              <ModalButton onPress={() => setModalVisible(false)}>
+                <Text color="#1e96dc" weight="bold">
+                  CANCEL
+                </Text>
+              </ModalButton>
+              <ModalButton onPress={sendSupportEmail}>
+                <Text color="#1e96dc" weight="bold">
+                  SEND
+                </Text>
+              </ModalButton>
+            </ButtonContainer>
+          </ModalBody>
+        </CenteredContainer>
+      </SupportModal>
     </DrawerContainer>
   );
 }
@@ -680,3 +726,55 @@ const PolicyText = styled.Text`
 `;
 
 const Button = styled.TouchableOpacity``;
+
+const SupportModal = styled.Modal``;
+
+const CenteredContainer = styled.View`
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+`;
+
+const ModalBody = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  height: 290px;
+  width: 300px;
+  padding: 10px;
+  background-color: #ffffff;
+  elevation: 20;
+`;
+
+const Text = styled.Text`
+  text-align: left;
+  line-height: ${(props) => props.size || 14}px;
+  flex-wrap: wrap;
+  font-weight: ${(props) => props.weight || 'normal'};
+  font-size: ${(props) => props.size || 14}px;
+  color: ${(props) => (props.color ? props.color : '#808080')};
+  margin: ${(props) => props.margin || 15}px;
+`;
+
+const SupportInput = styled.TextInput.attrs({
+  textAlignVertical: 'top',
+})`
+  flex-wrap: wrap;
+  text-align: left;
+  font-size: ${(props) => props.size || 14}px;
+  color: ${(props) => (props.color ? props.color : '#808080')};
+  border-radius: 1px;
+  elevation: 1;
+  width: 100%;
+  height: 100px;
+`;
+
+const ModalButton = styled.TouchableOpacity``;
+
+const ButtonContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+`;

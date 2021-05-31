@@ -4,6 +4,7 @@ import {Linking} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import styled from 'styled-components';
 import CheckBox from '@react-native-community/checkbox';
+import RadioInput from '../components/inputs/radioInput';
 import HeaderTitle from '../components/headers/headerTitle';
 import Storage from '../storage/storage';
 
@@ -17,6 +18,12 @@ export default function SettingsScreen(props) {
   const [radioButtons, setRadioButtons] = useState(
     Array(sortItems.length).fill(false),
   );
+
+  const updateRadioButtons = (index) => {
+    let newRadio = Array(sortItems.length).fill(false);
+    newRadio[index] = true;
+    setRadioButtons(newRadio);
+  };
 
   const updateSettings = () => {
     let selected = radioButtons.findIndex((button) => button === true);
@@ -144,12 +151,26 @@ export default function SettingsScreen(props) {
         <CenteredContainer>
           <ModalBody>
             <Text size={20} color="#000000" weight="bold">
-              Support
+              Sort Objects
             </Text>
-            <Text size={16}>
-              You can send message to tech support and receive the answer on
-              email
-            </Text>
+            {sortItems.map((_, i) => {
+              return (
+                <ModalRowContainer
+                  onPress={() => updateRadioButtons(i)}
+                  android_ripple={{
+                    color: '#b5dbf1',
+                  }}>
+                  <RadioInput
+                    color="#1e96dc"
+                    selected={radioButtons[i]}
+                    onPress={() => updateRadioButtons(i)}
+                  />
+                  <Text size={20} color="#000000">
+                    {_}
+                  </Text>
+                </ModalRowContainer>
+              );
+            })}
             <ButtonContainer>
               <ModalButton onPress={() => setModalVisible(false)}>
                 <Text color="#1e96dc" weight="bold">
@@ -234,7 +255,7 @@ const CenteredContainer = styled.View`
 const ModalBody = styled.View`
   flex-direction: column;
   align-items: flex-start;
-  height: 290px;
+  height: 260px;
   width: 300px;
   padding: 10px;
   background-color: #ffffff;
@@ -257,5 +278,12 @@ const ButtonContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
+  width: 100%;
+`;
+
+const ModalRowContainer = styled.Pressable`
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
   width: 100%;
 `;

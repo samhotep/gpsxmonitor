@@ -48,7 +48,7 @@ export default function HeaderTitle(props) {
         <HeaderIcon
           size={20}
           source={require('../../assets/filter.png')}
-          onPress={() => {}}
+          onPress={props.onFilter}
         />
       </ItemsContainer>
     </HeaderContainer>

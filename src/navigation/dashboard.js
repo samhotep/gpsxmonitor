@@ -62,13 +62,20 @@ function CustomDrawerContent({navigation}) {
   );
   const isDrawerOpen = useIsDrawerOpen();
 
-  const options = {
+  const textOptions = {
     includeScore: true,
     threshold: 0.3,
     keys: ['label'],
   };
 
-  const fuse = new Fuse(originalTrackersList, options);
+  const checkOptions = {
+    includeScore: true,
+    useExtendedSearch: true,
+    threshold: 0.2,
+    keys: ['connection_status'],
+  };
+
+  const textFuse = new Fuse(originalTrackersList, textOptions);
 
   let tests = [
     {
@@ -440,14 +447,51 @@ function CustomDrawerContent({navigation}) {
       newfilter[id] = value;
     }
     setFilterOptions(newfilter);
-    setTimeout(() => {
-      setFilterModalVisible(false);
-    }, 200);
+
+    let options = Object.keys(lists.statusColors);
+    let optionFilter = [...newfilter];
+    optionFilter.shift(0);
+    optionFilter.map((_, i) => {
+      if (_ === false) {
+        options.splice(i, 1, null);
+      }
+    });
+    options = options.filter((option) => {
+      return option !== null;
+    });
+    let optionString = '';
+    options.map((_, i) => {
+      if (i === 0) {
+        optionString += _;
+      } else {
+        optionString += ` | ${_}`;
+      }
+    });
+    if (id === 0) {
+      setTrackersList(originalTrackersList);
+    } else {
+      const checkFuse = new Fuse(
+        Utils.trackerStatesToList(trackerStates),
+        checkOptions,
+      );
+
+      let searchResults = [];
+      const result = checkFuse.search(optionString);
+      result.map((res, i) => {
+        originalTrackersList.map((tracker, j) => {
+          if (res.item.id === `${tracker.id}`) {
+            searchResults.push(tracker);
+          }
+        });
+      });
+      setTrackersList(searchResults);
+    }
+    setFilterModalVisible(false);
   };
 
   const filterBySearch = () => {
     let searchResults = [];
-    const result = fuse.search(searchString);
+    const result = textFuse.search(searchString);
     result.map((res, i) => {
       searchResults.push(res.item);
     });

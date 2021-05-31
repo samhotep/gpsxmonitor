@@ -3,7 +3,6 @@ import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import Utils from '../../utils/utils';
 
-// TODO Animate the list
 export default function HomeItem(props) {
   const [signalIcon, setSignalIcon] = useState();
   const [timeStatus, setTimeStatus] = useState('0');

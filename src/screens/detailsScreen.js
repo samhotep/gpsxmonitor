@@ -10,7 +10,6 @@ import API from '../api/api';
 import Utils from '../utils/utils';
 import lists from '../components/lists/lists';
 
-// TODO Pass the location as a state prop, or as an event emitter
 export default function DetailsScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
   const [itemList, setItemList] = useState([]);

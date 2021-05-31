@@ -20,9 +20,13 @@ export default function SettingsScreen(props) {
   );
 
   const updateRadioButtons = (index) => {
+    setSortValue(sortItems[index]);
     let newRadio = Array(sortItems.length).fill(false);
     newRadio[index] = true;
     setRadioButtons(newRadio);
+    setTimeout(() => {
+      setModalVisible(false);
+    }, 100);
   };
 
   const updateSettings = () => {
@@ -156,14 +160,18 @@ export default function SettingsScreen(props) {
             {sortItems.map((_, i) => {
               return (
                 <ModalRowContainer
-                  onPress={() => updateRadioButtons(i)}
+                  onPress={() => {
+                    updateRadioButtons(i);
+                  }}
                   android_ripple={{
                     color: '#b5dbf1',
                   }}>
                   <RadioInput
                     color="#1e96dc"
                     selected={radioButtons[i]}
-                    onPress={() => updateRadioButtons(i)}
+                    onPress={() => {
+                      updateRadioButtons(i);
+                    }}
                   />
                   <Text size={20} color="#000000">
                     {_}

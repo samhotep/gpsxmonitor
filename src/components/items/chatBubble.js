@@ -14,7 +14,15 @@ export default function ChatBubble(props) {
         <BubbleContainer outgoing={props.outgoing}>
           <TimeText>{dateString}</TimeText>
           <MessageContainer outgoing={props.outgoing}>
-            <Text outgoing={true}>{props.text}</Text>
+            <TextContainer outgoing={true}>
+              <Text outgoing={true}>{props.text}</Text>
+              {props.delivered ? (
+                <BubbleCorner
+                  source={require('../../assets/bluetick.png')}
+                  size={14}
+                />
+              ) : null}
+            </TextContainer>
             <BubbleCorner source={require('../../assets/sent_triangle.png')} />
           </MessageContainer>
         </BubbleContainer>
@@ -24,7 +32,9 @@ export default function ChatBubble(props) {
             <BubbleCorner
               source={require('../../assets/received_triangle.png')}
             />
-            <Text>{props.text}</Text>
+            <TextContainer>
+              <Text>{props.text}</Text>
+            </TextContainer>
           </MessageContainer>
           <TimeText>{dateString}</TimeText>
         </BubbleContainer>
@@ -54,22 +64,26 @@ const MessageContainer = styled.View`
 `;
 
 const BubbleCorner = styled.Image`
-  height: 12px;
-  width: 12px;
+  height: ${(props) => props.size || 12}px;
+  width: ${(props) => props.size || 12}px;
 `;
 
 const Text = styled.Text`
-  padding: 10px 10px 15px 10px;
+  padding: 10px;
   text-align: left;
   flex-wrap: wrap;
+  color: ${(props) => (props.outgoing ? '#000000' : '#ffffff')};
+`;
+
+const TextContainer = styled.View`
+  flex-direction: column;
+  align-items: flex-end;
   ${(props) =>
     props.outgoing
       ? 'border-top-left-radius: 5px;'
       : 'border-bottom-right-radius: 5px;'}
   border-top-right-radius: 5px;
   border-bottom-left-radius: 5px;
-  font-size: ${(props) => props.size || 14}px;
-  color: ${(props) => (props.outgoing ? '#000000' : '#ffffff')};
   background-color: ${(props) => (props.outgoing ? '#a8caec' : '#66bb6a')};
 `;
 

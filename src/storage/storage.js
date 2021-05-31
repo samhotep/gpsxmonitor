@@ -186,6 +186,19 @@ const Storage = {
       console.log(e);
     }
   },
+  getSettings: () => {
+    return AsyncStorage.getItem('generalsettings');
+  },
+  setSettings: (data) => {
+    AsyncStorage.setItem('generalsettings', JSON.stringify(data));
+  },
+  removeSettings: async () => {
+    try {
+      await AsyncStorage.removeItem('generalsettings');
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };
 
 export default Storage;

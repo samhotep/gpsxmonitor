@@ -134,8 +134,11 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     let maps = [...mapType];
+    let selection = [...trackerSelection];
     maps[0] = true;
+    selection[1] = true;
     setMapType(maps);
+    setTrackerSelection(selection);
     try {
       Storage.getMarkerSettings()
         .then((stored) => {

@@ -203,6 +203,13 @@ const Utils = {
       return number * 1.60934;
     }
   },
+  trackerStatesToList: (trackers) => {
+    let objects = [];
+    Object.keys(trackers).map((_, i) => {
+      objects.push({id: _, ...trackers[_]});
+    });
+    return objects;
+  },
 };
 
 export default Utils;

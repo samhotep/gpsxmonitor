@@ -49,6 +49,7 @@ export default function HomeScreen({navigation}) {
   const [intervalID, setIntervalID] = useState(0);
   const renderDelay = 1000;
   const [mapRoute, setMapRoute] = useState([]);
+  const [showLabels, setShowLabels] = useState(true);
 
   const updateRadioButtons = (index, list, radioCallback, itemCallback) => {
     itemCallback(list[index]);
@@ -133,13 +134,22 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     try {
-      Storage.getMarkerSettings().then((stored) => {
-        let settings = JSON.parse(stored);
-        setFollowObject(settings.followObject);
-        setTrackerSelection(settings.selections);
-      });
+      Storage.getMarkerSettings()
+        .then((stored) => {
+          let settings = JSON.parse(stored);
+          setFollowObject(settings.followObject);
+          setTrackerSelection(settings.selections);
+          return Storage.getSettings();
+        })
+        .then((res) => {
+          let settings = JSON.parse(res);
+          console.log(settings);
+          if (settings) {
+            setShowLabels(settings.labels);
+          }
+        });
     } catch (error) {
-      console.warn(error);
+      ToastAndroid.show(error.message, ToastAndroid.SHORT, ToastAndroid.CENTER);
     }
   }, []);
 
@@ -270,9 +280,11 @@ export default function HomeScreen({navigation}) {
         {showTrackers === 'Selected' ? (
           <Marker.Animated ref={markerRef} coordinate={currentMarker}>
             <View style={styles.marker}>
-              <Text style={styles.text}>
-                {trackerEventData ? trackerEventData.data.label : ''}
-              </Text>
+              {showLabels && (
+                <Text style={styles.text}>
+                  {trackerEventData ? trackerEventData.data.label : ''}
+                </Text>
+              )}
               <Image
                 style={styles.icon}
                 source={require('../assets/map.png')}

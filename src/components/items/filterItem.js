@@ -4,7 +4,7 @@ import CheckBox from '@react-native-community/checkbox';
 
 export default function FilterItem(props) {
   return (
-    <Container onPress={props.onValueChange}>
+    <Container>
       <RowContainer>
         <CheckBox
           disabled={props.disabled}
@@ -21,7 +21,7 @@ export default function FilterItem(props) {
   );
 }
 
-const Container = styled.TouchableOpacity`
+const Container = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;

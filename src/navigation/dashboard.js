@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {createDrawerNavigator, useIsDrawerOpen} from '@react-navigation/drawer';
 import {
@@ -21,6 +22,7 @@ import lists from '../components/lists/lists';
 import Storage from '../storage/storage';
 import Separator from '../components/separators/separator';
 import API from '../api/api';
+import Fuse from 'fuse.js';
 
 const Drawer = createDrawerNavigator();
 
@@ -46,11 +48,20 @@ function CustomDrawerContent({navigation}) {
   const [userID, setUserID] = useState(0);
   const [trackerStates, setTrackerStates] = useState([]);
   const [trackersList, setTrackersList] = useState([]);
+  const [loadedData, setLoadedData] = useState([]);
   const [data, setData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [supportString, setSupportString] = useState('');
   const [loading, setLoading] = useState(false);
   const isDrawerOpen = useIsDrawerOpen();
+
+  const options = {
+    includeScore: true,
+    threshold: 0.3,
+    keys: ['trackers.label'],
+  };
+
+  const fuse = new Fuse(loadedData, options);
 
   let tests = [
     {
@@ -488,7 +499,9 @@ function CustomDrawerContent({navigation}) {
       })
       .then((result) => {
         setTrackerStates(result.states);
-        setData(Utils.createCategories(groups, _trackers));
+        let composite = Utils.createCategories(groups, _trackers);
+        setData(composite);
+        setLoadedData(composite);
         return API.getTasks();
       })
       .then((taskList) => {
@@ -513,13 +526,23 @@ function CustomDrawerContent({navigation}) {
   };
 
   // TODO Create search function
-  const searchTrackers = (term) => {
-    for (const tracker in trackersList) {
-      if (term === tracker) {
-      }
-      console.log(tracker);
+  const filterBySearch = () => {
+    let searchResults = [];
+    const result = fuse.search(searchString);
+    console.log(data[0].trackers);
+    result.map((res, i) => {
+      searchResults.push(res.item);
+    });
+    if (searchString === '') {
+      setData(loadedData);
+    } else {
+      setData(searchResults);
     }
   };
+
+  useEffect(() => {
+    filterBySearch();
+  }, [searchString]);
 
   useEffect(() => {
     // Load objects on first render

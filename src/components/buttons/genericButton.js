@@ -5,6 +5,9 @@ export default function GenericButton(props) {
   return (
     <Container
       onPress={props.onPress}
+      android_ripple={{
+        color: '#b5dbf1',
+      }}
       width={props.width}
       bgcolor={props.bgcolor}>
       <Title size={props.size} color={props.color}>
@@ -14,7 +17,7 @@ export default function GenericButton(props) {
   );
 }
 
-const Container = styled.TouchableOpacity`
+const Container = styled.Pressable`
   align-items: center;
   justify-content: center;
   border-radius: 2px;

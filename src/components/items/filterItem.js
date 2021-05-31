@@ -26,6 +26,7 @@ const Container = styled.TouchableOpacity`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  margin-bottom: 10px;
 `;
 
 const RowContainer = styled.View`

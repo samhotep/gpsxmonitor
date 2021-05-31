@@ -262,6 +262,13 @@ export default function HomeScreen({navigation}) {
   }, []);
 
   useEffect(() => {
+    Storage.setMarkerSettings({
+      selections: trackerSelection,
+      followObject: followObject,
+    });
+  }, [followObject, trackerSelection]);
+
+  useEffect(() => {
     clearInterval(intervalID);
   }, [mapRoute]);
 
@@ -401,14 +408,14 @@ export default function HomeScreen({navigation}) {
               return (
                 <RadioContainer
                   key={i}
-                  onPress={() =>
+                  onPress={() => {
                     updateRadioButtons(
                       i,
                       trackerSelections,
                       setTrackerSelection,
                       setShowTrackers,
-                    )
-                  }>
+                    );
+                  }}>
                   <RadioLabel>
                     {_.charAt(0).toUpperCase() + _.slice(1)}
                   </RadioLabel>

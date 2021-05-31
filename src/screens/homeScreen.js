@@ -151,7 +151,6 @@ export default function HomeScreen({navigation}) {
         })
         .then((res) => {
           let settings = JSON.parse(res);
-          console.log(settings);
           if (settings) {
             setShowLabels(settings.labels);
           }

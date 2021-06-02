@@ -48,7 +48,7 @@ export default function LoginScreen({navigation}) {
       })
       .then((res) => {
         let url = JSON.parse(res);
-        if (url === '') {
+        if (url === null || url === '') {
           Storage.setLoginImageURL(
             `${API.defaultURL}static/paas/1/app_logo.png`,
           );
@@ -90,7 +90,6 @@ export default function LoginScreen({navigation}) {
     Storage.getLoginImageURL()
       .then((res) => {
         let url = JSON.parse(res);
-        console.log('url', url);
         if (url) {
           setLoginImage({
             uri: url,

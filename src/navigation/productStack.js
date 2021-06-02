@@ -315,8 +315,8 @@ function CustomDrawerContent(props) {
     let current = [];
     let till = 0;
     API.getNotifications()
-      .then((list) => {
-        list.map((_, i) => {
+      .then((notlist) => {
+        notlist.map((_, i) => {
           till = new Date.parse(_.show_till.replace(/-+/g, '/'));
           if (till > today) {
             current.push(_);
@@ -324,13 +324,15 @@ function CustomDrawerContent(props) {
         });
         setNotifications(current);
         setLoading(false);
-        setDetailsLoaded(true);
-        if (list.length === 0) {
+        if (notlist.length === 0) {
+          setDetailsLoaded(false);
           ToastAndroid.show(
             'No unread notifications',
             ToastAndroid.SHORT,
             ToastAndroid.CENTER,
           );
+        } else {
+          setDetailsLoaded(false);
         }
       })
       .catch((error) => {
@@ -340,20 +342,13 @@ function CustomDrawerContent(props) {
 
   useEffect(() => {
     if (detail.screen === 'Notifications') {
-      API.getNotifications()
-        .then((result) => {
-          setNotifications(result);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      showNotifications();
     } else {
       initializeObjects();
       Storage.getCurrentTracker().then((tracker) => {
         setCurrentTracker(JSON.parse(tracker));
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [detail]);
 
   const initializeObjects = () => {
@@ -363,14 +358,6 @@ function CustomDrawerContent(props) {
     initTimeSettings();
     updateRadioButtons(0);
   };
-
-  useEffect(() => {
-    if (detail) {
-      if (detail.screen === 'Notifications') {
-        showNotifications();
-      }
-    }
-  }, [detail]);
 
   useEffect(() => {
     // Listener for location update events in dashboard
@@ -415,7 +402,11 @@ function CustomDrawerContent(props) {
           <HeaderContainer>
             <ClearButton
               onPress={() => {
-                setDetailsLoaded(false);
+                if (detailsLoaded) {
+                  setDetailsLoaded(false);
+                } else {
+                  props.navigation.closeDrawer();
+                }
               }}
             />
           </HeaderContainer>

@@ -76,10 +76,13 @@ export default function EmployeeScreen({route, navigation}) {
     Storage.getCurrentTracker()
       .then((res) => {
         let tracker = JSON.parse(res);
+        if (tracker === null) {
+          throw {message: 'No selected trackers'};
+        }
         return API.getChats(tracker.id);
       })
       .then((chatlist) => {
-        // TODO Enable chats from endpoint
+        // TODO Enable chats from endpoint -> current trackers have no messages, so we hardcode
         // chats = chatlist;
         // setChats(chatlist);
         // Storage.setTrackerMessages(chatlist);

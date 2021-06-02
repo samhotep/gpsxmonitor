@@ -308,48 +308,56 @@ export default function HomeScreen({navigation}) {
         ) : null}
         {showTrackers === 'All' ? (
           <>
-            {trackerEventData.trackers.map((_, i) => {
-              return (
-                <Marker
-                  key={_.id}
-                  coordinate={{
-                    latitude: trackerEventData.states[_.id].gps.location.lat,
-                    longitude: trackerEventData.states[_.id].gps.location.lng,
-                  }}>
-                  <View style={styles.marker}>
-                    <Text style={styles.text}>{_.label}</Text>
-                    <Image
-                      style={styles.icon}
-                      source={require('../assets/map.png')}
-                    />
-                  </View>
-                </Marker>
-              );
-            })}
+            {trackerEventData
+              ? trackerEventData.trackers.map((_, i) => {
+                  return (
+                    <Marker
+                      key={_.id}
+                      coordinate={{
+                        latitude:
+                          trackerEventData.states[_.id].gps.location.lat,
+                        longitude:
+                          trackerEventData.states[_.id].gps.location.lng,
+                      }}>
+                      <View style={styles.marker}>
+                        <Text style={styles.text}>{_.label}</Text>
+                        <Image
+                          style={styles.icon}
+                          source={require('../assets/map.png')}
+                        />
+                      </View>
+                    </Marker>
+                  );
+                })
+              : null}
           </>
         ) : null}
         {showTrackers === 'Group' ? (
           <>
-            {trackerEventData.trackers.map((_, i) => {
-              if (_.group_id === trackerEventData.data.group_id) {
-                return (
-                  <Marker
-                    key={_.id}
-                    coordinate={{
-                      latitude: trackerEventData.states[_.id].gps.location.lat,
-                      longitude: trackerEventData.states[_.id].gps.location.lng,
-                    }}>
-                    <View style={styles.marker}>
-                      <Text style={styles.text}>{_.label}</Text>
-                      <Image
-                        style={styles.icon}
-                        source={require('../assets/map.png')}
-                      />
-                    </View>
-                  </Marker>
-                );
-              }
-            })}
+            {trackerEventData
+              ? trackerEventData.trackers.map((_, i) => {
+                  if (_.group_id === trackerEventData.data.group_id) {
+                    return (
+                      <Marker
+                        key={_.id}
+                        coordinate={{
+                          latitude:
+                            trackerEventData.states[_.id].gps.location.lat,
+                          longitude:
+                            trackerEventData.states[_.id].gps.location.lng,
+                        }}>
+                        <View style={styles.marker}>
+                          <Text style={styles.text}>{_.label}</Text>
+                          <Image
+                            style={styles.icon}
+                            source={require('../assets/map.png')}
+                          />
+                        </View>
+                      </Marker>
+                    );
+                  }
+                })
+              : null}
           </>
         ) : null}
         {mapRoute.length > 0 ? (

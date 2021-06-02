@@ -445,7 +445,7 @@ export default function DetailsScreen({route, navigation}) {
   }, []);
 
   return (
-    <Container onPress={() => setTapped(!tapped)}>
+    <Container>
       <StatusBar backgroundColor="#007aa6" />
       {loading ? (
         <Container>
@@ -466,6 +466,7 @@ export default function DetailsScreen({route, navigation}) {
                 time={_.time}
                 details={_.details}
                 modal={_.modal}
+                onPress={() => setTapped(!tapped)}
                 clicked={tapped}
               />
             );
@@ -476,7 +477,7 @@ export default function DetailsScreen({route, navigation}) {
   );
 }
 
-const Container = styled.Pressable`
+const Container = styled.View`
   flex-direction: column;
   width: 100%;
   flex: 1;

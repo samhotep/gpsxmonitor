@@ -284,11 +284,16 @@ function CustomDrawerContent(props) {
           console.log(error);
         });
     } else if (detail.screen === 'Events') {
-      API.getEvents(
-        currentTracker.id,
-        timeRange[timeSelection].from.replace('T', ' ').substr(0, 19),
-        timeRange[timeSelection].to.replace('T', ' ').substr(0, 19),
-      )
+      let from;
+      let to;
+      if (customPeriodSelected) {
+        from = dateFrom.toISOString().replace('T', ' ').substr(0, 19);
+        to = dateTo.toISOString().replace('T', ' ').substr(0, 19);
+      } else {
+        from = timeRange[timeSelection].from.replace('T', ' ').substr(0, 19);
+        to = timeRange[timeSelection].to.replace('T', ' ').substr(0, 19);
+      }
+      API.getEvents(currentTracker.id, from, to)
         .then((eventList) => {
           if (eventList.length > 0) {
             setEvents(Utils.sortIntoDateGroups(eventList, 'Events'));

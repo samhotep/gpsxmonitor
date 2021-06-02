@@ -32,7 +32,7 @@ export default function DetailItem(props) {
   }, []);
 
   return (
-    <Container>
+    <Container onPress={props.onPress}>
       <RowContainer>
         <Text size={19} color={'#000000'}>
           {props.title}
@@ -187,7 +187,7 @@ function OutputSwitch(props) {
   );
 }
 
-const Container = styled.View`
+const Container = styled.Pressable`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;

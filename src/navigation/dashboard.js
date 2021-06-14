@@ -667,7 +667,6 @@ function CustomDrawerContent({navigation}) {
           }
         }}
         onChangeText={(text) => {
-          //  TODO Search and filter trackers
           setSearchString(text);
         }}
         onFilter={() => {

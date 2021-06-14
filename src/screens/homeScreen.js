@@ -290,7 +290,6 @@ export default function HomeScreen({navigation}) {
           setGlobeClicked(false);
           setArrowClicked(false);
         }}>
-        {/* TODO Set default selection type */}
         {showTrackers === 'Selected' ? (
           <Marker.Animated ref={markerRef} coordinate={currentMarker}>
             <View style={styles.marker}>

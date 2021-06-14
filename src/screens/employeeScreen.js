@@ -28,35 +28,35 @@ export default function EmployeeScreen({route, navigation}) {
 
   const fuse = new Fuse(allEmployees, options);
 
-  let test = [
-    {
-      id: 1,
-      submit_time: '2021-05-30 09:02:24',
-      update_time: null,
-      text: 'Hello',
-      type: 'INCOMING',
-      status: 'DELIVERED',
-      employee_id: 3484,
-    },
-    {
-      id: 2,
-      submit_time: '2021-05-30 09:04:24',
-      update_time: null,
-      text: 'Hi, How are you',
-      type: 'OUTGOING',
-      status: 'DELIVERED',
-      employee_id: 3484,
-    },
-    {
-      id: 3,
-      submit_time: '2021-05-30 09:04:29',
-      update_time: null,
-      text: 'Whats up?',
-      type: 'OUTGOING',
-      status: 'PENDING',
-      employee_id: 3484,
-    },
-  ];
+  // let test = [
+  //   {
+  //     id: 1,
+  //     submit_time: '2021-05-30 09:02:24',
+  //     update_time: null,
+  //     text: 'Hello',
+  //     type: 'INCOMING',
+  //     status: 'DELIVERED',
+  //     employee_id: 3484,
+  //   },
+  //   {
+  //     id: 2,
+  //     submit_time: '2021-05-30 09:04:24',
+  //     update_time: null,
+  //     text: 'Hi, How are you',
+  //     type: 'OUTGOING',
+  //     status: 'DELIVERED',
+  //     employee_id: 3484,
+  //   },
+  //   {
+  //     id: 3,
+  //     submit_time: '2021-05-30 09:04:29',
+  //     update_time: null,
+  //     text: 'Whats up?',
+  //     type: 'OUTGOING',
+  //     status: 'PENDING',
+  //     employee_id: 3484,
+  //   },
+  // ];
 
   const filterBySearch = () => {
     let searchResults = [];
@@ -72,7 +72,8 @@ export default function EmployeeScreen({route, navigation}) {
   };
 
   const loadObjects = () => {
-    let chats = [];
+    // let chats = [];
+    setLoading(true);
     Storage.getCurrentTracker()
       .then((res) => {
         let tracker = JSON.parse(res);
@@ -82,16 +83,15 @@ export default function EmployeeScreen({route, navigation}) {
         return API.getChats(tracker.id);
       })
       .then((chatlist) => {
-        // TODO Enable chats from endpoint -> current trackers have no messages, so we hardcode
+        if (chatlist === 400) {
+          throw {message: 'No objects available for chat'};
+        }
         // chats = chatlist;
-        // setChats(chatlist);
-        // Storage.setTrackerMessages(chatlist);
-        // if (chatlist === 400) {
-        //   throw {message: 'No objects available for chat'};
-        // }
-        chats = test;
-        setChats(test);
-        Storage.setTrackerMessages(chats);
+        setChats(chatlist);
+        Storage.setTrackerMessages(chatlist);
+        // chats = test;
+        // setChats(test);
+        // Storage.setTrackerMessages(chats);
         return Storage.getAllEmployees();
       })
       .then((employeeList) => {

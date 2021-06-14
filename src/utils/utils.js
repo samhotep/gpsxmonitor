@@ -181,7 +181,6 @@ const Utils = {
         dates[item_date] = [_];
       }
     });
-    // TODO Return list sorted by date
     return dates;
   },
   renameLocationKeys: (list) => {

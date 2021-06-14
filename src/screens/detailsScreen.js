@@ -140,7 +140,9 @@ export default function DetailsScreen({route, navigation}) {
       {
         type: 'image',
         image: require('../assets/car_battery.png'),
-        text: `Board voltage: ${readings.inputs[0].value} V`,
+        text: `Board voltage: ${
+          readings.inputs === undefined ? null : readings.inputs[0].value
+        } V`,
       },
     ]);
   };

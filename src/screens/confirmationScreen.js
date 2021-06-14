@@ -7,7 +7,6 @@ import FloatingLoader from '../components/loaders/floatingLoader';
 import ErrorBox from '../components/alerts/errorBox';
 import API from '../api/api';
 
-// TODO Pass the location as a state prop, or as an event emitter
 export default function ConfirmationScreen({route, navigation}) {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);

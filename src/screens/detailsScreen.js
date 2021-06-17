@@ -10,6 +10,8 @@ import API from '../api/api';
 import Utils from '../utils/utils';
 import lists from '../components/lists/lists';
 
+// TODO Fix date bug
+
 export default function DetailsScreen({route, navigation}) {
   const [loading, setLoading] = useState(true);
   const [itemList, setItemList] = useState([]);

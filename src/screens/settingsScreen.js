@@ -8,6 +8,8 @@ import RadioInput from '../components/inputs/radioInput';
 import HeaderTitle from '../components/headers/headerTitle';
 import Storage from '../storage/storage';
 
+// TODO Poll for object label setting (or maybe use event)
+
 export default function SettingsScreen(props) {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);

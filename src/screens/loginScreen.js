@@ -7,6 +7,8 @@ import FloatingLoader from '../components/loaders/floatingLoader';
 import API from '../api/api';
 import Storage from '../storage/storage';
 
+// TODO Save subscription expiry date to prevent successive checks (checks are time expensive)
+
 export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

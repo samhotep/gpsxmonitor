@@ -22,6 +22,8 @@ import API from '../api/api';
 import Storage from '../storage/storage';
 import Utils from '../utils/utils';
 
+// TODO Show setting for object labels
+
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
 export default function HomeScreen({navigation}) {

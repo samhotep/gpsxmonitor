@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
-import {Linking} from 'react-native';
+import {Linking, ToastAndroid} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import styled from 'styled-components';
 import CheckBox from '@react-native-community/checkbox';
@@ -118,20 +118,28 @@ export default function SettingsScreen(props) {
 
   useEffect(() => {
     let options = [...radioButtons];
-    Storage.getSettings().then((res) => {
-      let settings = JSON.parse(res);
-      if (settings === null) {
-        options[0] = true;
-        Storage.setSettings({
-          labels: true,
-          sort: 'disabled',
-        });
-      } else {
-        setLabelsEnabled(settings.labels);
-        options[sortItems.findIndex((item) => item === settings.sort)] = true;
-      }
-      setRadioButtons(options);
-    });
+    Storage.getSettings()
+      .then((res) => {
+        let settings = JSON.parse(res);
+        if (settings === null) {
+          options[0] = true;
+          Storage.setSettings({
+            labels: true,
+            sort: 'disabled',
+          });
+        } else {
+          setLabelsEnabled(settings.labels);
+          options[sortItems.findIndex((item) => item === settings.sort)] = true;
+        }
+        setRadioButtons(options);
+      })
+      .catch((error) => {
+        ToastAndroid.show(
+          error.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+      });
   }, []);
 
   return (

@@ -78,7 +78,7 @@ export default function HomeScreen({navigation}) {
         );
       } catch (error) {}
     }
-    // TODO Might be useful somewhere -> Animate Marker
+    // TODO Might be useful somewhere -> Animate Markers
     // markerRef.current.animateMarkerToCoordinate(
     //   {
     //     latitude: trackerData.gps.location.lat,
